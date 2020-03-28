@@ -5,13 +5,13 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BlogModule } from './blog/blog.module';
-import { CatsController } from './cats/cats.controller';
+import { UserModule } from './user/user.module';
 
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://101.132.105.38/bs', { useNewUrlParser: true }),
-    BlogModule,
+    BlogModule, UserModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '101.132.105.38',
@@ -19,11 +19,11 @@ import { CatsController } from './cats/cats.controller';
       username: 'root',
       password: 'Aaa1111.',
       database: 'health_center',
-      entities: [],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
   ],
-  controllers: [AppController, CatsController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
