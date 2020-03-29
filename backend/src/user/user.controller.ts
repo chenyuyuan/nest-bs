@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 
@@ -9,5 +9,11 @@ export class UserController {
   @Get('/all')
   findAll(): Promise<User[]> {
     return this.userService.findAll();
+  }
+  @Post('/login') 
+  async login(@Res() res, @Body() name: string, @Body() pwd:string) {
+    const post = await this.userService.getUserById(name);
+    if (!post) throw new NotFoundException('Post does not exist!');
+    return res.status(HttpStatus.OK).json(post);
   }
 }
