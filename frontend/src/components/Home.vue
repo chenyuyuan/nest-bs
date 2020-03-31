@@ -1,12 +1,30 @@
 <template>
 <el-container>
-  <el-aside width="200px" style="background-color:red">Aside</el-aside>
-  <el-container>
-    <el-header style="background-color:blue">Header</el-header>
-    <el-main style="background-color:green">Main</el-main>
-    <el-footer style="background-color:yellow">Footer</el-footer>
-  </el-container>
-</el-container>
+  <el-header class="bg-white">
+      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item index="1">首页</el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">数据报表</template>
+          <el-menu-item index="2-1">实时数据</el-menu-item>
+          <el-menu-item index="2-2">历史数据</el-menu-item>
+          <el-submenu index="2-4">
+            <template slot="title">选项4</template>
+                 <el-menu-item index="2-4-1">选项1</el-menu-item>
+            <el-menu-item index="2-4-2">选项2</el-menu-item>
+            <el-menu-item index="2-4-3">选项3</el-menu-item>
+          </el-submenu>
+        </el-submenu>
+        <el-menu-item index="3">消息中心</el-menu-item>
+        <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">账号管理</a></el-menu-item>
+      </el-menu>
+      <div class="line"></div>
+    </el-header>
+  <el-main style="background-color:white">Main</el-main>
+  <el-footer class="bg-white">
+      <hr/>
+      <div>this is footer</div>
+  </el-footer>
+</el-container>  
 </template>
 <style>
   .el-header, .el-footer {
