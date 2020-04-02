@@ -11,7 +11,7 @@
         <el-button style="width:100%" type="primary" plain>登录</el-button>
         <div style="height:5px"></div>
         <el-link :underline="false" type="primary" href="/register">注册</el-link>
-        <el-link :underline="false" type="primary" href="/register" style="float:right">忘记密码？</el-link>
+        <el-link :underline="false" type="primary" href="/forgetpwd" style="float:right">忘记密码？</el-link>
 
 			</div>
 		</el-col>

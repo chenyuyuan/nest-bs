@@ -1,20 +1,29 @@
 <template>
-<el-container>
- <Header></Header>
- <Footer></Footer>
-</el-container>
+<div>
+  <el-container>
+    <Header></Header>
+  </el-container>
+
+<div>
+  <el-container>
+    
+  </el-container>
+</div>
+
+</div>
+
 </template>
 <script>
 import axios from "axios";
 
 import Header from "./Header"
-import Footer from "./Footer"
+
+
 
 export default {
   name: "Home",
   components: {
-    Header,
-    Footer
+    Header
   },
   
  

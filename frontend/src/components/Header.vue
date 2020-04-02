@@ -1,6 +1,6 @@
 <template>
   <el-container>
-  <el-header class="bg-white">
+    <el-header class="bg-white">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <el-menu-item index="1">首页</el-menu-item>
         <el-submenu index="2">
@@ -10,21 +10,29 @@
         </el-submenu>
         <el-menu-item index="3">设备管理</el-menu-item>
         <el-menu-item index="4">消息中心</el-menu-item>
-        <el-menu-item index="5"><a href="https://www.ele.me" target="_blank">账号管理</a></el-menu-item>
+        <el-menu-item index="5"><a href="/profile" target="_blank">账号管理</a></el-menu-item>
         <el-menu-item style="float:right" index="7"><i class="el-icon-user"></i></el-menu-item>
-        <el-menu-item style="float:right" index="6"><i class="el-icon-message"></i></el-menu-item>
+        <el-menu-item style="float:right" index="6">
+          <el-badge is-dot class="item">
+            <i class="el-icon-message"></i> 
+          </el-badge> 
+        </el-menu-item>
       </el-menu>
-      <div class="line"></div>
+      <!-- <div class="line"></div> -->
+      <!-- <hr> -->
     </el-header>
-  <el-main style="background-color:white">Main</el-main>
-  
-</el-container> 
+
+  </el-container> 
 </template>
 
 <script>
+import Footer from "./Footer"
 export default {
 // 定义一个名为 button-counter 的新组件
-  name: 'Header'
+  name: 'Header',
+  components: {
+    
+  }
 }
 </script>
 <style>
