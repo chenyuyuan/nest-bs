@@ -8,6 +8,7 @@ export class UserController {
 
   @Get('/all')
   findAll(): Promise<User[]> {
+    console.log("[user/all]: got data~~~~~~");
     return this.userService.findAll();
   }
   @Post('/login') 

@@ -1,7 +1,10 @@
 nest.js + vue.js
 
-backend:
-    install: mongoose, 
+backend: 
+    npm i -g @nestjs/cli
+    npm install --save @nestjs/mongoose mongoose
+    npm install --save @nestjs/typeorm typeorm mysql
+    npm run start
 
 frontend:
     npm install -g @vue/cli
