@@ -14,8 +14,8 @@ let transporter = nodemailer.createTransport({
 
 let mailOptions = {
   from: '"yuan" <cyuyuan15@qq.com>', // sender address
-  to: 'cyuyuan15@gmail.com', // list of receivers
-  subject: 'Hello', // Subject line
+  to: process.argv[2], // list of receivers
+  subject: process.argv[3], // Subject line
   // 发送text或者html格式
   // text: 'Hello world?', // plain text body
   html: '<b>Hello world?</b>' // html body
