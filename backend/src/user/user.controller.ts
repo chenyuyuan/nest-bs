@@ -2,6 +2,8 @@ import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import {CacheService} from '../utils/cache.service'
+import { RegisterUserDTO } from './dto/register-user.dto';
+import { LoginUserDTO } from './dto/login-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -9,24 +11,44 @@ export class UserController {
 
 
   @Get('/all')
-  findAll(@Res() res): Promise<User[]> {
+  async findAll(@Res() res): Promise<User[]> {
     console.log("[user/all]: got data~~~~~~");
-    
-    return this.userService.findAll();
+    console.log((await this.userService.findAll()).length)
+    return (await this.userService.findAll());
   }
   @Post('/login') 
-  async login(@Res() res, @Body() name: string, @Body() pwd:string) {
-    const post = await this.userService.getUserById(name);
-    console.log(name)
-    if (!post) throw new NotFoundException('Post does not exist!');
-    return res.status(HttpStatus.OK).json(post);
+  async login(@Res() res, @Body() loginUserDTO: LoginUserDTO) {
+
+    //session
+
+    const user = await this.userService.getUserByName(loginUserDTO.name);
+    console.log("用户名："+loginUserDTO.name)
+    if (!user) throw new NotFoundException('Post does not exist!');
+    return res.status(HttpStatus.OK).json(user);
   }
+  
 
   @Post('/register') 
-  async register(@Res() res, @Body() name: string, @Body() pwd:string) {
-    const post = await this.userService.getUserById(name);
-    if (!post) throw new NotFoundException('Post does not exist!');
-    return res.status(HttpStatus.OK).json(post);
+  async register(@Res() res, @Body() registerUserDTO:RegisterUserDTO) {
+    var req_code = registerUserDTO.mail_code;
+    var code = await this.cacheService.get(registerUserDTO.mail)
+
+    if(req_code === code) {
+      if(await this.userService.getUserByName(name) == null) {
+        if((await this.userService.addUser(registerUserDTO.name, registerUserDTO.mail, registerUserDTO.pwd, registerUserDTO.phone)) !==null){
+          return res.status(HttpStatus.OK).json({msg:"register_success",tip:"注册成功"});
+        }
+        else {
+          return res.status(HttpStatus.OK).json({msg:"register_failed",tip:"数据库写入错误"});
+        }
+      }
+
+      
+    }
+    else {
+      return res.status(HttpStatus.OK).json({msg:"wrong_mail_code",tip:"验证码错误"});
+    }
+    
   }
 
 
@@ -51,26 +73,53 @@ export class UserController {
     });
     workerProcess.stderr.on('data', function (data) {
        console.log('stderr: ' + data);
-       return res.status(HttpStatus.EXPECTATION_FAILED).json("发送失败");
+       return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"发送失败"});
     });
     workerProcess.on('close', function (code) {
        console.log('子进程已退出，退出码 '+code);
     });
-    return res.status(HttpStatus.OK).json("发送成功");
+    return res.status(HttpStatus.OK).json({msg:"mail_send_success",tip:"发送成功"});
   }
 
-  @Get('/verifymailcode/:mail/:code') 
-  async verifyMailCode(@Res() res, @Param() param) {
-    var reqcode = param.code;
-    var code = await this.cacheService.get(param.mail)
+  @Get('/ifusernameexists/:name') 
+  async ifUserNameExists(@Res() res, @Param() param) {
+    var name = param.name;
+    
 
-    if(reqcode === code) {
-      return res.status(HttpStatus.OK).json("验证码正确");
+
+    if(await this.userService.getUserByName(name) == null) {
+      return res.status(HttpStatus.OK).json({msg:"no_exists",tip:"用户名不存在"});
     }
     else {
-      return res.status(HttpStatus.EXPECTATION_FAILED).json("验证码错误");
+      return res.status(HttpStatus.OK).json({msg:"exists",tip:"用户名存在"});
     }
     
   }
+  @Get('/changepwd/:mail/:code/:pwd') 
+  async changePwd(@Res() res, @Param() param) {
+    var mail = param.mail;
+    var req_code = param.code;
+    var pwd = param.pwd;
+
+    var code = await this.cacheService.get(mail)
+
+
+    if(req_code === code) {
+      if (await this.userService.updatePwd(mail, pwd)!==null) {
+        return res.status(HttpStatus.OK).json({msg:"change_pwd_susscess", tip:"密码修改成功"});
+      }
+      else {
+        return res.status(HttpStatus.OK).json({msg:"change_pwd_failed", tip:"修改失败"});
+      }
+
+      
+    }
+    else {
+      return res.status(HttpStatus.OK).json({msg:"wrong_mail_code", tip:"验证码错误"});
+    }
+    
+  }
+
+
 
 }

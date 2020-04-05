@@ -8,13 +8,16 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   user_id: number;
 
-  @Column('text')
+  @Column('varchar')
   name: string;
 
-  @Column('text')
+  @Column('varchar')
+  mail: string;
+
+  @Column('varchar')
   pwd: string;
 
-  @Column('text')
+  @Column('varchar')
   phone: string;
 
 }
