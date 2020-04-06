@@ -7,6 +7,7 @@ backend:
     npm install --save nodemailer
     npm i --save redis
     npm install nestjs-redis --save
+    cnpm install express-session
     npm run start
 
 frontend:

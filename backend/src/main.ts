@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as serveStatic from 'serve-static';
 import path = require('path');
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create( AppModule);
@@ -12,6 +13,8 @@ async function bootstrap() {
     maxAge: '1d',
     extensions: ['jpg', 'jpeg', 'png', 'gif'],
    }));
+
+   app.use(session({ secret: 'keyword', cookie: { maxAge: 60000 }}))
 
   app.enableCors(); //允许跨域访问
   await app.listen(3000);

@@ -6,9 +6,9 @@
         <div style="height:60px"></div>
         <div style="">L O G I N</div>
         <div style="height:40px"></div>
-        <el-input style="width:100%" class="center-block" v-model="input" placeholder="请输入用户名"></el-input>
+        <el-input style="width:100%" class="center-block" v-model="name" placeholder="请输入用户名"></el-input>
         <el-input style="width:100%" placeholder="请输入密码" v-model="pwd" show-password></el-input>
-        <el-button style="width:100%" type="primary" plain>登录</el-button>
+        <el-button style="width:100%" type="primary" v-on:click="login" plain>登录</el-button>
         <div style="height:5px"></div>
         <el-link :underline="false" type="primary" href="/register">注册</el-link>
         <el-link :underline="false" type="primary" href="/forgetpwd" style="float:right">忘记密码？</el-link>
@@ -27,12 +27,7 @@ export default {
   name: "Login",
   data() {
     return {
-      title: "",
-      description: "",
-      body: "",
-      author: "",
-      date_posted: "",
-      input: "",
+      name: "",
       pwd: "",
     };
   },
@@ -40,19 +35,23 @@ export default {
     this.date_posted = new Date().toLocaleDateString();
   },
   methods: {
-    createPost() {
+    login() {
       let postData = {
-        title: this.title,
-        description: this.description,
-        body: this.body,
-        author: this.author,
-        date_posted: this.date_posted
+        name: this.name,
+        pwd: this.pwd,
       };
       this.__submitToServer(postData);
     },
     __submitToServer(data) {
-      axios.post(`${server.baseURL}/blog/post`, data).then(data => {
-        router.push({ name: "home" });
+      axios.post(`${server.baseURL}/user/login`, data).then(data => {
+        if(data.data.msg == "login_success") {
+          this.$message('登录成功');
+          this.$router.push("/home");
+        }
+        else {
+          this.$message('登录失败');
+        }
+        
       });
     }
   }

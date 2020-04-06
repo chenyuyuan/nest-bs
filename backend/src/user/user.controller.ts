@@ -1,4 +1,4 @@
-import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,Req } from '@nestjs/common';
+import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,Req,Request } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import {CacheService} from '../utils/cache.service'
@@ -17,14 +17,17 @@ export class UserController {
     return (await this.userService.findAll());
   }
   @Post('/login') 
-  async login(@Res() res, @Body() loginUserDTO: LoginUserDTO) {
+  async login(@Res() res, @Body() loginUserDTO: LoginUserDTO, @Request() request) {
 
     //session
+    console.log(request.session.username)
+    request.session.username = loginUserDTO.name;
+    console.log(request.session.username)
 
     const user = await this.userService.getUserByName(loginUserDTO.name);
-    console.log("用户名："+loginUserDTO.name)
-    if (!user) throw new NotFoundException('Post does not exist!');
-    return res.status(HttpStatus.OK).json(user);
+    console.log("用户："+loginUserDTO.name+"登录")
+    if (!user) throw new NotFoundException('User does not exist!');
+    return res.status(HttpStatus.OK).json({msg:"login_success",tip:"登录成功"});
   }
   
 
@@ -33,16 +36,18 @@ export class UserController {
     var req_code = registerUserDTO.mail_code;
     var code = await this.cacheService.get(registerUserDTO.mail)
 
-    if(req_code === code) {
-      if(await this.userService.getUserByName(name) == null) {
-        if((await this.userService.addUser(registerUserDTO.name, registerUserDTO.mail, registerUserDTO.pwd, registerUserDTO.phone)) !==null){
-          return res.status(HttpStatus.OK).json({msg:"register_success",tip:"注册成功"});
-        }
-        else {
-          return res.status(HttpStatus.OK).json({msg:"register_failed",tip:"数据库写入错误"});
-        }
-      }
+    console.log("用户发送的验证码："+req_code+"正确的验证码："+code)
+    if(await this.userService.getUserByName(registerUserDTO.name) != null) {
+      return res.status(HttpStatus.OK).json({msg:"user_exists",tip:"用户已存在"});
+    }
 
+    if(req_code == code) {
+      if((await this.userService.addUser(registerUserDTO.name, registerUserDTO.mail, registerUserDTO.pwd, registerUserDTO.phone)) !==null){
+        return res.status(HttpStatus.OK).json({msg:"register_success",tip:"注册成功"});
+      }
+      else {
+        return res.status(HttpStatus.OK).json({msg:"register_failed",tip:"数据库写入错误"});
+      }
       
     }
     else {
@@ -73,7 +78,7 @@ export class UserController {
     });
     workerProcess.stderr.on('data', function (data) {
        console.log('stderr: ' + data);
-       return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"发送失败"});
+       return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"发送失败", mail_code:code});
     });
     workerProcess.on('close', function (code) {
        console.log('子进程已退出，退出码 '+code);
