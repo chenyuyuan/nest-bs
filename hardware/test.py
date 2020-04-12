@@ -37,7 +37,7 @@ if __name__ == '__main__':
     else:
         print("open failed >", serial.name)
     # create a link
-    order_new = "at+cm2mclinew=\"49.4.85.232\",\"5683\",\"868334033365754\"\r\n"
+    order_new = "AT+CM2MCLINEW=\"119.3.250.80\",\"5683\",\"868334033365754\"\r\n"
     serial.write(order_new.encode())
     while True:
         # send_data = input("=>")
