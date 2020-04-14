@@ -13,12 +13,9 @@ def rcv_data(queue):
     while True:
         rcv = serial.readline()
         rcv = rcv.decode()
-        if rcv == "":
-            print("是空格")
         if rcv == "\r\n":
-            print("是rn")
-        if rcv == "\n":
-            print("是n")
+            time.sleep(0.1)
+            continue
         print("收到消息: " + str(rcv))
         if queue.full():
             print("队列queue已满")
@@ -64,7 +61,7 @@ if __name__ == '__main__':
     print("order_new_data: " + str(order_new_data))
     start_time = time.time()
     while True:
-        overtime = 30  # 超时未上报时间为30秒
+        overtime = 20  # 超时未上报时间为30秒
         if (time.time() - start_time) > overtime:
             sensor_data = get_data()
             order_senddata = "at+cm2mclisend=" + str(sensor_data) + "\r\n"
