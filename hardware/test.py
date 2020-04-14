@@ -52,9 +52,9 @@ if __name__ == '__main__':
     time.sleep(0.1)
     order_new_data = (order_new_data + serial.read(serial.inWaiting())).decode()
     print("order_new_data: " + str(order_new_data))
+    start_time = time.time()
     while True:
-        start_time = time.time()
-        overtime = 60  # 超时未上报时间为60秒
+        overtime = 30  # 超时未上报时间为60秒
         if (time.time() - start_time) > overtime:
             sensor_data = get_data()
             order_senddata = "at+cm2mclisend=" + sensor_data
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
         if queue.empty:
             print("队列queue为空")
-            time.sleep(5)
+            time.sleep(10)
             continue
         else:
             print("get data")
