@@ -28,7 +28,7 @@ def rcv_data(queue):
 
         i = i + 1
         print("rcv_data循环次数: " + str(i))
-        # time.sleep(5)
+        time.sleep(0.1)
 
 
 def get_data():
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         overtime = 30  # 超时未上报时间为30秒
         if (time.time() - start_time) > overtime:
             sensor_data = get_data()
-            order_senddata = "at+cm2mclisend=" + str(sensor_data)
+            order_senddata = "at+cm2mclisend=" + str(sensor_data) + "\r\n"
             serial.write(order_senddata.encode())
             print("超时自动上报：" + str(sensor_data))
             start_time = time.time()
@@ -80,7 +80,7 @@ if __name__ == '__main__':
                 while count > 0:
                     # get sensor data
                     sensor_data = get_data()
-                    order_senddata = "at+cm2mclisend=" + str(sensor_data)
+                    order_senddata = "at+cm2mclisend=" + str(sensor_data) + "\r\n"
                     serial.write(order_senddata.encode())
                     print("连续上报第" + str(count) + "次：" + str(sensor_data))
                     time.sleep(5)
