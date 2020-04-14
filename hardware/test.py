@@ -4,6 +4,8 @@ import serial.tools.list_ports
 import threading
 import multiprocessing
 import time
+import random
+import struct
 
 
 def rcv_data(queue):
@@ -26,12 +28,14 @@ def rcv_data(queue):
 
         i = i + 1
         print("rcv_data循环次数: " + str(i))
-        time.sleep(5)
+        # time.sleep(5)
 
 
 def get_data():
-    data = 1
-    return data
+    data = random.randint(1, 9999)
+    data_hex = (hex(struct.unpack('>H', struct.pack('>h', data))[0]))
+    data_hex = data_hex[2:] if len(data_hex) % 2 == 0 else "0" + data_hex[2:]
+    return data_hex
 
 
 if __name__ == '__main__':
