@@ -22,7 +22,7 @@ def rcv_data(queue):
         else:
             if rcv[0:14] == "+CM2MCLIRECV: ":
                 queue.put(rcv[14:])
-                print("rcv_data: "+str(rcv[14:]))
+                print("rcv_data: "+str(rcv[14:-2]))
             if rcv[0:10] == "+CM2MCLI: ":
                 cm2mcli_code = rcv[10:-2]
                 print("+CM2MCLI code: " + str(cm2mcli_code))
