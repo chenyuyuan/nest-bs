@@ -2,22 +2,30 @@ import serial
 import serial.tools.list_ports
 import threading
 import multiprocessing
-from time import sleep
+import time
 
 
 def rcv_data(queue):
-    i = 1
+    i = 0
     while True:
         rcv = serial.readline()
         rcv = rcv.decode()
-        print("got order: " + str(rcv))
+        print("收到消息: " + str(rcv))
         if queue.full():
-            print("队列queue 已满")
-        queue.put(i)
+            print("队列queue已满")
+        else:
+            if rcv[0:14] == "+CM2MCLIRECV: ":
+                queue.put(rcv[14:])
+                print("rcv_data: "+str(rcv[14:]))
+            if rcv[0:10] == "+CM2MCLI: ":
+                cm2mcli_code = rcv[10:]
+                print("+CM2MCLI: " + str(cm2mcli_code))
+            if rcv == "ERROR":
+                print("is ERROR")
+
         i = i + 1
-        print("recv")
-        print(i)
-        sleep(1)
+        print("rcv_data循环次数: " + str(i))
+        time.sleep(5)
 
 
 def get_data():
@@ -39,18 +47,38 @@ if __name__ == '__main__':
     # create a link
     order_new = "AT+CM2MCLINEW=\"119.3.250.80\",\"5683\",\"868334033365754\"\r\n"
     serial.write(order_new.encode())
+    order_new_data = serial.read(1)
+    time.sleep(0.1)
+    order_new_data = (order_new_data + serial.read(serial.inWaiting())).decode()
+    print("oeder_new_data: " + str(order_new_data))
     while True:
-        # send_data = input("=>")
-        # send_data = send_data + '\r\n'
+        start_time = time.time()
+        overtime = 60  # 超时未上报时间为60秒
         if queue.empty:
             print("队列queue为空")
-            sleep(1)
+            time.sleep(5)
             continue
-        print("get data")
-        order = queue.get()
-        if order == 1:
-            # get sensor data
+        else:
+            print("get data")
+            order = queue.get()
+            queue.clear()  # 读到命令直接清空
+            if order != "":
+                count = 120  # 收到命令后连续上报10分钟
+                while count > 0:
+                    # get sensor data
+                    sensor_data = get_data()
+                    order_senddata = "at+cm2mclisend=" + sensor_data
+                    serial.write(order_senddata.encode())
+                    print(sensor_data)
+                    time.sleep(5)
+                    count = count-1
+            start_time = time.time()
+        if (time.time() - start_time) > overtime:
             sensor_data = get_data()
-            order_data = "at+cm2mclisend=" + sensor_data
-            sleep(5)
-            print(sensor_data)
+            order_senddata = "at+cm2mclisend=" + sensor_data
+            serial.write(order_senddata.encode())
+            print("超时自动上报：" + str(sensor_data))
+            start_time = time.time()
+            time.sleep(5)
+
+        time.sleep(5)
