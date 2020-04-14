@@ -16,9 +16,9 @@ def rcv_data(queue):
         if rcv == "":
             print("是空格")
         if rcv == "\r\n":
-            print("是\r\n")
+            print("是rn")
         if rcv == "\n":
-            print("是\n")
+            print("是n")
         print("收到消息: " + str(rcv))
         if queue.full():
             print("队列queue已满")
