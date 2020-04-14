@@ -22,7 +22,7 @@ def rcv_data(queue):
                 print("rcv_data: "+str(rcv[14:]))
             if rcv[0:10] == "+CM2MCLI: ":
                 cm2mcli_code = rcv[10:]
-                print("+CM2MCLI: " + str(cm2mcli_code))
+                print("+CM2MCLI code: " + str(cm2mcli_code))
             if rcv == "ERROR":
                 print("is ERROR")
 
@@ -74,7 +74,8 @@ if __name__ == '__main__':
         else:
             print("get data")
             order = queue.get()
-            queue.clear()  # 读到命令直接清空
+            while queue.empty() is False:
+                a = queue.get()  # 读到命令就清空queue
             if order != "":
                 count = 120  # 收到命令后连续上报10分钟
                 while count > 0:
