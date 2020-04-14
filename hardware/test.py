@@ -54,10 +54,10 @@ if __name__ == '__main__':
     print("order_new_data: " + str(order_new_data))
     start_time = time.time()
     while True:
-        overtime = 30  # 超时未上报时间为60秒
+        overtime = 30  # 超时未上报时间为30秒
         if (time.time() - start_time) > overtime:
             sensor_data = get_data()
-            order_senddata = "at+cm2mclisend=" + sensor_data
+            order_senddata = "at+cm2mclisend=" + str(sensor_data)
             serial.write(order_senddata.encode())
             print("超时自动上报：" + str(sensor_data))
             start_time = time.time()
@@ -76,7 +76,7 @@ if __name__ == '__main__':
                 while count > 0:
                     # get sensor data
                     sensor_data = get_data()
-                    order_senddata = "at+cm2mclisend=" + sensor_data
+                    order_senddata = "at+cm2mclisend=" + str(sensor_data)
                     serial.write(order_senddata.encode())
                     print("连续上报第" + str(count) + "次：" + str(sensor_data))
                     time.sleep(5)
