@@ -67,7 +67,7 @@ if __name__ == '__main__':
             start_time = time.time()
             time.sleep(5)
 
-        if queue.empty:
+        if queue.empty():
             print("队列queue为空")
             time.sleep(10)
             continue
