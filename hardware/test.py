@@ -1,3 +1,4 @@
+# encoding: utf-8
 import serial
 import serial.tools.list_ports
 import threading
@@ -69,7 +70,7 @@ if __name__ == '__main__':
                     sensor_data = get_data()
                     order_senddata = "at+cm2mclisend=" + sensor_data
                     serial.write(order_senddata.encode())
-                    print(sensor_data)
+                    print("连续上报第" + str(count) + "次：" + str(sensor_data))
                     time.sleep(5)
                     count = count-1
             start_time = time.time()
