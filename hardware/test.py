@@ -51,10 +51,18 @@ if __name__ == '__main__':
     order_new_data = serial.read(1)
     time.sleep(0.1)
     order_new_data = (order_new_data + serial.read(serial.inWaiting())).decode()
-    print("oeder_new_data: " + str(order_new_data))
+    print("order_new_data: " + str(order_new_data))
     while True:
         start_time = time.time()
         overtime = 60  # 超时未上报时间为60秒
+        if (time.time() - start_time) > overtime:
+            sensor_data = get_data()
+            order_senddata = "at+cm2mclisend=" + sensor_data
+            serial.write(order_senddata.encode())
+            print("超时自动上报：" + str(sensor_data))
+            start_time = time.time()
+            time.sleep(5)
+
         if queue.empty:
             print("队列queue为空")
             time.sleep(5)
@@ -74,12 +82,5 @@ if __name__ == '__main__':
                     time.sleep(5)
                     count = count-1
             start_time = time.time()
-        if (time.time() - start_time) > overtime:
-            sensor_data = get_data()
-            order_senddata = "at+cm2mclisend=" + sensor_data
-            serial.write(order_senddata.encode())
-            print("超时自动上报：" + str(sensor_data))
-            start_time = time.time()
-            time.sleep(5)
 
         time.sleep(5)
