@@ -13,6 +13,12 @@ def rcv_data(queue):
     while True:
         rcv = serial.readline()
         rcv = rcv.decode()
+        if rcv == "":
+            print("是空格")
+        if rcv == "\r\n":
+            print("是\r\n")
+        if rcv == "\n":
+            print("是\n")
         print("收到消息: " + str(rcv))
         if queue.full():
             print("队列queue已满")
@@ -77,8 +83,8 @@ if __name__ == '__main__':
             while queue.empty() is False:
                 a = queue.get()  # 读到命令就清空queue
             if order != "":
-                count = 120  # 收到命令后连续上报10分钟
-                while count > 0:
+                count = 1  # 收到命令后连续上报10分钟
+                while count <= 120:
                     # get sensor data
                     sensor_data = get_data()
                     order_senddata = "at+cm2mclisend=" + str(sensor_data) + "\r\n"
