@@ -4,7 +4,7 @@ import serial.tools.list_ports
 import threading
 import multiprocessing
 import time
-import random
+# import random
 import struct
 
 
@@ -45,8 +45,8 @@ def get_data():
 def temperature():
     file = open('/sys/bus/w1/devices/28-01187a999cff/w1_slave')
     text = file.read()
-    tempmul1000 = text[-6:-1]
-    print("DS18B20，温度是" + str(tempmul1000/1000))
+    tempmul1000 = int(text[-6:-1])
+    print("DS18B20，温度是" + str(float(tempmul1000)/1000))
     file.close()
     return tempmul1000
 
