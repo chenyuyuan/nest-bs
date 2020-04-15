@@ -35,10 +35,20 @@ def rcv_data(queue):
 
 
 def get_data():
-    data = random.randint(1, 9999)
+    # data = random.randint(1, 9999)
+    data = temperature()
     data_hex = (hex(struct.unpack('>H', struct.pack('>h', data))[0]))
     data_hex = data_hex[2:] if len(data_hex) % 2 == 0 else "0" + data_hex[2:]
     return data_hex
+
+
+def temperature():
+    file = open('/sys/bus/w1/devices/28-01187a999cff/w1_slave')
+    text = file.read()
+    tempmul1000 = text[-6:-1]
+    print("DS18B20，温度是" + str(tempmul1000/1000))
+    file.close()
+    return tempmul1000
 
 
 if __name__ == '__main__':
