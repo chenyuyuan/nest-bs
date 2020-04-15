@@ -20,12 +20,10 @@ export class UserController {
   async login(@Res() res, @Body() loginUserDTO: LoginUserDTO, @Request() request) {
 
     //session
-    console.log(request.session.username)
     request.session.username = loginUserDTO.name;
-    console.log(request.session.username)
 
     const user = await this.userService.getUserByName(loginUserDTO.name);
-    console.log("用户："+loginUserDTO.name+"登录")
+    console.log("用户登录："+loginUserDTO.name)
     if (!user) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({msg:"login_success",tip:"登录成功"});
   }
