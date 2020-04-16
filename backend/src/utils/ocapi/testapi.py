@@ -1,4 +1,5 @@
 import requests
+# import sys
 
 url = "https://iam.cn-north-4.myhuaweicloud.com/v3/auth/tokens"
 
@@ -11,3 +12,5 @@ headers = {
 response = requests.request("POST", url, headers=headers, data = payload)
 
 print(response.text.encode('utf8'))
+print("hahahahahahaha")
+# sys.stdout.write(response.text.encode('utf8') + "\n")

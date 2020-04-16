@@ -9,6 +9,7 @@ backend:
     npm i --save redis
     npm install nestjs-redis --save
     cnpm install express-session --save
+    cnpm install node-cmd
     npm run start
 
 frontend:

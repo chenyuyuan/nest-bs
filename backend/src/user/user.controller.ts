@@ -110,10 +110,33 @@ export class UserController {
           }
       }
     }
+    var nodeCmd = require('node-cmd');
 
+    // 'python ../utils/ocapi/testapi.py'
+    nodeCmd.get(
+
+      'python ./src/utils/ocapi/testapi.py',
+      function(err, data, stderr){
+        console.log("aaa")
+          console.log(data);
+      }
+  );
+  nodeCmd.run('python ../utils/ocapi/testapi.py');
 
     console.log("before req")
 
+    // const fs = require('fs');
+    // const child_process = require('child_process');
+    // var workerProcess = child_process.spawn('node', ['./src/utils/req.js',]);
+    // workerProcess.stdout.on('data', function (data) {
+    //    console.log('stdout: ' + data);
+    // });
+    // workerProcess.stderr.on('data', function (data) {
+    //    console.log('stderr: ' + data);
+    // });
+    // workerProcess.on('close', function (code) {
+    //    console.log('子进程已退出，退出码 '+code);
+    // });
   
 
     return (await this.userService.findAll());

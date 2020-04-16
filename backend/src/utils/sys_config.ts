@@ -5,4 +5,5 @@ export const sys_config = {
     IAMPassword: 'ccc1111.',
     IAMDoaminId: 'cyuyuan15',
     region: 'cn-north-4',
+    project_id: '063c924f96800fb72f78c012471a0813'
 }
