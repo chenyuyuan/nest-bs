@@ -5,9 +5,10 @@ backend:
     npm install --save @nestjs/mongoose mongoose
     npm install --save @nestjs/typeorm typeorm mysql
     npm install --save nodemailer
+    npm install axios
     npm i --save redis
     npm install nestjs-redis --save
-    cnpm install express-session
+    cnpm install express-session --save
     npm run start
 
 frontend:

@@ -14,7 +14,8 @@ async function bootstrap() {
     extensions: ['jpg', 'jpeg', 'png', 'gif'],
    }));
 
-   app.use(session({ secret: 'keyword', cookie: { maxAge: 60000 }}))
+  app.use(session({ secret: 'keyword', cookie: { maxAge: 60000 }}))
+
 
   app.enableCors(); //允许跨域访问
   await app.listen(3000);
