@@ -1,0 +1,1 @@
+"id"	"value"	"datatype_id"	"device_id"	"time"	"properties"	"order"

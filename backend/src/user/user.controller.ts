@@ -25,14 +25,13 @@ export class UserController {
     var a;
     // 'python ../utils/ocapi/testapi.py'
     nodeCmd.get(
-      'python ./src/utils/ocapi/testapi.py',
+      'python ./src/utils/ocapi/get_token.py',
       function(err, data, stderr){
-          a = data
+        console.log("cmd: python ./src/utils/ocapi/get_token.py")
+        console.log(data)
+        console.log(err)
       }
     );
-
-    
-
     
     var xauthtoken = await this.cacheService.get("xauthtoken")
     console.log(xauthtoken)

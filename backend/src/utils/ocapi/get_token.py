@@ -1,6 +1,6 @@
 import requests
 import json
-from redis import StrictRedis
+# from redis import StrictRedis
 import mysql.connector
 
 # import sys

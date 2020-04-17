@@ -1,0 +1,1 @@
+"id"	"user_id"	"article_id"	"is_like"

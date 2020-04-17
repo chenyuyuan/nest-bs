@@ -1,0 +1,1 @@
+"id"	"ocdevice_id"	"ocproduct_id"	"imei"	"imsi"	"reg_time"	"status"
