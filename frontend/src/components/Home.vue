@@ -7,7 +7,7 @@
 <div>
   <div style="height:1px"></div>
   <el-row class="tac">
-    <el-col :span="4">
+    <el-col :span="3">
       <el-menu
         default-active="2"
         class="el-menu-vertical-demo"
@@ -44,6 +44,9 @@
           <span slot="title">导航四</span>
         </el-menu-item>
       </el-menu>
+    </el-col>
+    <el-col :span="1" style="border:1px solid transparent">
+      <div style="display:none" class="grid-content bg-purple">1</div>
     </el-col>
     <el-col :span="20">
       

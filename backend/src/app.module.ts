@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BlogModule } from './blog/blog.module';
 import { UserModule } from './user/user.module';
+import { DeviceModule } from './device/device.module';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { UserModule } from './user/user.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    DeviceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

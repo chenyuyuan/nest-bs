@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home.vue'
 import Login from '../components/user/Login.vue'
 import Register from '../components/user/Register.vue'
-
+import AddDevice from '../components/device/AddDevice'
+import ManageDevice from '../components/device/ManageDevice'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   { path: '/home', name: 'Home', component: Home  },
+
+  { path: '/adddevice', name: 'AddDevice', component: AddDevice  },
+  { path: '/managedevice', name: 'ManageDevice', component: ManageDevice  },
+  
   { path: '/create', name: 'Create', component: () => import(/* webpackChunkName: "about" */ '../components/post/Create.vue') },
   { path: '/edit/:id', name: 'Edit', component: () => import(/* webpackChunkName: "about" */ '../components/post/Edit.vue') },
   { path: '/post/:id', name: 'Post', component: () => import(/* webpackChunkName: "about" */ '../components/post/Post.vue') },
