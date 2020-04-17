@@ -30,8 +30,13 @@ mydb = mysql.connector.connect(
   passwd="Aaa1111.",
   database="health_center"
 )
+# mycursor = mydb.cursor()
+# mycursor.execute("SELECT * FROM sys_config where name = \'xauthtoken\'")
+# myresult = mycursor.fetchall()     # fetchall() 获取所有记录
+# print(myresult[0])
 mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM sys_config")
-myresult = mycursor.fetchall()     # fetchall() 获取所有记录
-for x in myresult:
-  print(x)
+sql = "update sys_var set value = \'"+x_auth_token+"\' where name = \'xauthtoken\'"
+mycursor.execute(sql)
+mydb.commit()
+print(mycursor.rowcount, " 条记录被修改")
+print("Token Saved in Table sys_var Column xauthToken!")
