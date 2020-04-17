@@ -86,8 +86,8 @@ export default {
     },
     add() {
       let adddata = {
-        product_id: this.value,
-        device_id: this.device_id,
+        ocproduct_id: this.value,
+        ocdevice_id: this.device_id,
       };
       this.__add(adddata);
     },
