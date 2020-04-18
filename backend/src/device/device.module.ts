@@ -5,10 +5,10 @@ import { DeviceController } from './device.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Device } from './device.entity';
 import { Product } from './product.entity';
-import { User_Device } from './user_device.entity';
+import { UserDevice } from './userdevice.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Device,Product,User_Device]), ],
+  imports: [TypeOrmModule.forFeature([Device,Product,UserDevice]), ],
   providers: [DeviceService],
   controllers: [DeviceController]
 })

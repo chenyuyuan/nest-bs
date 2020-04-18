@@ -1,4 +1,4 @@
-import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,Req,Request } from '@nestjs/common';
+import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,Req,Request,Header } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import {CacheService} from '../utils/cache.service'
@@ -33,19 +33,25 @@ export class UserController {
       }
     );
     
-    var xauthtoken = await this.cacheService.get("xauthtoken")
-    console.log(xauthtoken)
+    // var xauthtoken = await this.cacheService.get("xauthtoken")
+    // console.log(xauthtoken)
 
     return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
   }
   @Post('/login') 
+
   async login(@Res() res, @Body() loginUserDTO: LoginUserDTO, @Request() request) {
 
+    // res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, accept, content-type");
+    // res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
+    // res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+    // res.setHeader("Access-Control-Allow-Credentials", "true");
     //session
     request.session.username = loginUserDTO.name;
+    request.session.user_id = (await this.userService.getUserByName(loginUserDTO.name)).user_id;
 
     const user = await this.userService.getUserByName(loginUserDTO.name);
-    console.log("用户登录："+loginUserDTO.name)
+    console.log("用户登录："+loginUserDTO.name + request.session.user_id)
     if (!user) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({msg:"login_success",tip:"登录成功"});
   }
@@ -54,7 +60,8 @@ export class UserController {
   @Post('/register') 
   async register(@Res() res, @Body() registerUserDTO:RegisterUserDTO) {
     var req_code = registerUserDTO.mail_code;
-    var code = await this.cacheService.get(registerUserDTO.mail)
+    //var code = await this.cacheService.get(registerUserDTO.mail)
+    var code = await this.userService.getMailCode(registerUserDTO.mail)
 
     console.log("用户发送的验证码："+req_code+"正确的验证码："+code)
     if(await this.userService.getUserByName(registerUserDTO.name) != null) {
@@ -82,7 +89,9 @@ export class UserController {
     let code :number = parseInt(String(Math.random() * 10000));
     code = code < 1000 ? code + 1000 : code;
     //保存mail:code，到Redis缓存
-    await this.cacheService.set(param.mail,code);
+    //await this.cacheService.set(param.mail,code);
+    await this.userService.setMailCode(param.mail,String(code))
+
     //await this.cacheService.get(param.mail)
     //console.log(await this.cacheService.get(param.mail))
     console.log("邮箱：" + param.mail+ " 验证码：" + code)
@@ -126,7 +135,8 @@ export class UserController {
     var req_code = param.code;
     var pwd = param.pwd;
 
-    var code = await this.cacheService.get(mail)
+    //var code = await this.cacheService.get(mail)
+    var code = await this.userService.getMailCode(mail)
 
 
     if(req_code === code) {

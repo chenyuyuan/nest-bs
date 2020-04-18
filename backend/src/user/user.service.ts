@@ -3,15 +3,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { Sys_Mail_Code } from './sys_mail_code.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly UserRepository: Repository<User>,
+    @InjectRepository(Sys_Mail_Code)
+    private readonly Sys_Mail_CodeRepository: Repository<Sys_Mail_Code>,
   ) { }
 
   private readonly users: User[] = [];
+  private readonly sys_mail_codes: Sys_Mail_Code[] = [];
 
 
   async addUser(name:string, mail:string, pwd:string, phone:string): Promise<User> {
@@ -47,5 +51,18 @@ export class UserService {
     return await this.UserRepository.findOne({name:name});
   }
 
+  async setMailCode(mail: string, code:string): Promise<string> {
+    
+    var sys_mail_code:Sys_Mail_Code = (await this.Sys_Mail_CodeRepository.findOne({mail:mail}))
+    sys_mail_code.mail = mail
+    sys_mail_code.code = code
+    await this.Sys_Mail_CodeRepository.save(sys_mail_code)
+    return code;
+  }
+  async getMailCode(mail: string): Promise<string> {
+    return (await this.Sys_Mail_CodeRepository.findOne({mail:mail})).code;
+  }
+
+  
 
 }

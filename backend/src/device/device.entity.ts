@@ -8,25 +8,25 @@ export class Device extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   name: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   ocdevice_id: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   ocproduct_id: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   imei: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   imsi: string;
 
-  @Column('datetime')
+  @Column('datetime',{nullable: true})
   reg_time: string;
 
-  @Column('int')
+  @Column('int',{nullable: true})
   status: number;
 
 }

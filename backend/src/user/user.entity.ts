@@ -11,13 +11,13 @@ export class User extends BaseEntity {
   @Column('varchar')
   name: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable:true})
   mail: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable:true})
   pwd: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable:true})
   phone: string;
 
 }

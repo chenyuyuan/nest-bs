@@ -36,9 +36,9 @@
         <el-select v-model="value" placeholder="请选择产品" style="margin-right:full">
           <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            :key="item.id"
+            :label="item.name"
+            :value="item.ocproduct_id">
           </el-option>
         </el-select>
       </div>
@@ -46,7 +46,7 @@
         <el-input placeholder="请输入设备号" v-model="device_id" style="width:250px" clearable></el-input>
       </div>
       <div class="form-inline" style="margin-top:10px">
-        <el-button type="primary">确认</el-button>
+        <el-button type="primary" v-on:click="add">确认</el-button>
       </div>
     </el-col>
   </el-row>
@@ -89,6 +89,7 @@ export default {
         ocproduct_id: this.value,
         ocdevice_id: this.device_id,
       };
+      console.log("selected " + this.value)
       this.__add(adddata);
     },
     __add(data) {
@@ -96,17 +97,21 @@ export default {
         if(data.data.msg == "add_device_success") {
           this.$message('添加成功');
         }
-        else if(data.data.msg == "device_exists") {
+        else if(data.data.msg == "user_device_exists") {
           this.$message('设备已存在，请到管理设备查看');
+        }
+        else if(data.data.msg == "device_not_exists") {
+          this.$message('设备不存在');
         }
         
       });
     }
   },
   mounted() {
-    axios.post(`${server.baseURL}/device/products`, ).then(data => {
-      console.log(data.data)
-      this.options = data.data
+    axios.get(`${server.baseURL}/device/products`, ).then(data => {
+      console.log(data.data.products)
+      this.options = data.data.products
+      
         
     });
     

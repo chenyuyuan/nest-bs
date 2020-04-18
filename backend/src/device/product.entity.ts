@@ -8,16 +8,16 @@ export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   name: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   ocproduct_id: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   device_type: string;
 
-  @Column('varchar')
+  @Column('varchar',{nullable: true})
   protocol_type: string;
 
 }

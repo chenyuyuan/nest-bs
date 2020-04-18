@@ -127,7 +127,7 @@ export default {
     }
   },
   mounted() {
-    axios.post(`${server.baseURL}/device/my_devices`, ).then(data => {
+    axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
       console.log(data.data)
       this.tableData = data.data
         

@@ -4,17 +4,17 @@ import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 // 这里可以修改表名
 // @Entity('messages')
 @Entity()
-export class User_Device extends BaseEntity {
+export class UserDevice extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('int')
+  @Column('int',{nullable: true})
   user_id: number;
 
-  @Column('varchar')
+  @Column('int',{nullable: true})
   device_id: number;
 
-  @Column('int')
+  @Column('int',{nullable: true,default:0})
   verify: number;
 
 }
