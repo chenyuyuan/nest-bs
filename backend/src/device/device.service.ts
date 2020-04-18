@@ -26,7 +26,7 @@ export class DeviceService {
       return await this.ProductRepository.find();
     }
 
-    async updatePwd(ocproduct_id:string, ocdevice_id: string,user_id:number): Promise<User_Device> {
+    async addDevice(ocproduct_id:string, ocdevice_id: string,user_id:number): Promise<User_Device> {
         var device: Device = await this.DeviceRepository.findOne({ocdevice_id:ocdevice_id, ocproduct_id:ocproduct_id}) 
         var user_device:User_Device
         if((await this.User_DeviceRepository.find()).length == 0) {
