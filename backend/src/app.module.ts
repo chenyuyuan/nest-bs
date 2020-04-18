@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BlogModule } from './blog/blog.module';
 import { UserModule } from './user/user.module';
 import { DeviceModule } from './device/device.module';
+import { DataModule } from './data/data.module';
 
 
 @Module({
@@ -24,6 +25,7 @@ import { DeviceModule } from './device/device.module';
       synchronize: true,
     }),
     DeviceModule,
+    DataModule,
   ],
   controllers: [AppController],
   providers: [AppService],

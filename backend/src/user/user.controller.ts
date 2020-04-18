@@ -1,7 +1,6 @@
 import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,Req,Request,Header } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
-import {CacheService} from '../utils/cache.service'
 import { RegisterUserDTO } from './dto/register-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
 import 'axios';
@@ -11,7 +10,7 @@ import { async } from 'rxjs/internal/scheduler/async';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService,private readonly cacheService: CacheService) { }
+  constructor(private readonly userService: UserService) { }
 
 
 

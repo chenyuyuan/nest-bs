@@ -40,15 +40,16 @@ export class DeviceController {
         
     }
 
-    @Get('/:ocdevice_id')
-    async getDevice(@Res() res, @Param() param): Promise<string> {
-        
-        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",products:(await this.deviceService.findDevice(param.ocdevice_id))});
+    @Get('/device/:ocdevice_id')
+    async getDevice(@Res() res, @Param() param,@Request() request): Promise<string> {
+        console.log("/device/device/ "+param.ocdevice_id)
+        console.log(request.session.user_id)
+        return res.status(HttpStatus.OK).json({msg:"success",tip:"device成功",device:(await this.deviceService.findDevice(param.ocdevice_id))});
     }
     @Get('/delete/:device_id')
     async deleteDevice(@Res() res, @Param() param, @Request() request): Promise<string> {
 
-        var user_id:number = request.session.username;
+        var user_id:number = request.session.user_id;
 
         await this.deviceService.deleteUserDevice(user_id, param.device_id)
         return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",});
@@ -61,12 +62,14 @@ export class DeviceController {
         await this.deviceService.updateDevice(user_id, param.name,param.imei,param.imsi)
         return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",});
     }
-    @Get('/mydevice')
+    @Get('/my_device')
     async getMyDevice(@Res() res,@Request() request): Promise<string> {
-        var user_id:number = request.session.username;
-        await this.deviceService.findDeviceByUserId(user_id)
-        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",products:(await this.deviceService.findAllProduct())});
+        var user_id:number = request.session.user_id;
+        console.log("user_id: "+ user_id)
+        //await this.deviceService.findDeviceByUserId(user_id)
+        return res.status(HttpStatus.OK).json({msg:"success",tip:"mydevice成功",devices:(await this.deviceService.findDeviceByUserId(user_id))});
     }
+    
     @Get('/product/:ocproduct_id')
     async getProduct(@Res() res,@Param() param): Promise<string> {
         

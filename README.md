@@ -12,6 +12,9 @@ backend:
     cnpm install node-cmd
     npm run start
 
+    generate:
+    nest generate module/service/controller name
+
 frontend:
     npm install -g @vue/cli
     npm install
@@ -19,3 +22,5 @@ frontend:
     npm i element-ui -S
 
     npm run serve
+
+    

@@ -40,12 +40,12 @@
             width="120">
         </el-table-column>
         <el-table-column
-            prop="device_id"
+            prop="ocdevice_id"
             label="设备id"
             width="120">
         </el-table-column>
         <el-table-column
-            prop="product_id"
+            prop="ocproduct_id"
             label="产品id">
         </el-table-column>
         <el-table-column
@@ -103,8 +103,8 @@ export default {
       tableData: [{
         id: '',
         name: '',
-        device_id: '',
-        product_id: '',
+        ocdevice_id: '',
+        ocproduct_id: '',
         imei: '',
         imsi:'',
         reg_time: '',
@@ -119,6 +119,7 @@ export default {
     },
     editRow(row) {
       console.log(row);
+      this.$router.push({path:"/device",query:{ocdevice_id:row.ocdevice_id}});
       
     },
     deleteRow(row) {
@@ -128,9 +129,10 @@ export default {
   },
   mounted() {
     axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
-      console.log(data.data)
-      this.tableData = data.data
-        
+      console.log(data)
+      
+      this.tableData = data.data.devices
+      
     });
   }
   
