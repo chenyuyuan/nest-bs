@@ -8,6 +8,7 @@ import { BlogModule } from './blog/blog.module';
 import { UserModule } from './user/user.module';
 import { DeviceModule } from './device/device.module';
 import { DataModule } from './data/data.module';
+import { SysModule } from './sys/sys.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { DataModule } from './data/data.module';
     }),
     DeviceModule,
     DataModule,
+    SysModule,
   ],
   controllers: [AppController],
   providers: [AppService],
