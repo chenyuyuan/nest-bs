@@ -81,7 +81,7 @@ if __name__ == '__main__':
             time.sleep(5)
 
         if queue.empty():
-            print("队列queue为空")
+            print("\n")
             time.sleep(10)
             continue
         else:

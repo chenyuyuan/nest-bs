@@ -21,7 +21,9 @@ export class DataService {
     private readonly devicedatatypes: DeviceDatatype[] = [];
 
     async getDataNew(device_id:number, datatype_id: number): Promise<Data> {
-        var data: Data = await this.DataRepository.findOne({device_id:device_id, datatype_id:datatype_id}) 
+        //var data: Data = await this.DataRepository.findOne({device_id:device_id, datatype_id:datatype_id}) 
+        var data:Data = await this.DataRepository.createQueryBuilder("data").where("device_id=\':device_id\' and datatype_id='\:datatype_id\'",{device_id,datatype_id})
+            .orderBy("id","DESC").getOne()
         console.log("getDataNew")
         console.log(data)
         return data;

@@ -41,17 +41,29 @@ headers = {
 
 response = requests.request("GET", url, headers=headers, data=payload,  verify=False)
 
-print(response.text.encode('utf8'))
+# print(response.text.encode('utf8'))
+data_json = json.loads(response.text)
 
-temperature = 26
+temperature = data_json['shadow'][0]['reported']['properties']['up']
+
+# temperature = 26
 datatype_id = 1
 device_id = 1
 time0 = "20200415T082803Z"
+time0 = data_json['shadow'][0]['reported']['event_time']
 time0 = time0[0:8]+time0[9:-1]
 print(time0)
+print(temperature)
 
 mycursor = mydb.cursor()
-sql = "insert into data (value, datatype_id, device_id, time) values ("+str(temperature)+","+str(datatype_id)+","+str(device_id)+",\'"+time0+"\')"
-mycursor.execute(sql)
-mydb.commit()
-print(mycursor.rowcount, " 条记录被修改")
+mycursor.execute("SELECT * FROM data where time = \'"+time0+"\'")
+myresult = mycursor.fetchall()
+# print(myresult)
+if myresult != []:
+    print("data exists")
+else:
+    mycursor = mydb.cursor()
+    sql = "insert into data (value, datatype_id, device_id, time) values ("+str(temperature)+","+str(datatype_id)+","+str(device_id)+",\'"+time0+"\')"
+    mycursor.execute(sql)
+    mydb.commit()
+    print(mycursor.rowcount, " 条记录被修改")

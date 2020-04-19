@@ -7,6 +7,7 @@ import Register from '../components/user/Register.vue'
 import AddDevice from '../components/device/AddDevice'
 import ManageDevice from '../components/device/ManageDevice'
 import Device from '../components/device/Device'
+import Data from '../components/data/Data'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,8 @@ const routes = [
   { path: '/adddevice', name: 'AddDevice', component: AddDevice  },
   { path: '/managedevice', name: 'ManageDevice', component: ManageDevice  },
   { path: '/device', name: 'Device', component: Device  },
+
+  { path: '/data', name: 'Data', component: Data  },
   
   { path: '/create', name: 'Create', component: () => import(/* webpackChunkName: "about" */ '../components/post/Create.vue') },
   { path: '/edit/:id', name: 'Edit', component: () => import(/* webpackChunkName: "about" */ '../components/post/Edit.vue') },
