@@ -58,6 +58,7 @@ export default {
     
     return {
         charts: '',
+        data: []
         //opinion:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎'],
         // opinionData:[
         // {value:335, name:'直接访问'},
@@ -70,42 +71,7 @@ export default {
         // now : +new Date(1997,9,3),
         // oneDay : 24*3600*1000,
         // value : Math.random()*1000,
-        option : {
-            title: {
-                text: '动态数据 + 时间坐标轴'
-            },
-            tooltip: {
-                trigger: 'axis',
-                formatter: function (params) {
-                    params = params[0];
-                    var date = new Date(params.name);
-                    return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
-                },
-                axisPointer: {
-                    animation: false
-                }
-            },
-            xAxis: {
-                type: 'time',
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-                type: 'value',
-                boundaryGap: [0, '100%'],
-                splitLine: {
-                    show: false
-                }
-            },
-            series: [{
-                name: '模拟数据',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: this.data
-            }]
-        },
+        
 
     }
   },
@@ -126,24 +92,27 @@ export default {
         
     var data = [];
     //var now = +new Date(2020,4,19,19,52,0);
-    var now = +new Date("2020-04-19T05:34:10.000Z");
+    // var now = +new Date("2020-04-19T05:34:10.000Z");
+    var now = +new Date();
     var oneDay = 24 * 3600 * 1000;
-    var oneSecond = 10000;
+    var oneSecond = 1;
     var value = 0;
-    for (var i = 0; i < 1000; i++) {
-        now = new Date(+now + oneSecond);
-        value = value + Math.random() * 21 - 10;
-        data.push({
-        name: now.toString(),
-            value: [
-                now.getFullYear() + '/' + now.getMonth() +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds(),
-                Math.round(value)
-            ]
-        });
-    }
-    //console.log(dom)
-    //console.log(myChart)
-    
+    // for (var i = 0; i < 100; i++) {
+    //     now = new Date(+now -(101-i) * oneSecond);
+    //     value = 0;
+    //     //console.log(now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds())
+    //     data.push({
+    //     name: now.toString(),
+    //         value: [
+    //             now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds(),
+    //             Math.round(value)
+    //         ]
+    //     });
+    // }
+    console.log(dom)
+    console.log(myChart)
+
+    this.data = data
     var option = {
         title: {
             text: '动态数据 + 时间坐标轴'
@@ -153,7 +122,7 @@ export default {
             formatter: function (params) {
                 params = params[0];
                 var date = new Date(params.name);
-                return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
+                return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
             },
             axisPointer: {
                 animation: false
@@ -162,14 +131,14 @@ export default {
         xAxis: {
             type: 'time',
             splitLine: {
-                show: false
+                show: true
             }
         },
         yAxis: {
             type: 'value',
             boundaryGap: [0, '100%'],
             splitLine: {
-                show: false
+                show: true
             }
         },
         series: [{
@@ -184,28 +153,39 @@ export default {
     var dom = document.getElementById("my-chart");
     var myChart = echarts.init(dom);
 
+    console.log(data)
+    //console.log(this.data)\
+    const _this=this
 
     setInterval(function () {
         //console.log(this.now)
         //console.log(setdata)
-        axios.get(`${server.baseURL}/data/a`, ).then(data => {
+        //console.log(_this.data)
+        axios.get(`${server.baseURL}/data/a`, ).then(resdata => {
 
-            value = data.data.sensordata.value
-            console.log(data.data.sensordata.time)
-            now = +new Date(data.data.sensordata.time)
-
-            data.shift();
-            data.push({
+            var temp = resdata.data.sensordata.value
+            //console.log(resdata.data.sensordata.time)
+            //console.log(data.data.sensordata.value)
+    
+            //console.log((resdata.data.sensordata.time).toString())
+            var now = new Date((resdata.data.sensordata.time).toString())
+            
+            var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
+            console.log(timestr)
+            console.log(temp/10)
+            console.log(_this.data)
+            //_this.data.shift();
+            _this.data.push({
             name: now.toString(),
                 value: [
-                    now.getFullYear() + '/' + now.getMonth() +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds(),
-                    value
+                    timestr,
+                    temp/10
                 ]
             });
 
             myChart.setOption({
             series: [{
-                data: data
+                data: _this.data
                 }]
         });
         

@@ -1,5 +1,6 @@
 import requests
 import sys
+import time
 import json
 import mysql.connector
 
@@ -45,12 +46,18 @@ response = requests.request("GET", url, headers=headers, data=payload,  verify=F
 data_json = json.loads(response.text)
 
 temperature = data_json['shadow'][0]['reported']['properties']['up']
-
+temperature = int(eval("0x"+str(temperature)))
 # temperature = 26
 datatype_id = 1
 device_id = 1
 time0 = "20200415T082803Z"
 time0 = data_json['shadow'][0]['reported']['event_time']
+# 加8小时
+timeArray = time.strptime(time0, "%Y%m%dT%H%M%SZ")
+timeStamp = int(time.mktime(timeArray)) + 8*60*60
+timeArray = time.localtime(timeStamp)
+time0 = time.strftime("%Y%m%dT%H%M%SZ", timeArray)
+
 time0 = time0[0:8]+time0[9:-1]
 print(time0)
 print(temperature)

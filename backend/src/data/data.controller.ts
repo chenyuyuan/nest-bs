@@ -29,6 +29,7 @@ export class DataController {
 
         var data: Data = await this.dataService.getDataNew(device_id,datatype_id)
         
+        
   
         return res.status(HttpStatus.OK).json({msg:"data_success",tip:"成功",sensordata:data});
     }
