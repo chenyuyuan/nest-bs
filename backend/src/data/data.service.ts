@@ -29,5 +29,13 @@ export class DataService {
         return data;
     }
 
+    async getAllData(): Promise<Data[]> {
+        //var data: Data = await this.DataRepository.findOne({device_id:device_id, datatype_id:datatype_id}) 
+        var alldata:Data[] = await this.DataRepository.find()
+        //console.log(alldata)
+        return alldata;
+    }
+
+
 
 }

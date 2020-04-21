@@ -57,10 +57,13 @@
         <div >{{device.reg_time}}</div>
       </div>
       <div class="form-inline" style="margin-top:10px">
-        <el-button type="" v-on:click="add">修改</el-button>
+        <el-button type="" v-on:click="update">修改</el-button>
       </div>
       <div class="form-inline" style="margin-top:10px">
-        <el-button type="" v-on:click="add">查看设备数据</el-button>
+        <el-button type="" v-on:click="nowdata">查看设备实时数据</el-button>
+      </div>
+      <div class="form-inline" style="margin-top:10px">
+        <el-button type="" v-on:click="historydata">查看设备历史数据</el-button>
       </div>
     </el-col>
   </el-row>
@@ -102,6 +105,12 @@ export default {
     },
     toDataTime(){
       this.$router.push({path:'/managedevice'})
+    },
+    nowdata() {
+      this.$router.push({path:'/data'})
+    },
+    historydata(){
+      this.$router.push({path:'/historydata'})
     },
     
     update() {

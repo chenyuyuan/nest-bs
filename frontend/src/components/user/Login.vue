@@ -46,7 +46,7 @@ export default {
       axios.post(`${server.baseURL}/user/login`, data).then(data => {
         if(data.data.msg == "login_success") {
           this.$message('登录成功');
-          this.$router.push("/home");
+          this.$router.push("/managedevice");
         }
         else {
           this.$message('登录失败');

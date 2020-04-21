@@ -19,15 +19,18 @@ mydb = mysql.connector.connect(
   database="health_center"
 )
 
+
+files = {"C:client.crt", "C:client.key"}
+
+
 url = "https://49.4.92.191:8743/iocm/app/sec/v1.1.0/login"
 
-payload = {}
-files = {}
+payload = {'appId':'YsyupmenAZu8_AK1HOujaigWs68a','secret':'0aA8aq_nQPRI0QJRl2BoF72EKyka'}
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded'
 }
 
-response = requests.request("POST", url, headers=headers, data = payload, files = files)
+response = requests.request("POST", url, headers=headers, data = payload, files=files)
 
 print(response.text.encode('utf8'))
 

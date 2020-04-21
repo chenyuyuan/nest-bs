@@ -50,7 +50,7 @@ import echarts from 'echarts'
 
 
 export default {
-  name: "Device",
+  name: "HistoryData",
   components: {
     Header
   },
@@ -97,25 +97,35 @@ export default {
     var oneDay = 24 * 3600 * 1000;
     var oneSecond = 1;
     var value = 0;
-    for (var i = 0; i < 100; i++) {
-        now = new Date(+now -(101-i) * oneSecond);
-        value = 0;
-        //console.log(now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds())
-        data.push({
+    const _this = this
+    axios.get(`${server.baseURL}/data/datas`, ).then(resdata => {
+
+        console.log(resdata)
+      console.log("length:"+resdata.data.sensordata.length)
+      var len=resdata.data.sensordata.length;
+      var temp = resdata.data.sensordata
+      
+      for(var i=0;i<len;++i) {
+        var now = new Date((temp[i].time).toString())
+        var thevalue = temp[i].value
+        var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
+        //console.log(timestr)
+        //console.log(thevalue/10)
+        //console.log(this.data)
+        //_this.data.shift();
+        this.data.push({
         name: now.toString(),
             value: [
-                now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds(),
-                Math.round(value)
+                timestr,
+                thevalue/10
             ]
         });
-    }
-    console.log(dom)
-    console.log(myChart)
-
-    this.data = data
+      }
+    data = this.data
+    console.log(data)
     var option = {
         title: {
-            text: '动态数据 + 时间坐标轴'
+            text: '数据 + 时间坐标轴'
         },
         tooltip: {
             trigger: 'axis',
@@ -129,23 +139,40 @@ export default {
             }
         },
         xAxis: {
-            type: 'time',
-            splitLine: {
-                show: false
-            }
+            type: 'category',
+            boundaryGap: false,
+            
         },
         yAxis: {
             type: 'value',
             boundaryGap: [0, '100%'],
             splitLine: {
-                show: false
+                show: true
             }
-        },
+        },dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 10
+    }, {
+        start: 0,
+        end: 10,
+        handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+        handleSize: '80%',
+        handleStyle: {
+            color: '#fff',
+            shadowBlur: 3,
+            shadowColor: 'rgba(0, 0, 0, 0.6)',
+            shadowOffsetX: 2,
+            shadowOffsetY: 2
+        }
+    }],
         series: [{
             name: '模拟数据',
             type: 'line',
+            //smooth: true,
             showSymbol: false,
             hoverAnimation: false,
+            
             data: data
         }]
     };
@@ -153,49 +180,12 @@ export default {
     var dom = document.getElementById("my-chart");
     var myChart = echarts.init(dom);
 
-    console.log(data)
-    //console.log(this.data)\
-    const _this=this
-
-    setInterval(function () {
-        //console.log(this.now)
-        //console.log(setdata)
-        //console.log(_this.data)
-        axios.get(`${server.baseURL}/data/a`, ).then(resdata => {
-
-            var temp = resdata.data.sensordata.value
-            //console.log(resdata.data.sensordata.time)
-            //console.log(data.data.sensordata.value)
     
-            //console.log((resdata.data.sensordata.time).toString())
-            var now = new Date((resdata.data.sensordata.time).toString())
-            
-            var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
-            console.log(timestr)
-            console.log(temp/10)
-            console.log(_this.data)
-            //_this.data.shift();
-            _this.data.push({
-            name: now.toString(),
-                value: [
-                    timestr,
-                    temp
-                ]
-            });
-
-            myChart.setOption({
-            series: [{
-                data: _this.data
-                }]
-        });
-        
-      });
-
-        
-     }, 5000);
     if (option && typeof option === "object") {
        myChart.setOption(option, true);
     } 
+    
+    });
     
   }
   
