@@ -9,6 +9,9 @@ import { UserModule } from './user/user.module';
 import { DeviceModule } from './device/device.module';
 import { DataModule } from './data/data.module';
 import { SysModule } from './sys/sys.module';
+import { AdminModule } from './admin/admin.module';
+import { ArticleModule } from './article/article.module';
+import { MessageModule } from './message/message.module';
 
 
 @Module({
@@ -28,6 +31,9 @@ import { SysModule } from './sys/sys.module';
     DeviceModule,
     DataModule,
     SysModule,
+    AdminModule,
+    ArticleModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
