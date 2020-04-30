@@ -12,8 +12,10 @@ iot-coaps.cn-north-4.myhuaweicloud.com
 
 sudo minicom -D /dev/ttyS0
 
+id
+YsyupmenAZu8_AK1HOujaigWs68a
+pSEwWvokYIp0A1PvdKPfNiMC8b8a
 
 
-at+cm2mclinew="iot-mqtts.cn-north-4.myhuaweicloud.com","1883","12345678"
-at+cm2mclinew="iot-coaps.cn-north-4.myhuaweicloud.com","5683","868334033365754"
-
+psk dtls
+e000503ea01526cef7b715b442329c6f

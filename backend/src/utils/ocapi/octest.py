@@ -19,25 +19,50 @@ mydb = mysql.connector.connect(
   database="health_center"
 )
 
-
-files = {"C:client.crt", "C:client.key"}
-
-
 url = "https://49.4.92.191:8743/iocm/app/sec/v1.1.0/login"
 
-payload = {'appId':'YsyupmenAZu8_AK1HOujaigWs68a','secret':'0aA8aq_nQPRI0QJRl2BoF72EKyka'}
+payload = {'appId': 'YsyupmenAZu8_AK1HOujaigWs68a', 'secret': 'pSEwWvokYIp0A1PvdKPfNiMC8b8a'}
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded'
 }
 
-response = requests.request("POST", url, headers=headers, data = payload, files=files)
+response = requests.request("POST", url, headers=headers, data=payload, verify=False, cert=('\\client.crt', '\\client.key'))
 
-print(response.text.encode('utf8'))
+
+data_json = json.loads(response.text)
+print(data_json)
+print(data_json['accessToken'])
+
+accessToken = data_json['accessToken']
+
+# 获取设备影子
+
+authorization = "Bearer " + accessToken
+
+
+url = "https://49.4.92.191:8743/iocm/app/shadow/v1.5.0/devices/60ba3351-dcdd-40c2-8f72-937396da9911?appId=YsyupmenAZu8_AK1HOujaigWs68a"
+
+payload = {}
+headers = {
+  'app_key': 'YsyupmenAZu8_AK1HOujaigWs68a',
+  'Authorization': authorization,
+  'Content-Type': 'application/json' 
+}
+
+response = requests.request("GET", url, headers=headers, data=payload, verify=False, cert=('\\client.crt', '\\client.key'))
+
+data_json = json.loads(response.text)
+
+# print(json.dumps(data_json, indent=4))
+
+
+
+
 
 # print(type(data_json))
 # xauthtoken = response.headers.get("X-Subject-Token")
 
-print(data_json)
+# print(data_json)
 
 # # product_id = sys.args[1]
 # # device_id = sys.args[2]

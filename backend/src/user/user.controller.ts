@@ -38,7 +38,6 @@ export class UserController {
     return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
   }
   @Post('/login') 
-
   async login(@Res() res, @Body() loginUserDTO: LoginUserDTO, @Request() request) {
 
     // res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, accept, content-type");

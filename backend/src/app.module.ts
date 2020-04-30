@@ -16,7 +16,7 @@ import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/bs', { useNewUrlParser: true }),
+    //MongooseModule.forRoot('mongodb://localhost/bs', { useNewUrlParser: true }),
     BlogModule, UserModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
