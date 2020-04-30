@@ -55,11 +55,13 @@ export class DeviceService {
         return await this.ProductRepository.findOne({ocproduct_id:ocproduct_id});
     }
 
-    async findDeviceByUserId(user_id:number): Promise<Device[]> {//测试 ++
+    async findDeviceByUserId(user_id:number): Promise<Device[]> {//测试 ++ ✔✔
         var user_device:UserDevice[] = await this.User_DeviceRepository.find({user_id:user_id})
         
         const result = await this.DeviceRepository.createQueryBuilder('device')
-            .leftJoinAndSelect(UserDevice,"user_device",'device.id = user_device.device_id and user_device.user_id = :user_id',{user_id}).getMany()
+            .leftJoinAndSelect(UserDevice,"user_device",'device.id = user_device.device_id')
+            .where('user_device.user_id = :user_id',{user_id:user_id})
+            .getMany()
         
         console.log(result)
 

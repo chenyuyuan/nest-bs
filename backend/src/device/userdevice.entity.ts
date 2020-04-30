@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
 // 这里可以修改表名
 // @Entity('messages')
-@Entity()
+@Entity("user_device")
 export class UserDevice extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

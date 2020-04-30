@@ -65,6 +65,7 @@ export class DeviceController {
     @Get('/my_device')
     async getMyDevice(@Res() res,@Request() request): Promise<string> {
         var user_id:number = request.session.user_id;
+        //var user_id:number = 1;
         console.log("user_id: "+ user_id)
         //await this.deviceService.findDeviceByUserId(user_id)
         return res.status(HttpStatus.OK).json({msg:"success",tip:"mydevice成功",devices:(await this.deviceService.findDeviceByUserId(user_id))});
