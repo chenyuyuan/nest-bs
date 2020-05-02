@@ -76,7 +76,7 @@ if __name__ == '__main__':
             sensor_data = get_data()
             order_senddata = "at+cm2mclisend=" + str(sensor_data) + "\r\n"
             serial.write(order_senddata.encode())
-            print("以发送：" + str(sensor_data))
+            print("已发送：" + str(sensor_data))
             start_time = time.time()
             time.sleep(5)
 
