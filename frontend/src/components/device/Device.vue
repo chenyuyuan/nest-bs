@@ -14,7 +14,7 @@
         @open="handleOpen"
         @close="handleClose">
         <el-menu-item index="1">
-          <i class="el-icon-menu"></i>
+          <i class="el-icon-menu" @click="toAddDevice"></i>
           <span slot="title">添加设备</span>
         </el-menu-item>
         <el-menu-item index="2" @click="toManageDevice">
@@ -103,6 +103,9 @@ export default {
     toManageDevice(){
       this.$router.push({path:'/managedevice'})
     },
+     toAddDevice(){
+      this.$router.push({path:'/adddevice'})
+    },
     toDataTime(){
       this.$router.push({path:'/managedevice'})
     },
@@ -124,14 +127,8 @@ export default {
     },
     __update(data) {
       axios.post(`${server.baseURL}/device/update`, data).then(data => {
-        if(data.data.msg == "add_device_success") {
-          this.$message('添加成功');
-        }
-        else if(data.data.msg == "user_device_exists") {
-          this.$message('设备已存在，请到管理设备查看');
-        }
-        else if(data.data.msg == "device_not_exists") {
-          this.$message('设备不存在');
+        if(data.data.msg == "device_update_success") {
+          this.$message('修改成功');
         }
         
       });
@@ -140,7 +137,7 @@ export default {
 
   },
   mounted() {
-      console.log(this.$route)
+    console.log(this.$route)
     axios.get(`${server.baseURL}/device/device/`+this.$route.query.ocdevice_id, ).then(data => {
       console.log(data.data)
       this.device = data.data.device

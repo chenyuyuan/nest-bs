@@ -65,6 +65,10 @@ export default {
     toManageDevice(){
       this.$router.push({path:'/managedevice'})
     },
+
+
+
+    
   }
   
  

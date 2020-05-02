@@ -70,7 +70,7 @@
           width="100">
           <template slot-scope="scope">
             <el-button @click="editRow(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button @click="deleteRow(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="deleteRow(scope.row)" type="text" size="small">解绑</el-button>
           </template>
        </el-table-column> 
       </el-table>
@@ -124,13 +124,20 @@ export default {
     },
     deleteRow(row) {
       console.log(row);
-      
+      axios.get(`${server.baseURL}/device/delete/`+row.id, ).then(data => {
+      console.log(data)
+      this.$message('设备解除绑定成功');
+      axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
+        console.log(data)
+        this.tableData = data.data.devices
+          
+      });
+    });
     }
   },
   mounted() {
     axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
       console.log(data)
-      
       this.tableData = data.data.devices
       
     });
