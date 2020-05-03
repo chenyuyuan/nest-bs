@@ -100,7 +100,7 @@ export default {
     const _this = this
     axios.get(`${server.baseURL}/data/datas`, ).then(resdata => {
 
-        console.log(resdata)
+      console.log(resdata)
       console.log("length:"+resdata.data.sensordata.length)
       var len=resdata.data.sensordata.length;
       var temp = resdata.data.sensordata
@@ -117,12 +117,15 @@ export default {
         name: now.toString(),
             value: [
                 timestr,
-                thevalue/10
+                thevalue/1000
             ]
         });
       }
     data = this.data
     console.log(data)
+
+    var dataLen = data.length
+
     var option = {
         title: {
             text: '数据 + 时间坐标轴'
@@ -142,7 +145,7 @@ export default {
             type: 'category',
             boundaryGap: false,
             
-        },
+        }, 
         yAxis: {
             type: 'value',
             boundaryGap: [0, '100%'],
@@ -150,9 +153,9 @@ export default {
                 show: true
             }
         },dataZoom: [{
-            type: 'inside',
-            start: 0,
-            end: 10
+            type: 'slider',
+            start: dataLen-20,
+            end: dataLen
         }, {
             start: 0,
             end: 10,

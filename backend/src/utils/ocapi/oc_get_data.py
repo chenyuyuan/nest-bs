@@ -54,10 +54,10 @@ response = requests.request("GET", url, headers=headers, data=payload, verify=Fa
 data_json = json.loads(response.text)
 
 # print(json.dumps(data_json, indent=4))
-print(data_json)
+# print(data_json)
 
 temperature = data_json['services'][0]['reportedProps']['up']
-temperature = int(eval("0x"+str(temperature)))
+# temperature = int(eval("0x"+str(temperature)))
 # temperature = 26
 datatype_id = 1
 device_id = 1
@@ -84,4 +84,4 @@ else:
     sql = "insert into data (value, datatype_id, device_id, time) values ("+str(temperature)+","+str(datatype_id)+","+str(device_id)+",\'"+time0+"\')"
     mycursor.execute(sql)
     mydb.commit()
-    print(mycursor.rowcount, " 条记录被修改")
+    print(mycursor.rowcount, " record were changes in data")

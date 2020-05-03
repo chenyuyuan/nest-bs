@@ -17,7 +17,7 @@ export class DataController {
         var a;
         // 'python ../utils/ocapi/testapi.py'
         nodeCmd.get(
-          'python ./src/utils/ocapi/get_data.py',
+          'python ./src/utils/ocapi/oc_get_data.py',
           function(err, data, stderr){
             console.log("cmd: python ./src/utils/ocapi/get_data.py")
             console.log(data)

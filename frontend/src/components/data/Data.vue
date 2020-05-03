@@ -93,24 +93,30 @@ export default {
     var data = [];
     //var now = +new Date(2020,4,19,19,52,0);
     // var now = +new Date("2020-04-19T05:34:10.000Z");
-    var now = +new Date();
-    var oneDay = 24 * 3600 * 1000;
-    var oneSecond = 1;
+    var timestamp = Date.parse(new Date());
+    console.log("timestamp is "+timestamp)
+    
+    var now = new Date(timestamp);
+    console.log("now"+now.toString())
     var value = 0;
-    for (var i = 0; i < 100; i++) {
-        now = new Date(+now -(101-i) * oneSecond);
-        value = 0;
-        //console.log(now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds())
-        data.push({
-        name: now.toString(),
-            value: [
-                now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds(),
-                Math.round(value)
-            ]
-        });
+    var dataCount = 100
+    for (var i = 0; i < dataCount; i++) {
+      var time0 = timestamp - (dataCount - i)*1000;
+      now = new Date(time0);
+      var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
+      var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
+      var timeformat = now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+minute+':'+second;
+      //console.log(now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds())
+      data.push({
+      name: now.toString(),
+          value: [
+              timeformat,
+              Math.round(value)
+          ]
+      });
     }
-    console.log(dom)
-    console.log(myChart)
+    // console.log(dom)
+    // console.log(myChart)
 
     this.data = data
     var option = {
@@ -136,7 +142,7 @@ export default {
         },
         yAxis: {
             type: 'value',
-            boundaryGap: [0, '100%'],
+            boundaryGap: [ 0, '100%'],
             splitLine: {
                 show: false
             }
@@ -172,14 +178,14 @@ export default {
             
             var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
             console.log(timestr)
-            console.log(temp/10)
-            console.log(_this.data)
+            console.log(temp/1000)
+            //console.log(_this.data)
             //_this.data.shift();
             _this.data.push({
             name: now.toString(),
                 value: [
                     timestr,
-                    temp
+                    temp/1000
                 ]
             });
 
