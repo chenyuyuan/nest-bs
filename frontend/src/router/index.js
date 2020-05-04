@@ -9,6 +9,7 @@ import ManageDevice from '../components/device/ManageDevice'
 import Device from '../components/device/Device'
 import Data from '../components/data/Data'
 import HistoryData from '../components/data/HistoryData'
+import AdminLogin from '../components/admin/AdminLogin'
 
 Vue.use(VueRouter)
 
@@ -39,7 +40,12 @@ const routes = [
   { path: '/edit/:id', name: 'Edit', component: () => import(/* webpackChunkName: "about" */ '../components/post/Edit.vue') },
   { path: '/post/:id', name: 'Post', component: () => import(/* webpackChunkName: "about" */ '../components/post/Post.vue') },
   { path: '/login', name: 'Login', component: Login },
-  { path: '/register', name: 'Register', component: Register }
+  { path: '/register', name: 'Register', component: Register },
+
+
+
+  { path: '/admin/login', name: 'AdminLogin', component: AdminLogin  },
+
 ]
 
 const router = new VueRouter({

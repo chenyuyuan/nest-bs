@@ -99,9 +99,10 @@ export default {
     var now = new Date(timestamp);
     console.log("now"+now.toString())
     var value = 0;
-    var dataCount = 100
+    var dataCount = 20
     for (var i = 0; i < dataCount; i++) {
-      var time0 = timestamp - (dataCount - i)*1000;
+      var time0 = timestamp - (dataCount-i+
+      10)*1000;
       now = new Date(time0);
       var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
       var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
@@ -111,7 +112,7 @@ export default {
       name: now.toString(),
           value: [
               timeformat,
-              Math.round(value)
+              //Math.round(value)
           ]
       });
     }
@@ -174,9 +175,11 @@ export default {
             //console.log(data.data.sensordata.value)
     
             //console.log((resdata.data.sensordata.time).toString())
-            var now = new Date((resdata.data.sensordata.time).toString())
+            var now = new Date((resdata.data.sensordata.time).toString());
+            var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
+            var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
             
-            var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
+            var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+minute+':'+second
             console.log(timestr)
             console.log(temp/1000)
             //console.log(_this.data)
