@@ -22,7 +22,7 @@ import axios from "axios";
 import { server } from "../../utils/helper";
 import router from "../../router";
 export default {
-  name: "AdminLogin",
+  name: "AdminHome",
   data() {
     return {
       name: "",
@@ -41,10 +41,10 @@ export default {
       this.__submitToServer(postData);
     },
     __submitToServer(data) {
-      axios.post(`${server.baseURL}/user/login`, data).then(data => {
-        if(data.data.msg == "login_success") {
+      axios.post(`${server.baseURL}/admin/login`, data).then(data => {
+        if(data.data.msg == "admin_login_success") {
           this.$message('登录成功');
-          this.$router.push("/managedevice");
+          this.$router.push("/admin/home");
         }
         else {
           this.$message('登录失败');

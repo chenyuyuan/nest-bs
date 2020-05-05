@@ -11,18 +11,15 @@ export class AdminController {
   @Post('/login') 
   async login(@Res() res, @Body() adminLoginUserDTO: AdminLoginUserDTO, @Request() request) {
 
-    // res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, accept, content-type");
-    // res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
-    // res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-    // res.setHeader("Access-Control-Allow-Credentials", "true");
     //session
-    request.session.username = adminLoginUserDTO.name;
-    request.session.user_id = (await this.adminService.getUserByName(loginUserDTO.name)).user_id;
+    request.session.adminname = adminLoginUserDTO.name;
+    const admin = await this.adminService.findById(adminLoginUserDTO.name);
+    request.session.admin_id = admin.admin_id;
 
-    const user = await this.userService.getUserByName(loginUserDTO.name);
-    console.log("用户登录："+loginUserDTO.name + request.session.user_id)
-    if (!user) throw new NotFoundException('User does not exist!');
-    return res.status(HttpStatus.OK).json({msg:"login_success",tip:"登录成功"});
+    
+    console.log("用户登录："+adminLoginUserDTO.name + request.session.user_id)
+    if (!admin) throw new NotFoundException('Admin does not exist!');
+    return res.status(HttpStatus.OK).json({msg:"admin_login_success",tip:"管理员登录成功"});
   }
 
   @Get('/all')

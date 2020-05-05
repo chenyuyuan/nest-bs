@@ -9,9 +9,9 @@
           <el-menu-item index="2-2">历史数据</el-menu-item>
         </el-submenu>
         <el-menu-item index="3"><a href="/managedevice">设备管理</a></el-menu-item>
-        <el-menu-item index="4"><a href="/message/my" target="_blank">消息中心</a></el-menu-item>
+        <el-menu-item index="4">消息推送</el-menu-item>
         <el-menu-item index="5"><a href="/profile" target="_blank">账号管理</a></el-menu-item>
-        <el-menu-item index="6"><a href="/article" target="_blank">文章</a></el-menu-item>
+        <el-menu-item index="6"><a href="/profile" target="_blank">文章管理</a></el-menu-item>
         <el-menu-item style="float:right" index="7"><i class="el-icon-user"></i></el-menu-item>
         <el-menu-item style="float:right" index="6">
           <el-badge is-dot class="item">
@@ -27,10 +27,9 @@
 </template>
 
 <script>
-import Footer from "./Footer"
 export default {
 // 定义一个名为 button-counter 的新组件
-  name: 'Header',
+  name: 'AdminHeader',
   components: {
     
   }

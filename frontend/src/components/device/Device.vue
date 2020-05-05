@@ -41,8 +41,8 @@
         <div >{{device.imei}}</div>
       </div>
       <div class="form-inline" style="margin-top:10px">
-          <div style="width:10%">设备名:</div>
-            <el-input placeholder="请输入设备名" v-model="device.name" style="width:250px" clearable></el-input>
+        <div style="width:10%">设备名:</div>
+        <el-input placeholder="请输入设备名" v-model="device.name" style="width:250px" clearable></el-input>
       </div>
       <div class="form-inline" style="margin-top:10px">
         <div style="width:10%">imei:</div>

@@ -39,6 +39,31 @@ export class UserService {
   }
 
 
+  async updatePwdNoMailCode(user_id:number, pwd: string): Promise<User> {
+    var user: User = await this.UserRepository.findOne({user_id:user_id}) 
+    user.pwd = pwd
+    return await this.UserRepository.save(user);
+  }
+  async updateMail(user_id:number, mail: string): Promise<User> {
+    var user: User = await this.UserRepository.findOne({user_id:user_id}) 
+    user.mail = mail
+    return await this.UserRepository.save(user);
+  }
+  async updateName(user_id:number, name: string): Promise<string> {
+    var user: User = await this.UserRepository.findOne({user_id:user_id}) 
+    var findUserName: User = await this.UserRepository.findOne({name:name}) 
+    if(findUserName!=null && findUserName.user_id == user_id) {
+      return "user_name_exists";
+    }
+    user.name = name;
+    await this.UserRepository.save(user);
+    return "change_name_success";
+  }
+
+
+
+
+
   async findAll(): Promise<User[]> {
     return await this.UserRepository.find();
   }

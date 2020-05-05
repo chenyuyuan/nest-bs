@@ -9,8 +9,11 @@ export class AdminService {
         @InjectRepository(Admin)
         private readonly AdminRepository: Repository<Admin>,
       ) { }
+      private readonly admins: Admin[] = [];
 
-
-
+    async findById(name:string): Promise<Admin> {
+        return await this.AdminRepository.findOne({name:name});
+        
+    }
 
 }

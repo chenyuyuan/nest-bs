@@ -12,6 +12,7 @@ import { SysModule } from './sys/sys.module';
 import { AdminModule } from './admin/admin.module';
 import { ArticleModule } from './article/article.module';
 import { MessageModule } from './message/message.module';
+import { CacheModule } from './cache/cache.module';
 
 
 @Module({
@@ -34,6 +35,7 @@ import { MessageModule } from './message/message.module';
     AdminModule,
     ArticleModule,
     MessageModule,
+    CacheModule,
   ],
   controllers: [AppController],
   providers: [AppService],

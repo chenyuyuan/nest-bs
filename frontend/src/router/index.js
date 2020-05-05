@@ -10,6 +10,8 @@ import Device from '../components/device/Device'
 import Data from '../components/data/Data'
 import HistoryData from '../components/data/HistoryData'
 import AdminLogin from '../components/admin/AdminLogin'
+import AdminHome from '../components/admin/AdminHome'
+import Profile from '../components/user/Profile'
 
 Vue.use(VueRouter)
 
@@ -41,10 +43,12 @@ const routes = [
   { path: '/post/:id', name: 'Post', component: () => import(/* webpackChunkName: "about" */ '../components/post/Post.vue') },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
+  { path: '/profile', name: 'Profile', component: Profile },
 
 
 
   { path: '/admin/login', name: 'AdminLogin', component: AdminLogin  },
+  { path: '/admin/home', name: 'AdminHome', component: AdminHome  },
 
 ]
 
