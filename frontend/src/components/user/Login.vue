@@ -50,7 +50,7 @@ export default {
           this.$router.push("/managedevice");
         }
         else {
-          this.$message('登录失败');
+          this.$message('用户名或密码错误');
         }
         
       });

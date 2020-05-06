@@ -41,17 +41,16 @@ export class UserController {
   @Post('/login') 
   async login(@Res() res, @Body() loginUserDTO: LoginUserDTO, @Request() request) {
 
-    // res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, accept, content-type");
-    // res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
-    // res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-    // res.setHeader("Access-Control-Allow-Credentials", "true");
-    //session
-    request.session.username = loginUserDTO.name;
-    request.session.user_id = (await this.userService.getUserByName(loginUserDTO.name)).user_id;
-
     const user = await this.userService.getUserByName(loginUserDTO.name);
+    if (!user || user.pwd != loginUserDTO.pwd) {
+      return res.status(HttpStatus.OK).json({msg:"login_failed",tip:"登录失败"});
+    }
+    request.session.username = loginUserDTO.name;
+    request.session.user_id = user.user_id;
+
+    
     console.log("用户登录："+loginUserDTO.name + request.session.user_id)
-    if (!user) throw new NotFoundException('User does not exist!');
+
     return res.status(HttpStatus.OK).json({msg:"login_success",tip:"登录成功"});
   }
   
@@ -154,6 +153,19 @@ export class UserController {
     
   }
 
+
+  @Get('/user') 
+  async getUser(@Res() res, @Param() param, @Request() request) { // correct
+    var user_id = request.session.user_id;
+    //user_id = 1;
+    var user:User = await this.userService.findById(user_id);
+    user.pwd = "";
+
+    if (await this.userService.findById(user_id)!==null) {
+      return res.status(HttpStatus.OK).json({msg:"get_user_success", tip:"成功",user:user});
+    }
+  }
+
   // PROFILE
   @Get('/changepwdnomailcode/:pwd') 
   async changePwdNoMailCode(@Res() res, @Param() param, @Request() request) { // correct
@@ -168,13 +180,13 @@ export class UserController {
   @Get('/changemail/:mail/:code') 
   async changeMail(@Res() res, @Param() param, @Request() request) { // correct
     var user_id = request.session.user_id;
-    user_id = 1;
+    //user_id = 1;
     var code = await this.cacheService.get(param.mail)
     if(param.code != code) {
       return res.status(HttpStatus.OK).json({msg:"wrong_mail_code", tip:"验证码错误"});
     }
     if (await this.userService.updateMail(user_id, param.mail)!==null) {
-      return res.status(HttpStatus.OK).json({msg:"change_pwd_susscess", tip:"邮箱修改成功"});
+      return res.status(HttpStatus.OK).json({msg:"change_mail_susscess", tip:"邮箱修改成功"});
     }
   }
   @Get('/changename/:name') 
@@ -185,7 +197,7 @@ export class UserController {
     var returnMsg = await this.userService.updateName(user_id, name)
 
     if (returnMsg=="change_name_success") {
-      return res.status(HttpStatus.OK).json({msg:"change_name_susscess", tip:"昵称修改成功"});
+      return res.status(HttpStatus.OK).json({msg:"change_name_success", tip:"昵称修改成功"});
     }
     else if(returnMsg == "user_name_exists") {
       return res.status(HttpStatus.OK).json({msg:"user_name_exists", tip:"用户名已存在"});
