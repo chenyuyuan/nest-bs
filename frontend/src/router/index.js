@@ -12,6 +12,7 @@ import HistoryData from '../components/data/HistoryData'
 import AdminLogin from '../components/admin/AdminLogin'
 import AdminHome from '../components/admin/AdminHome'
 import Profile from '../components/user/Profile'
+import ForgetPwd from '../components/user/ForgetPwd'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,7 @@ const routes = [
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
   { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/forgetpwd', name: 'ForgetPwd', component: ForgetPwd },
 
 
 

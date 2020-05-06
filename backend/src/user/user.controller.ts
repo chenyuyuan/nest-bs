@@ -137,7 +137,7 @@ export class UserController {
     //var code = await this.userService.getMailCode(mail)
 
 
-    if(req_code === code) {
+    if(req_code == code) {
       if (await this.userService.updatePwd(mail, pwd)!==null) {
         return res.status(HttpStatus.OK).json({msg:"change_pwd_susscess", tip:"密码修改成功"});
       }
