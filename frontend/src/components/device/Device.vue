@@ -7,30 +7,10 @@
 <div>
   <div style="height:1px"></div>
   <el-row class="tac">
-    <el-col :span="3">
-      <el-menu
-        default-active=""
-        class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose">
-        <el-menu-item index="1">
-          <i class="el-icon-menu" @click="toAddDevice"></i>
-          <span slot="title">添加设备</span>
-        </el-menu-item>
-        <el-menu-item index="2" @click="toManageDevice">
-          <i class="el-icon-setting"></i>
-          <span slot="title">管理设备</span>
-        </el-menu-item>
-        <!-- <el-menu-item index="3">
-          <i class="el-icon-document"></i>
-          <span slot="title">删除设备</span>
-        </el-menu-item> -->
-      </el-menu>
-    </el-col>
     <el-col :span="1" style="border:1px solid transparent">
       <div style="display:none" class="grid-content bg-purple">1</div>
     </el-col>
-    <el-col :span="20">
+    <el-col :span="10">
       <div style="margin-top:10px;margin-bottom:10px">修改设备</div>
       <div class="form-inline" style="margin-top:10px">
         <div style="width:10%">产品号</div>
@@ -65,6 +45,18 @@
       <div class="form-inline" style="margin-top:10px">
         <el-button type="" v-on:click="historydata">查看设备历史数据</el-button>
       </div>
+    </el-col>
+    <el-col :span="10" style="border:1px solid transparent">
+      <div style="margin-top:10px;margin-bottom:10px">
+        预警值设置
+      </div>
+      <div class="form-inline" style="margin-top:10px">
+        <div style="width:10%">大于</div>
+        <div >12</div>
+      </div>
+    </el-col>
+    <el-col :span="1" style="border:1px solid transparent">
+      <div style="display:none" class="grid-content bg-purple">1</div>
     </el-col>
   </el-row>
 </div>

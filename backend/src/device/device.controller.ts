@@ -45,6 +45,8 @@ export class DeviceController {
     async getDevice(@Res() res, @Param() param,@Request() request): Promise<string> {
         console.log("/device/device/ "+param.ocdevice_id)
         console.log(request.session.user_id)
+        //加身份认证
+
         return res.status(HttpStatus.OK).json({msg:"success",tip:"/device成功",device:(await this.deviceService.findDevice(param.ocdevice_id))});
     }
     @Get('/delete/:device_id') // correct ✔
