@@ -15,10 +15,8 @@
         </el-col>
         <el-col :span="22">
           <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="name" label="设备名" width="120">
-            </el-table-column>
             <el-table-column
-                prop="serder"
+                prop="sender_name"
                 label="发送者"
                 width="120">
             </el-table-column>
@@ -27,8 +25,9 @@
                 label="消息">
             </el-table-column>
             <el-table-column
-                prop="send_time"
-                label="时间">
+                prop="time"
+                label="时间"
+                width="250">
             </el-table-column>
             <el-table-column
               fixed="right"
@@ -71,8 +70,8 @@ export default {
     
     return {
         tableData: [{
-        sender_id:"1",
-        serder:"1",
+        sender_id:"",
+        sender_name:"",
         content:"",
         send_time:""
       }],
@@ -81,47 +80,27 @@ export default {
     }
   },
   methods: {
-    toManageDevice(){
-      this.$router.push({path:'/managedevice'})
-    },
-     toAddDevice(){
-      this.$router.push({path:'/adddevice'})
-    },
-    toDataTime(){
-      this.$router.push({path:'/managedevice'})
-    },
-    nowdata() {
-      this.$router.push({path:'/data'})
-    },
-    historydata(){
-      this.$router.push({path:'/historydata'})
-    },
-    
-    update() {
-      let updatedata = {
-        name: this.device.name,
-        imei: this.device.imei,
-        imsi: this.device.imsi
-      };
-      console.log("selected " + this.device.name)
-      this.__update(updatedata);
-    },
-    __update(data) {
-      axios.post(`${server.baseURL}/device/update`, data).then(data => {
-        if(data.data.msg == "device_update_success") {
-          this.$message('修改成功');
-        }
+    deleteRow(row) {
+        axios.get(`${server.baseURL}/message/delete/`+row.id, ).then(data => {
+            if(data.data.msg == "message_delete_success") {
+              this.$message('删除成功成功');
+              axios.get(`${server.baseURL}/message/get`, ).then(data => {
+                console.log(data.data)
+                this.tableData = data.data.message
+                
+              });
+            }
         
-      });
+        });
     }
 
 
   },
   mounted() {
-    console.log(this.$route)
-    axios.get(`${server.baseURL}/device/device/`+this.$route.query.ocdevice_id, ).then(data => {
+    
+    axios.get(`${server.baseURL}/message/get`, ).then(data => {
       console.log(data.data)
-      this.device = data.data.device
+      this.tableData = data.data.message
       
     });
     

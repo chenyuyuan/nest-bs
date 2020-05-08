@@ -88,7 +88,6 @@ export class UserController {
     code = code < 1000 ? code + 1000 : code;
     //保存mail:code，到Redis缓存
     await this.cacheService.set(param.mail,code);
-    //await this.userService.setMailCode(param.mail,String(code))
 
     //await this.cacheService.get(param.mail)
     //console.log(await this.cacheService.get(param.mail))
@@ -134,7 +133,6 @@ export class UserController {
     var pwd = param.pwd;
 
     var code = await this.cacheService.get(mail);
-    //var code = await this.userService.getMailCode(mail)
 
 
     if(req_code == code) {

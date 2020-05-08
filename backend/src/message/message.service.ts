@@ -30,6 +30,7 @@ export class MessageService {
       }
       async deleteMessage(user_id:number, message_id:number): Promise<Message> {
         var message: Message = await this.MessageRepository.findOne({user_id:user_id, id:message_id}) 
+        if(message == null) return null;
         return await this.MessageRepository.remove(message);
       }
       async findMessage(message_id:number): Promise<Message> {

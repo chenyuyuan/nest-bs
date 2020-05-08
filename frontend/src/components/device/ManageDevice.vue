@@ -9,33 +9,6 @@
   <el-row class="tac">
     
     <el-tabs :tab-position="tabPosition" style="height: 200px;">
-      <el-tab-pane label="添加设备">
-        <el-col :span="1" style="border:1px solid transparent">
-          <div style="display:none" class="grid-content bg-purple">1</div>
-        </el-col>
-        <el-col :span="22">
-          <div style="margin-top:10px;margin-bottom:10px">添加设备</div>
-          <div class="form-inline">
-            <el-select v-model="value" placeholder="请选择产品" style="margin-right:full">
-              <el-option
-                v-for="item in options"
-                :key="item.id"
-                :label="item.name"
-                :value="item.ocproduct_id">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="form-inline" style="margin-top:10px">
-            <el-input placeholder="请输入设备号" v-model="device_id" style="width:222px" clearable></el-input>
-          </div>
-          <div class="form-inline" style="margin-top:10px">
-            <el-button type="primary" v-on:click="add">确认</el-button>
-          </div>
-        </el-col>
-        <el-col :span="1" style="border:1px solid transparent">
-          <div style="display:none" class="grid-content bg-purple">1</div>
-        </el-col>
-      </el-tab-pane>
       <el-tab-pane label="设备管理">
         <el-col :span="1" style="border:1px solid transparent">
           <div style="display:none" class="grid-content bg-purple">1</div>
@@ -79,6 +52,33 @@
               </template>
           </el-table-column> 
           </el-table>
+        </el-col>
+      </el-tab-pane>
+      <el-tab-pane label="添加设备">
+        <el-col :span="1" style="border:1px solid transparent">
+          <div style="display:none" class="grid-content bg-purple">1</div>
+        </el-col>
+        <el-col :span="22">
+          <div style="margin-top:10px;margin-bottom:10px">添加设备</div>
+          <div class="form-inline">
+            <el-select v-model="value" placeholder="请选择产品" style="margin-right:full">
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.name"
+                :value="item.ocproduct_id">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="form-inline" style="margin-top:10px">
+            <el-input placeholder="请输入设备号" v-model="device_id" style="width:222px" clearable></el-input>
+          </div>
+          <div class="form-inline" style="margin-top:10px">
+            <el-button type="primary" v-on:click="add">确认</el-button>
+          </div>
+        </el-col>
+        <el-col :span="1" style="border:1px solid transparent">
+          <div style="display:none" class="grid-content bg-purple">1</div>
         </el-col>
       </el-tab-pane>
       <!-- <el-tab-pane label="角色管理">角色管理</el-tab-pane> -->
