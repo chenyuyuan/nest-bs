@@ -1,4 +1,3 @@
-export class AddMessageDTO {
-    readonly user_id: number;
+export class AddMessageAdminDTO {
     readonly content: string;
 }
