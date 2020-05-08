@@ -13,6 +13,7 @@ import AdminLogin from '../components/admin/AdminLogin'
 import AdminHome from '../components/admin/AdminHome'
 import Profile from '../components/user/Profile'
 import ForgetPwd from '../components/user/ForgetPwd'
+import Message from '../components/user/Message'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,8 @@ const routes = [
   { path: '/profile', name: 'Profile', component: Profile },
   { path: '/forgetpwd', name: 'ForgetPwd', component: ForgetPwd },
 
+
+  { path: '/message/my', name: 'Message', component: Message },
 
 
   { path: '/admin/login', name: 'AdminLogin', component: AdminLogin  },

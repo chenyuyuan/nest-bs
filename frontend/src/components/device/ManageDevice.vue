@@ -26,7 +26,7 @@
             </el-select>
           </div>
           <div class="form-inline" style="margin-top:10px">
-            <el-input placeholder="请输入设备号" v-model="device_id" style="width:250px" clearable></el-input>
+            <el-input placeholder="请输入设备号" v-model="device_id" style="width:222px" clearable></el-input>
           </div>
           <div class="form-inline" style="margin-top:10px">
             <el-button type="primary" v-on:click="add">确认</el-button>
@@ -81,8 +81,7 @@
           </el-table>
         </el-col>
       </el-tab-pane>
-      <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-      <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+      <!-- <el-tab-pane label="角色管理">角色管理</el-tab-pane> -->
     </el-tabs>
 
   </el-row>
@@ -118,13 +117,16 @@ export default {
         status: '',
       }],
       tabPosition: 'left',
+      value:"",
+      device_id:"",
+      options: [{
+        value: '',
+        label: ''
+      },],
 
     }
   },
   methods: {
-    toAddDevice(){
-      this.$router.push({path:'/adddevice'})
-    },
     editRow(row) {
       console.log(row);
       this.$router.push({path:"/device",query:{ocdevice_id:row.ocdevice_id}});
@@ -141,6 +143,28 @@ export default {
           
       });
     });
+    },
+    add() {
+      let adddata = {
+        ocproduct_id: this.value,
+        ocdevice_id: this.device_id,
+      };
+      console.log("selected " + this.value)
+      this.__add(adddata);
+    },
+    __add(data) {
+      axios.post(`${server.baseURL}/device/adddevice`, data).then(data => {
+        if(data.data.msg == "add_device_success") {
+          this.$message('添加成功');
+        }
+        else if(data.data.msg == "user_device_exists") {
+          this.$message('设备已存在，请到管理设备查看');
+        }
+        else if(data.data.msg == "device_not_exists") {
+          this.$message('设备不存在');
+        }
+        
+      });
     }
   },
   mounted() {
@@ -148,6 +172,12 @@ export default {
       console.log(data)
       this.tableData = data.data.devices
       
+    });
+    axios.get(`${server.baseURL}/device/products`, ).then(data => {
+      console.log(data.data.products)
+      this.options = data.data.products
+      
+        
     });
   }
   

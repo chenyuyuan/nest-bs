@@ -52,7 +52,30 @@
       </div>
       <div class="form-inline" style="margin-top:10px">
         <div style="width:10%">大于</div>
-        <div >12</div>
+      </div>
+      <div class="form-inline" style="margin-top:10px">
+        <div style="width:10%">预警值:</div>
+        <el-input placeholder="请输入预警值" v-model="alarm_up.value" style="width:150px" clearable></el-input>
+        <div style="width:10px"></div>
+        <el-switch v-model="alarm_up.mail" active-text="发邮箱" inactive-text=""></el-switch>
+        <div style="width:10px"></div>
+        <el-switch v-model="alarm_up.msg" active-text="发消息" inactive-text=""></el-switch>
+        <div style="width:10px"></div>
+        <el-button type="" v-on:click="update">确定</el-button>
+      </div>
+      <div style="height:40px"></div>
+      <div class="form-inline" style="margin-top:10px">
+        <div style="width:10%">小于</div>
+      </div>
+      <div class="form-inline" style="margin-top:10px">
+        <div style="width:10%">预警值:</div>
+        <el-input placeholder="请输入预警值" v-model="alarm_down.value" style="width:150px" clearable></el-input>
+        <div style="width:10px"></div>
+        <el-switch v-model="alarm_down.mail" active-text="发邮箱" inactive-text=""></el-switch>
+        <div style="width:10px"></div>
+        <el-switch v-model="alarm_down.msg" active-text="发消息" inactive-text=""></el-switch>
+        <div style="width:10px"></div>
+        <el-button type="" v-on:click="update">确定</el-button>
       </div>
     </el-col>
     <el-col :span="1" style="border:1px solid transparent">
@@ -81,14 +104,30 @@ export default {
   data() {
     
     return {
-        device:{id: '',
-            name: '',
-            ocdevice_id: '',
-            ocproduct_id: '',
-            imei: '1',
-            imsi:'2',
-            reg_time: '',
-            status: '',}
+      device:{
+        id: '',
+        name: '',
+        ocdevice_id: '',
+        ocproduct_id: '',
+        imei: '1',
+        imsi:'2',
+        reg_time: '',
+        status: '',
+      },
+      alarm_up:{
+        value:"",
+        name:"",
+        mail:false,
+        sms:false,
+        msg:false
+      },
+      alarm_down:{
+        value:"",
+        name:"",
+        mail:false,
+        sms:false,
+        msg:false
+      }
     }
   },
   methods: {
@@ -134,7 +173,6 @@ export default {
       console.log(data.data)
       this.device = data.data.device
       
-        
     });
     
   }
