@@ -13,13 +13,13 @@
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose">
-        <el-menu-item index="1">
+        <el-menu-item index="1" @click="toData">
           <i class="el-icon-menu"></i>
-          <span slot="title">添加设备</span>
+          <span slot="title">实时数据</span>
         </el-menu-item>
-        <el-menu-item index="2" @click="toManageDevice">
+        <el-menu-item index="2" @click="toHistoryData">
           <i class="el-icon-setting"></i>
-          <span slot="title">管理设备</span>
+          <span slot="title">历史数据</span>
         </el-menu-item>
         <!-- <el-menu-item index="3">
           <i class="el-icon-document"></i>
@@ -59,28 +59,16 @@ export default {
     return {
         charts: '',
         data: []
-        //opinion:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎'],
-        // opinionData:[
-        // {value:335, name:'直接访问'},
-        // {value:310, name:'邮件营销'},
-        // {value:234, name:'联盟广告'},
-        // {value:135, name:'视频广告'},
-        // {value:1548, name:'搜索引擎'}
-        // ],
-        // data:[2,1],
-        // now : +new Date(1997,9,3),
-        // oneDay : 24*3600*1000,
-        // value : Math.random()*1000,
-        
+
 
     }
   },
   methods: {
-    toManageDevice(){
-      this.$router.push({path:'/managedevice'})
+    toData(){
+      this.$router.push({path:'/data'})
     },
-    toDataTime(){
-      this.$router.push({path:'/managedevice'})
+    toHistoryData(){
+      this.$router.push({path:'/historydata'})
     },
 
 
@@ -99,10 +87,9 @@ export default {
     var now = new Date(timestamp);
     console.log("now"+now.toString())
     var value = 0;
-    var dataCount = 20
+    var dataCount = 100
     for (var i = 0; i < dataCount; i++) {
-      var time0 = timestamp - (dataCount-i+
-      10)*1000;
+      var time0 = timestamp - (dataCount-i+10)*1000;
       now = new Date(time0);
       var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
       var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
@@ -162,7 +149,9 @@ export default {
 
     console.log(data)
     //console.log(this.data)\
-    const _this=this
+    const _this=this;
+    var lo=0;
+    var hi=0;
 
     setInterval(function () {
         //console.log(this.now)
@@ -171,32 +160,33 @@ export default {
         axios.get(`${server.baseURL}/data/a`, ).then(resdata => {
 
             var temp = resdata.data.sensordata.value
-            //console.log(resdata.data.sensordata.time)
-            //console.log(data.data.sensordata.value)
-    
-            //console.log((resdata.data.sensordata.time).toString())
-            var now = new Date((resdata.data.sensordata.time).toString());
-            var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
-            var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
+            var datatime = new Date((resdata.data.sensordata.time).toString());
             
-            var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+minute+':'+second
-            console.log(timestr)
-            console.log(temp/1000)
-            //console.log(_this.data)
-            //_this.data.shift();
-            _this.data.push({
-            name: now.toString(),
-                value: [
-                    timestr,
-                    temp/1000
-                ]
-            });
+            if((timestamp - Date.parse(datatime)) < 60*1000) {
+              var minute = datatime.getMinutes()<10?'0'+datatime.getMinutes():datatime.getMinutes();
+              var second = datatime.getSeconds()<10?'0'+datatime.getSeconds():datatime.getSeconds();
+              
+              var timestr = datatime.getFullYear() + '/' + (datatime.getMonth()+1) +'/'+ datatime.getDate()+' ' +datatime.getHours()+':'+minute+':'+second
+              console.log(timestr)
+              console.log(temp/1000)
+              //console.log(_this.data)
+              //_this.data.shift();
+              _this.data.push({
+              name: timestr,
+                  value: [
+                      timestr,
+                      temp/1000
+                  ]
+              });
 
-            myChart.setOption({
-            series: [{
-                data: _this.data
-                }]
-        });
+              myChart.setOption({
+              series: [{
+                  data: _this.data
+                  }]
+              });
+
+            }
+            
         
       });
 

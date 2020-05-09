@@ -13,18 +13,14 @@
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose">
-        <el-menu-item index="1">
+        <el-menu-item index="1" @click="toData">
           <i class="el-icon-menu"></i>
-          <span slot="title">添加设备</span>
+          <span slot="title">实时数据</span>
         </el-menu-item>
-        <el-menu-item index="2" @click="toManageDevice">
+        <el-menu-item index="2" @click="toHistoryData">
           <i class="el-icon-setting"></i>
-          <span slot="title">管理设备</span>
+          <span slot="title">历史数据</span>
         </el-menu-item>
-        <!-- <el-menu-item index="3">
-          <i class="el-icon-document"></i>
-          <span slot="title">删除设备</span>
-        </el-menu-item> -->
       </el-menu>
     </el-col>
     <el-col :span="1" style="border:1px solid transparent">
@@ -59,30 +55,16 @@ export default {
     return {
         charts: '',
         data: []
-        //opinion:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎'],
-        // opinionData:[
-        // {value:335, name:'直接访问'},
-        // {value:310, name:'邮件营销'},
-        // {value:234, name:'联盟广告'},
-        // {value:135, name:'视频广告'},
-        // {value:1548, name:'搜索引擎'}
-        // ],
-        // data:[2,1],
-        // now : +new Date(1997,9,3),
-        // oneDay : 24*3600*1000,
-        // value : Math.random()*1000,
-        
 
     }
   },
   methods: {
-    toManageDevice(){
-      this.$router.push({path:'/managedevice'})
+    toData(){
+      this.$router.push({path:'/data'})
     },
-    toDataTime(){
-      this.$router.push({path:'/managedevice'})
+    toHistoryData(){
+      this.$router.push({path:'/historydata'})
     },
-
 
   },
   mounted() {
