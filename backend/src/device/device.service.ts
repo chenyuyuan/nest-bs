@@ -79,10 +79,53 @@ export class DeviceService {
         device.imei = imei
         device.imsi = imsi
         return await this.DeviceRepository.save(device);
-      }
+    }
 
       
     // admin's service
+
+
+
+
+
+
+
+
+
+
+    //alarm value
+    async findAlarmValue(ocproduct_id:string): Promise<Product> {
+        return await this.ProductRepository.findOne({ocproduct_id:ocproduct_id});
+    }
+    async addAlarmValue(ocproduct_id:string, ocdevice_id: string,user_id:number): Promise<number> {
+        var device: Device = await this.DeviceRepository.findOne({ocdevice_id:ocdevice_id, ocproduct_id:ocproduct_id}) 
+        const user_device= new UserDevice();
+
+
+        if((await this.User_DeviceRepository.find()).length == 0) {
+          user_device.id=1;
+        }
+
+        if(device == null) {
+            return 2 //设备不存在
+        }
+        if(await this.User_DeviceRepository.findOne({user_id:user_id,device_id:device.id}) !=null) {
+            return 3 //用户已添加
+        }
+        user_device.user_id = user_id;
+        user_device.device_id = device.id;
+
+        await this.User_DeviceRepository.save(user_device);
+        return 1;
+    }
+    async updateAlarmValue(device_id:number, name: string, imei:string,imsi:string): Promise<Device> {
+        var device: Device = await this.DeviceRepository.findOne({id:device_id}) 
+        device.name = name
+        device.imei = imei
+        device.imsi = imsi
+        return await this.DeviceRepository.save(device);
+    }
+
 
 
     

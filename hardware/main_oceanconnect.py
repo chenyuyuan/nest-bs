@@ -71,7 +71,7 @@ if __name__ == '__main__':
     print("order_new_data: " + str(order_new_data))
     start_time = time.time()
     while True:
-        overtime = 10  # 超时未上报时间为10秒
+        overtime = 6  # 超时未上报时间为10秒
         if (time.time() - start_time) > overtime:
             sensor_data = get_data()
             order_senddata = "at+cm2mclisend=" + str(sensor_data) + "\r\n"

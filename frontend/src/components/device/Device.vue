@@ -13,7 +13,7 @@
     <el-col :span="10">
       <div style="margin-top:10px;margin-bottom:10px">修改设备</div>
       <div class="form-inline" style="margin-top:10px">
-        <div style="width:10%">产品号</div>
+        <div style="width:10%">产品号:</div>
         <div >{{device.ocproduct_id}}</div>
       </div>
       <div class="form-inline" style="margin-top:10px">
@@ -109,8 +109,8 @@ export default {
         name: '',
         ocdevice_id: '',
         ocproduct_id: '',
-        imei: '1',
-        imsi:'2',
+        imei: '',
+        imsi:'',
         reg_time: '',
         status: '',
       },

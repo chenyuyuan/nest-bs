@@ -41,7 +41,35 @@
         </el-col>
       </el-tab-pane>
       <el-tab-pane label="系统消息">
-        
+        <el-col :span="1" style="border:1px solid transparent">
+          <div style="display:none" class="grid-content bg-purple">1</div>
+        </el-col>
+        <el-col :span="22">
+          <el-table :data="tableDataSys" style="width: 100%">
+            <el-table-column
+                prop="sender_name"
+                label="发送者"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="content"
+                label="消息">
+            </el-table-column>
+            <el-table-column
+                prop="time"
+                label="时间"
+                width="250">
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="100">
+              <template slot-scope="scope">
+                <el-button @click="deleteRow(scope.row)" type="text" size="small">删除</el-button>
+              </template>
+          </el-table-column> 
+          </el-table>
+        </el-col>
       </el-tab-pane>
       <!-- <el-tab-pane label="角色管理">角色管理</el-tab-pane> -->
     </el-tabs>
@@ -69,7 +97,13 @@ export default {
   data() {
     
     return {
-        tableData: [{
+      tableData: [{
+        sender_id:"",
+        sender_name:"",
+        content:"",
+        send_time:""
+      }],
+      tableDataSys: [{
         sender_id:"",
         sender_name:"",
         content:"",

@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 // 这里可以修改表名
 // @Entity('messages')
 @Entity("alarm_value")
-export class Product extends BaseEntity {
+export class AlarmValue extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
