@@ -9,9 +9,6 @@ export class DataController {
 
     @Get('/a')
     async findAll(@Res() res): Promise<string> {
-        console.log("[user/all]: got data--------");
-  
-  
         var nodeCmd = require('node-cmd');
 
         var a;
@@ -35,12 +32,9 @@ export class DataController {
     }
     @Get('/datas')
     async findAllData(@Res() res): Promise<string> {
-        console.log("[user/all]: got data--------");
-  
-
-        var data: Data[] = await this.dataService.getAllData()
         
-  
+      
+        var data: Data[] = await this.dataService.getAllData()
         return res.status(HttpStatus.OK).json({msg:"data_success",tip:"成功",sensordata:data});
     }
 
