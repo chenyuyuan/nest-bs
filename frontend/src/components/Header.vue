@@ -9,13 +9,13 @@
           <el-menu-item index="2-2">历史数据</el-menu-item>
         </el-submenu>
         <el-menu-item index="3"><a href="/managedevice">设备管理</a></el-menu-item>
-        <el-menu-item index="4"><a href="/message/my" target="_blank">消息中心</a></el-menu-item>
-        <el-menu-item index="5"><a href="/profile" target="_blank">账号管理</a></el-menu-item>
-        <el-menu-item index="6"><a href="/article" target="_blank">文章</a></el-menu-item>
+        <el-menu-item index="4"><a href="/messagelist" target="_blank">消息中心</a></el-menu-item>
+        <el-menu-item index="5"><a href="/profile" target="_blank">个人账号</a></el-menu-item>
+        <el-menu-item index="6"><a href="/postlist" target="_blank">动态</a></el-menu-item>
         <el-menu-item style="float:right" index="8"><a href="/profile" target="_blank"><i class="el-icon-user"></i></a></el-menu-item>
         <el-menu-item style="float:right" index="7">
           <el-badge is-dot class="item">
-            <a href="/message/my" target="_blank"><i class="el-icon-message"></i></a> 
+            <a href="/messagelist" target="_blank"><i class="el-icon-message"></i></a> 
           </el-badge> 
         </el-menu-item>
       </el-menu>

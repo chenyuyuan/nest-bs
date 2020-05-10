@@ -7,49 +7,42 @@
 <div>
   <div style="height:1px"></div>
   <el-row class="tac">
-    <el-col :span="3">
-      <el-menu
-        default-active=""
-        class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose">
-        <el-menu-item index="1" @click="toProfile">
-          <i class="el-icon-menu"></i>
-          <span slot="title">个人信息</span>
-        </el-menu-item>
-      </el-menu>
-    </el-col>
-    <el-col :span="1" style="border:1px solid transparent">
-      <div style="display:none" class="grid-content bg-purple">1</div>
-    </el-col>
-    <el-col :span="20">
-      <div style="margin-top:10px;margin-bottom:10px">个人信息</div>
-      <div class="form-inline" style="margin-top:10px">
-        <div style="width:5%;">昵称:</div>
-        <el-input placeholder="请输入新昵称" v-model="name" style="width:150px" clearable></el-input>
-        <div class="form-inline" style="">
-            <el-button type="" v-on:click="changeName">修改昵称</el-button>
-        </div>
-      </div>
-      <div class="form-inline" style="margin-top:10px">
-        <div style="width:5%">邮箱:</div>
-        <el-input placeholder="请输入新邮箱" v-model="mail" style="width:200px" clearable></el-input>
-        <div class="form-inline" style="">
-            <el-button type="" v-on:click="getMailCode">获取验证码</el-button>
-            <el-input placeholder="请输入验证码" v-model="mail_code" style="width:150px" clearable></el-input>
-            <el-button type="" v-on:click="changeMail">修改邮箱</el-button>
-        </div>
-      </div>
-      
-      <div class="form-inline" style="margin-top:10px">
-        <div style="width:5%">密码:</div>
-        <el-input placeholder="请输入密码" v-model="pwd" style="width:150px" clearable></el-input>
-        <el-input placeholder="再输入一次" v-model="pwd2" style="width:150px" clearable></el-input>
-        <el-button type="" v-on:click="changePwd">修改密码</el-button>
-        
-      </div>
+    <el-tabs :tab-position="tabPosition" style="height: 200px;">
+      <el-tab-pane label="个人信息">
+        <el-col :span="1" style="border:1px solid transparent">
+          <div style="display:none" class="grid-content bg-purple">1</div>
+        </el-col>
+        <el-col :span="20">
+          <div style="margin-top:10px;margin-bottom:10px">个人信息</div>
+          <div class="form-inline" style="margin-top:10px">
+            <div style="width:5%;">昵称:</div>
+            <el-input placeholder="请输入新昵称" v-model="name" style="width:150px" clearable></el-input>
+            <div class="form-inline" style="">
+                <el-button type="" v-on:click="changeName">修改昵称</el-button>
+            </div>
+          </div>
+          <div class="form-inline" style="margin-top:10px">
+            <div style="width:5%">邮箱:</div>
+            <el-input placeholder="请输入新邮箱" v-model="mail" style="width:200px" clearable></el-input>
+            <div class="form-inline" style="">
+                <el-button type="" v-on:click="getMailCode">获取验证码</el-button>
+                <el-input placeholder="请输入验证码" v-model="mail_code" style="width:150px" clearable></el-input>
+                <el-button type="" v-on:click="changeMail">修改邮箱</el-button>
+            </div>
+          </div>
+          
+          <div class="form-inline" style="margin-top:10px">
+            <div style="width:5%">密码:</div>
+            <el-input placeholder="请输入密码" v-model="pwd" style="width:150px" clearable></el-input>
+            <el-input placeholder="再输入一次" v-model="pwd2" style="width:150px" clearable></el-input>
+            <el-button type="" v-on:click="changePwd">修改密码</el-button>
+            
+          </div>
 
-    </el-col>
+        </el-col>
+      </el-tab-pane>
+    </el-tabs>
+    
   </el-row>
 </div>
 
@@ -75,13 +68,11 @@ export default {
         mail:"",
         mail_code:"",
         pwd:"",
-        pwd2:""
+        pwd2:"",
+        tabPosition:'left'
     }
   },
   methods:{
-    toProfile(){
-      this.$router.push({path:'/profile'})
-    },
     changeName() { 
       if(this.name == null || this.name == '') {
         this.$message('昵称不能为空');

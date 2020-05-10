@@ -14,6 +14,7 @@ import AdminHome from '../components/admin/AdminHome'
 import Profile from '../components/user/Profile'
 import ForgetPwd from '../components/user/ForgetPwd'
 import Message from '../components/user/Message'
+import PostList from '../components/post/PostList'
 
 Vue.use(VueRouter)
 
@@ -49,11 +50,14 @@ const routes = [
   { path: '/forgetpwd', name: 'ForgetPwd', component: ForgetPwd },
 
 
-  { path: '/message/my', name: 'Message', component: Message },
+  { path: '/messagelist', name: 'Message', component: Message },
 
 
   { path: '/admin/login', name: 'AdminLogin', component: AdminLogin  },
   { path: '/admin/home', name: 'AdminHome', component: AdminHome  },
+
+
+  { path: '/postlist', name: 'PostList', component: PostList },
 
 ]
 
