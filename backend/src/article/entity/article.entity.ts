@@ -16,17 +16,17 @@ export class Article extends BaseEntity {
   
     @Column('varchar',{nullable:true})
     content: string;
+
+    @Column('varchar',{nullable:true})
+    img: string;
   
-    @Column('int',{nullable:true})
+    @Column('int',{nullable:true, default:0})
     like: number;
   
-    @Column('int',{nullable:true})
-    dislike: number;
-  
-    @Column('int',{nullable:true})
+    @Column('int',{nullable:true, default:0})
     comment: number;
   
-    @Column('int',{nullable:true})
+    @Column('int',{nullable:true, default:0})
     user_type: number;
 
     @Column('datetime', {nullable: true,default: () => 'CURRENT_TIMESTAMP'})

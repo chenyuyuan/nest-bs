@@ -14,7 +14,7 @@ export class ArticleComment extends BaseEntity {
   @Column('int')
   article_id: number;
 
-  @Column('int')
+  @Column('int', {default:0})
   to_user_id: number;
 
   @Column('varchar',{nullable:true})
