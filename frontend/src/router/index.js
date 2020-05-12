@@ -15,6 +15,8 @@ import Profile from '../components/user/Profile'
 import ForgetPwd from '../components/user/ForgetPwd'
 import Message from '../components/user/Message'
 import PostList from '../components/post/PostList'
+import CreatePost from '../components/post/CreatePost'
+
 
 Vue.use(VueRouter)
 
@@ -58,6 +60,7 @@ const routes = [
 
 
   { path: '/postlist', name: 'PostList', component: PostList },
+  { path: '/createpost', name: 'CreatePost', component: CreatePost },
 
 ]
 

@@ -8,31 +8,154 @@
   <div style="height:1px"></div>
   <el-row class="tac">
     
-    <el-tabs :tab-position="tabPosition" style="height: 200px;">
+    <el-tabs :tab-position="tabPosition" style="">
         <el-tab-pane label="动态">
-            <el-col :span="1" style="border:1px solid transparent">
-            <div style="display:none" class="grid-content bg-purple">1</div>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
             </el-col>
-            <el-col :span="22">
-            
+            <el-col :span="16">
+                <el-card class="box-card" shadow="hover" v-on:click="toPost">
+                    <div slot="header" class="clearfix" style="">
+                        <div class="form-inline">
+                            <div>name</div>
+                            <div>·</div>
+                            <div>time</div>
+                        </div>
+                    </div>
+                    <div>
+                        title
+                    </div>
+                    <div>
+                        content
+                    </div>
+                    <div>
+                        img
+                    </div>
+                    <div class="form-inline" style="margin-top:5px" v-on:click="toPost">
+                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                        <div style="width:24px">&nbsp;</div>
+                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
             </el-col>
         </el-tab-pane>
         <el-tab-pane label="我的动态">
-            <el-col :span="1" style="border:1px solid transparent">
-            <div style="display:none" class="grid-content bg-purple">1</div>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
             </el-col>
-            <el-col :span="22">
-            
+            <el-col :span="16">
+                <el-card class="box-card" shadow="hover" v-on:click="toPost">
+                    <div slot="header" class="clearfix" style="">
+                        <div class="form-inline">
+                            <div>name</div>
+                            <div>·</div>
+                            <div>time</div>
+                        </div>
+                    </div>
+                    <div>
+                        title
+                    </div>
+                    <div>
+                        content
+                    </div>
+                    <div>
+                        img
+                    </div>
+                    <div class="form-inline" style="margin-top:5px" v-on:click="toPost">
+                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                        <div style="width:24px">&nbsp;</div>
+                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                    </div>
+                </el-card>
             </el-col>
-            <el-col :span="1" style="border:1px solid transparent">
-            <div style="display:none" class="grid-content bg-purple">1</div>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
             </el-col>
         </el-tab-pane>
         <el-tab-pane label="专业文章">
-          角色管理
+          <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
+            </el-col>
+            <el-col :span="16">
+                <el-card class="box-card" shadow="hover" v-on:click="toPost">
+                    <div slot="header" class="clearfix" style="">
+                        <div class="form-inline">
+                            <div>name</div>
+                            <div>·</div>
+                            <div>time</div>
+                        </div>
+                    </div>
+                    <div>
+                        title
+                    </div>
+                    <div>
+                        content
+                    </div>
+                    <div>
+                        img
+                    </div>
+                    <div class="form-inline" style="margin-top:5px" v-on:click="toPost">
+                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                        <div style="width:24px">&nbsp;</div>
+                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
+            </el-col>
         </el-tab-pane>
         <el-tab-pane label="帮助文档">
-          角色管理
+          <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
+            </el-col>
+            <el-col :span="16">
+                <el-card class="box-card" shadow="hover" v-on:click="toPost">
+                    <div slot="header" class="clearfix" style="">
+                        <div class="form-inline">
+                            <div>name</div>
+                            <div>·</div>
+                            <div>time</div>
+                        </div>
+                    </div>
+                    <div>
+                        title
+                    </div>
+                    <div>
+                        content
+                    </div>
+                    <div>
+                        img
+                    </div>
+                    <div class="form-inline" style="margin-top:5px" v-on:click="toPost">
+                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                        <div style="width:24px">&nbsp;</div>
+                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <div style="width:8px">&nbsp;</div>
+                        <div style="color:blue;font-size:15px">1</div>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
+            </el-col>
         </el-tab-pane>
     </el-tabs>
 
@@ -79,6 +202,10 @@ export default {
     }
   },
   methods: {
+      toPost() {
+          console.log("post")
+          this.$router.push({path:'/post/1'})
+      },
     editRow(row) {
       console.log(row);
       this.$router.push({path:"/device",query:{ocdevice_id:row.ocdevice_id}});
@@ -96,28 +223,6 @@ export default {
       });
     });
     },
-    add() {
-      let adddata = {
-        ocproduct_id: this.value,
-        ocdevice_id: this.device_id,
-      };
-      console.log("selected " + this.value)
-      this.__add(adddata);
-    },
-    __add(data) {
-      axios.post(`${server.baseURL}/device/adddevice`, data).then(data => {
-        if(data.data.msg == "add_device_success") {
-          this.$message('添加成功');
-        }
-        else if(data.data.msg == "user_device_exists") {
-          this.$message('设备已存在，请到管理设备查看');
-        }
-        else if(data.data.msg == "device_not_exists") {
-          this.$message('设备不存在');
-        }
-        
-      });
-    }
   },
   mounted() {
     axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
@@ -125,12 +230,7 @@ export default {
       this.tableData = data.data.devices
       
     });
-    axios.get(`${server.baseURL}/device/products`, ).then(data => {
-      console.log(data.data.products)
-      this.options = data.data.products
-      
-        
-    });
+
   }
   
  
@@ -138,6 +238,26 @@ export default {
 </script>
 
 <style>
+.text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {
+    width: 600px;
+  }
   .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
@@ -151,7 +271,7 @@ export default {
     text-align: center;
     line-height: 200px;
   }
-  
+
   .el-main {
     background-color: #ffffff;
     color: #333;
@@ -171,4 +291,9 @@ export default {
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }
+
+
+
+
+
 </style>

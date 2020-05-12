@@ -10,6 +10,9 @@ export class Article extends BaseEntity {
   
     @Column('int')
     author_id: number;
+
+    @Column('varchar',{nullable:true})
+    title: string;
   
     @Column('varchar',{nullable:true})
     content: string;
