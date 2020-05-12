@@ -8,8 +8,14 @@ export class ArticleController {
 
     @Get('/a')
     async findAll(@Res() res): Promise<string> {
-     
-      return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
+        const fs = require('fs');
+        const dirCache = {};
+        var user_id = 1;
+        var dir = join(__dirname, '..','../public/upload', '/', user_id)
+        fs.mkdirSync(dir);
+        console.log(fs.existsSync(join(__dirname, '..','../public/upload/1')))
+
+        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
     }
 
     @Post('/upload0')
@@ -26,6 +32,8 @@ export class ArticleController {
     @UseInterceptors(FileInterceptor('file'))
     uploadFile(@UploadedFile() file) {
         console.log(file);
+        var user_id = 1;
+
         const writeImage = createWriteStream(join(__dirname, '..','../public/upload/1', `${file.originalname}`))
         writeImage.write(file.buffer)
 
