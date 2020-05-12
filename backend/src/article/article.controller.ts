@@ -2,10 +2,17 @@ import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,
 import { FileInterceptor,FilesInterceptor } from '@nestjs/platform-express';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
+import { ArticleService } from './article.service';
+import { CacheService } from 'src/cache/cache.service';
+import { AddArticleDTO } from './dto/add-article.dto';
+import { UpdateArticleDTO } from './dto/update-article.dto';
+import { AddArticleCommentDTO } from './dto/add-comment.dto';
 const fs = require('fs');
 
 @Controller('article')
 export class ArticleController {
+    constructor(private readonly articleService: ArticleService, private readonly cacheService: CacheService) { }
+
 
     @Get('/a')
     async findAll(@Res() res): Promise<string> {
@@ -18,6 +25,99 @@ export class ArticleController {
 
         return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
     }
+
+    @Post('/add') 
+    async addArticle(@Res() res, @Request() request, @Body() addArticleDTO:AddArticleDTO) {
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var article = await this.articleService.addArticle(user_id, addArticleDTO.title, addArticleDTO.content, addArticleDTO.img, addArticleDTO.verify_code);
+        if (article != null) {
+            return res.status(HttpStatus.OK).json({msg:"add_article_success",tip:"添加文章成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"add_article_failed",tip:"添加文章失败"});
+      
+    }
+    @Post('/addcomment') 
+    async addArticleComment(@Res() res, @Request() request, @Body() addArticleCommentDTO:AddArticleCommentDTO) {
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var articleComment = await this.articleService.addArticleComment(user_id, addArticleCommentDTO.article_id, addArticleCommentDTO.to_user_id, addArticleCommentDTO.content);
+        if(articleComment != null){
+            return res.status(HttpStatus.OK).json({msg:"add_comment_success",tip:"添加评论成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"add_comment_failed",tip:"添加评论失败"});
+      
+    }
+    @Post('/update') 
+    async updateArticle(@Res() res, @Request() request, @Body() updateArticleDTO:UpdateArticleDTO) {
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var article = await this.articleService.updateArticle(
+            updateArticleDTO.article_id, user_id, updateArticleDTO.title, updateArticleDTO.content, updateArticleDTO.img, updateArticleDTO.verify_code);
+        if (article != null) {
+            return res.status(HttpStatus.OK).json({msg:"update_article_success",tip:"修改文章成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"add_article_failed",tip:"修改文章失败"});
+    }
+
+
+    @Get('/articlelist/:verify_code') 
+    async getArticles(@Res() res, @Param() param, @Request() request) { 
+        var articles = await this.articleService.getArticlesByVerifycode(param.verify_code);
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles});
+    }
+    @Get('/myarticlelist') 
+    async getArticlesMy(@Res() res, @Param() param, @Request() request) { 
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var articles = await this.articleService.getArticlesMy(user_id);
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles});
+    }
+    @Get('/article/:article_id') 
+    async getArticle(@Res() res, @Param() param, @Request() request) { 
+        var article = await this.articleService.getArticle(param.article_id);
+        var comments = await this.articleService.getComments(param.article_id);
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, comments:comments});
+    }
+
+
+    @Get('/del/:article_id') 
+    async delArticle(@Res() res, @Param() param, @Request() request) { 
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var article = await this.articleService.deleteArticle(user_id, param.article_id);
+        if (article != null) {
+            return res.status(HttpStatus.OK).json({msg:"delete_article_success", tip:"删除文章成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"delete_article_failed", tip:"删除文章失败"});
+    }
+    @Get('/delcomment/:article_id') 
+    async delComment(@Res() res, @Param() param, @Request() request) { 
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var article = await this.articleService.deleteArticleComment(user_id, param.article_id);
+        if (article != null) {
+            return res.status(HttpStatus.OK).json({msg:"delete_comment_success", tip:"删除评论成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"delete_comment_failed", tip:"删除评论失败"});
+    }
+
+    @Get('/like/:article_id') 
+    async likeArticle(@Res() res, @Param() param, @Request() request) { 
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var article = await this.articleService.deleteArticleComment(user_id, param.article_id);
+        if (article != null) {
+            return res.status(HttpStatus.OK).json({msg:"delete_comment_success", tip:"删除评论成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"delete_comment_failed", tip:"删除评论失败"});
+    }
+
+
+
+
+
+
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
