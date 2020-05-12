@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
 // 这里可以修改表名
 // @Entity('messages')
-@Entity("article-comment")
+@Entity("article_comment")
 export class ArticleComment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

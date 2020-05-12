@@ -35,6 +35,7 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :file-list="fileList"
+                    :on-success="setFileName"
                     list-type="picture">
                     <el-button size="small" type="primary">点击上传</el-button>
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -48,7 +49,8 @@
                         active-color="#13ce66"
                         inactive-color="#ff4949">
                         </el-switch>
-                        <el-button type="" v-on:click="changeName" style="float:right">发送</el-button>
+                        <div style="width:20px"></div>
+                        <el-button type="" v-on:click="sendPost" style="float:right">发送</el-button>
                     </div>
                 </el-card>
             </el-col>
@@ -84,7 +86,11 @@ export default {
             dialogImageUrl: '',
             dialogVisible: false,
             disabled: false,
-            fileList:[]
+            fileList:[],
+            fileName:'',
+            title:'',
+            content: '',
+
         };
     },
     created() {
@@ -92,8 +98,13 @@ export default {
         this.getPost();
     },
     methods: {
+        setFileName(response, file, fileList) {
+            console.log(response, file, fileList);
+            console.log(file.name)
+            this.fileName = file.name
+        },
         handleRemove(file, fileList) {
-        console.log(file, fileList);
+            console.log(file, fileList);
         },
         handlePreview(file) {
             console.log(file);
@@ -105,6 +116,17 @@ export default {
         },
         navigate() {
         router.go(-1);
+        },
+
+        sendPost() {
+            console.log("the upload picture url: ")
+            console.log(this.fileList)
+            var postData = {
+                img: this.fileName,
+                title: this.title,
+                content: this.content,
+                verify_code: this.value
+            }
         }
     }
 };
