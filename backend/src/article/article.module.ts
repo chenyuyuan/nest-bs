@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisModule } from 'nestjs-redis';
 import { Article } from './entity/article.entity';
 import { ArticleComment } from './entity/article-comment.entity';
+import { CacheService } from 'src/cache/cache.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { ArticleComment } from './entity/article-comment.entity';
     RedisModule.register({host:'101.132.105.38',port:6379,password:'',db:1})
   ],
   controllers: [ArticleController],
-  providers: [ArticleService]
+  providers: [ArticleService, CacheService]
 })
 export class ArticleModule {}

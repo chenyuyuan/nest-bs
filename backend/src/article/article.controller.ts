@@ -15,21 +15,17 @@ export class ArticleController {
 
 
     @Get('/a')
-    async findAll(@Res() res): Promise<string> {
-        
-        const dirCache = {};
-        var user_id = 1;
-        var dir = join(__dirname, '..','../public/upload', '/', user_id.toString())
-        fs.mkdirSync(dir);
-        console.log(fs.existsSync(dir))
+    async findAll(@Res() res, @Request() request): Promise<string> {
+        var user_id = request.session.user_id;
+        console.log(user_id)
 
-        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", user_id:user_id});
     }
 
     @Post('/add') 
-    async addArticle(@Res() res, @Request() request, @Body() addArticleDTO:AddArticleDTO) {
+    async addArticle(@Res() res, @Request() request, @Body() addArticleDTO:AddArticleDTO) { // correct
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var article = await this.articleService.addArticle(user_id, addArticleDTO.title, addArticleDTO.content, addArticleDTO.img, addArticleDTO.verify_code);
         if (article != null) {
             return res.status(HttpStatus.OK).json({msg:"add_article_success",tip:"添加文章成功"});
@@ -38,9 +34,9 @@ export class ArticleController {
       
     }
     @Post('/addcomment') 
-    async addArticleComment(@Res() res, @Request() request, @Body() addArticleCommentDTO:AddArticleCommentDTO) {
+    async addArticleComment(@Res() res, @Request() request, @Body() addArticleCommentDTO:AddArticleCommentDTO) { // correct
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var articleComment = await this.articleService.addArticleComment(user_id, addArticleCommentDTO.article_id, addArticleCommentDTO.to_user_id, addArticleCommentDTO.content);
         if(articleComment != null){
             return res.status(HttpStatus.OK).json({msg:"add_comment_success",tip:"添加评论成功"});
@@ -49,9 +45,9 @@ export class ArticleController {
       
     }
     @Post('/update') 
-    async updateArticle(@Res() res, @Request() request, @Body() updateArticleDTO:UpdateArticleDTO) {
+    async updateArticle(@Res() res, @Request() request, @Body() updateArticleDTO:UpdateArticleDTO) { //corrext
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var article = await this.articleService.updateArticle(
             updateArticleDTO.article_id, user_id, updateArticleDTO.title, updateArticleDTO.content, updateArticleDTO.img, updateArticleDTO.verify_code);
         if (article != null) {
@@ -64,7 +60,7 @@ export class ArticleController {
     @Get('/articlelist/:verify_code') 
     async getArticles(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var articles = await this.articleService.getArticlesByVerifycode(param.verify_code);
         var articlesLen = articles.length;
         for (var i = 0;i<articlesLen;++i) {
@@ -77,7 +73,7 @@ export class ArticleController {
     @Get('/myarticlelist') 
     async getArticlesMy(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var articles = await this.articleService.getArticlesMy(user_id);
         var articlesLen = articles.length;
 
@@ -90,7 +86,7 @@ export class ArticleController {
     @Get('/article/:article_id') 
     async getArticle(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var article = await this.articleService.getArticle(param.article_id);
         var comments = await this.articleService.getComments(param.article_id);
         var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
@@ -99,7 +95,7 @@ export class ArticleController {
     @Get('/myarticle/:article_id') 
     async getArticleMy(@Res() res, @Param() param, @Request() request) {
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var article = await this.articleService.getArticleMy(param.article_id, user_id);
         var comments = await this.articleService.getComments(param.article_id);
         var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
@@ -110,7 +106,7 @@ export class ArticleController {
     @Get('/del/:article_id') 
     async delArticle(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var article = await this.articleService.deleteArticle(user_id, param.article_id);
         if (article != null) {
             return res.status(HttpStatus.OK).json({msg:"delete_article_success", tip:"删除文章成功"});
@@ -120,7 +116,7 @@ export class ArticleController {
     @Get('/delcomment/:article_id') 
     async delComment(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         var article = await this.articleService.deleteArticleComment(user_id, param.article_id);
         if (article != null) {
             return res.status(HttpStatus.OK).json({msg:"delete_comment_success", tip:"删除评论成功"});
@@ -131,7 +127,7 @@ export class ArticleController {
     @Get('/like/:article_id') 
     async likeArticle(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
-        //user_id = 1;
+        user_id = 1;
         if(user_id != null) {
             var likeRedis = await this.cacheService.get(user_id)
             if (likeRedis == null || likeRedis == 0) {
