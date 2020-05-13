@@ -19,6 +19,8 @@ export class ArticleController {
         var user_id = request.session.user_id;
         console.log(user_id)
 
+        await this.articleService.delete(1, 4);
+
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", user_id:user_id});
     }
 
@@ -45,7 +47,7 @@ export class ArticleController {
       
     }
     @Post('/update') 
-    async updateArticle(@Res() res, @Request() request, @Body() updateArticleDTO:UpdateArticleDTO) { //corrext
+    async updateArticle(@Res() res, @Request() request, @Body() updateArticleDTO:UpdateArticleDTO) { //correct
         var user_id = request.session.user_id;
         user_id = 1;
         var article = await this.articleService.updateArticle(
@@ -58,7 +60,7 @@ export class ArticleController {
 
 
     @Get('/articlelist/:verify_code') 
-    async getArticles(@Res() res, @Param() param, @Request() request) { 
+    async getArticles(@Res() res, @Param() param, @Request() request) { // correct
         var user_id = request.session.user_id;
         user_id = 1;
         var articles = await this.articleService.getArticlesByVerifycode(param.verify_code);
@@ -113,11 +115,11 @@ export class ArticleController {
         }
         return res.status(HttpStatus.OK).json({msg:"delete_article_failed", tip:"删除文章失败"});
     }
-    @Get('/delcomment/:article_id') 
+    @Get('/delcomment/:comment_id') 
     async delComment(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
         user_id = 1;
-        var article = await this.articleService.deleteArticleComment(user_id, param.article_id);
+        var article = await this.articleService.deleteArticleComment(user_id, param.comment_id);
         if (article != null) {
             return res.status(HttpStatus.OK).json({msg:"delete_comment_success", tip:"删除评论成功"});
         }
@@ -133,24 +135,18 @@ export class ArticleController {
             if (likeRedis == null || likeRedis == 0) {
                 await this.articleService.updateArticleLike(param.article_id, 1)
                 await this.cacheService.set(user_id, 1)
+                return res.status(HttpStatus.OK).json({msg:"add_like_success", tip:"点赞成功"});
             }
             else {
                 await this.articleService.updateArticleLike(param.article_id, 0)
                 await this.cacheService.set(user_id, 0)
+                return res.status(HttpStatus.OK).json({msg:"cancel_like_success", tip:"取消赞成功"});
             }
+            return res.status(HttpStatus.OK).json({msg:"", tip:"请先登录"});
         }
         else {
             return res.status(HttpStatus.OK).json({msg:"without_login", tip:"请先登录"});
         }
-        
-
-
-
-        var article = await this.articleService.deleteArticleComment(user_id, param.article_id);
-        if (article != null) {
-            return res.status(HttpStatus.OK).json({msg:"delete_comment_success", tip:"删除评论成功"});
-        }
-        return res.status(HttpStatus.OK).json({msg:"delete_comment_failed", tip:"删除评论失败"});
     }
 
 

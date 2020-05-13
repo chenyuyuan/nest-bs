@@ -51,7 +51,7 @@ export class ArticleService {
         article.verify_code = verify_code;
         return await this.ArticleRepository.save(article);
     }
-    async updateArticleLike(article_id:number,like:number): Promise<Article> {
+    async updateArticleLike(article_id:number, like:number): Promise<Article> {
         var article: Article = await this.ArticleRepository.findOne({id: article_id})
         if(like == 0) {
             article.like = article.like - 1;
@@ -65,6 +65,10 @@ export class ArticleService {
 
     async deleteArticle(user_id:number, article_id:number): Promise<Article> {
         var article: Article = await this.ArticleRepository.findOne({id:article_id, author_id:user_id}) 
+
+        var articleComment: ArticleComment[] = await this.ArticleCommentRepository.find({article_id:article_id});
+        await this.ArticleCommentRepository.remove(articleComment);
+
         return await this.ArticleRepository.remove(article);
     }
     async deleteArticleComment(user_id:number, articleComment_id:number): Promise<ArticleComment> {
@@ -76,6 +80,13 @@ export class ArticleService {
 
         return await this.ArticleCommentRepository.remove(articleComment);
     }
+
+    async delete(user_id:number, article_id:number): Promise<ArticleComment[]> {
+        var articleComment: ArticleComment[] = await this.ArticleCommentRepository.find({article_id:article_id}) 
+        return await this.ArticleCommentRepository.remove(articleComment);
+    }
+
+
 
 
     async getArticlesByVerifycode(verify_code:number): Promise<Article[]> {
