@@ -63,7 +63,15 @@ export class ArticleController {
 
     @Get('/articlelist/:verify_code') 
     async getArticles(@Res() res, @Param() param, @Request() request) { 
+        var user_id = request.session.user_id;
+        //user_id = 1;
         var articles = await this.articleService.getArticlesByVerifycode(param.verify_code);
+        var articlesLen = articles.length;
+        for (var i = 0;i<articlesLen;++i) {
+            var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
+            articles[i]["like"] = likeRedis;
+        }
+
         return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles});
     }
     @Get('/myarticlelist') 
@@ -71,13 +79,31 @@ export class ArticleController {
         var user_id = request.session.user_id;
         //user_id = 1;
         var articles = await this.articleService.getArticlesMy(user_id);
+        var articlesLen = articles.length;
+
+        for (var i = 0;i<articlesLen;++i) {
+            var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
+            articles[i]["like"] = likeRedis;
+        }
         return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles});
     }
     @Get('/article/:article_id') 
     async getArticle(@Res() res, @Param() param, @Request() request) { 
+        var user_id = request.session.user_id;
+        //user_id = 1;
         var article = await this.articleService.getArticle(param.article_id);
         var comments = await this.articleService.getComments(param.article_id);
+        var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
         return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, comments:comments});
+    }
+    @Get('/myarticle/:article_id') 
+    async getArticleMy(@Res() res, @Param() param, @Request() request) {
+        var user_id = request.session.user_id;
+        //user_id = 1;
+        var article = await this.articleService.getArticleMy(param.article_id, user_id);
+        var comments = await this.articleService.getComments(param.article_id);
+        var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, comments:comments, like:likeRedis});
     }
 
 
@@ -106,6 +132,24 @@ export class ArticleController {
     async likeArticle(@Res() res, @Param() param, @Request() request) { 
         var user_id = request.session.user_id;
         //user_id = 1;
+        if(user_id != null) {
+            var likeRedis = await this.cacheService.get(user_id)
+            if (likeRedis == null || likeRedis == 0) {
+                await this.articleService.updateArticleLike(param.article_id, 1)
+                await this.cacheService.set(user_id, 1)
+            }
+            else {
+                await this.articleService.updateArticleLike(param.article_id, 0)
+                await this.cacheService.set(user_id, 0)
+            }
+        }
+        else {
+            return res.status(HttpStatus.OK).json({msg:"without_login", tip:"请先登录"});
+        }
+        
+
+
+
         var article = await this.articleService.deleteArticleComment(user_id, param.article_id);
         if (article != null) {
             return res.status(HttpStatus.OK).json({msg:"delete_comment_success", tip:"删除评论成功"});

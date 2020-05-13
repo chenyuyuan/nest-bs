@@ -9,7 +9,7 @@ import { ArticleComment } from './entity/article-comment.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Article, ArticleComment]), 
-    RedisModule.register({host:'101.132.105.38',port:6379,password:'',db:0})
+    RedisModule.register({host:'101.132.105.38',port:6379,password:'',db:1})
   ],
   controllers: [ArticleController],
   providers: [ArticleService]
