@@ -7,11 +7,12 @@ import { CacheService } from 'src/cache/cache.service';
 import { AddArticleDTO } from './dto/add-article.dto';
 import { UpdateArticleDTO } from './dto/update-article.dto';
 import { AddArticleCommentDTO } from './dto/add-comment.dto';
+import { UserService } from 'src/user/user.service';
 const fs = require('fs');
 
 @Controller('article')
 export class ArticleController {
-    constructor(private readonly articleService: ArticleService, private readonly cacheService: CacheService) { }
+    constructor(private readonly articleService: ArticleService, private readonly cacheService: CacheService, private readonly userService:UserService) { }
 
 
     @Get('/a')
@@ -68,6 +69,11 @@ export class ArticleController {
         for (var i = 0;i<articlesLen;++i) {
             var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
             articles[i]["like"] = likeRedis;
+
+            var user = await this.userService.findById(articles[i]['author_id'])
+            if(user!=null) {
+                articles[i]["name"] = user['name'];
+            }
         }
 
         return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles});
@@ -78,12 +84,13 @@ export class ArticleController {
         user_id = 1;
         var articles = await this.articleService.getArticlesMy(user_id);
         var articlesLen = articles.length;
+        var name = request.session.username;
 
         for (var i = 0;i<articlesLen;++i) {
             var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
             articles[i]["like"] = likeRedis;
         }
-        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles});
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles, name: name});
     }
     @Get('/article/:article_id') 
     async getArticle(@Res() res, @Param() param, @Request() request) { 
@@ -92,7 +99,23 @@ export class ArticleController {
         var article = await this.articleService.getArticle(param.article_id);
         var comments = await this.articleService.getComments(param.article_id);
         var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
-        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, comments:comments});
+
+        var name = (await this.userService.findById(article['author_id']))['name'];
+
+        var commentsLen = comments.length;
+
+        for (var i = 0;i<commentsLen;++i) {
+            var user = await this.userService.findById(comments[i]['user_id'])
+            if(user!=null) {
+                comments[i]["username"] = user['name'];
+            }
+            var touser = await this.userService.findById(comments[i]['to_user_id']);
+            if(touser!=null) {
+                comments[i]["tousername"] = touser['name'];
+            }
+        }
+
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, comments:comments, name: name});
     }
     @Get('/myarticle/:article_id') 
     async getArticleMy(@Res() res, @Param() param, @Request() request) {
@@ -101,7 +124,12 @@ export class ArticleController {
         var article = await this.articleService.getArticleMy(param.article_id, user_id);
         var comments = await this.articleService.getComments(param.article_id);
         var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
-        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, comments:comments, like:likeRedis});
+        var user = await this.userService.findById(article['author_id'])
+        var name = "";
+        if(user!=null) {
+            name = user['name']
+        }
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, comments:comments, like:likeRedis, name: name});
     }
 
 
@@ -142,7 +170,19 @@ export class ArticleController {
                 await this.cacheService.set(user_id, 0)
                 return res.status(HttpStatus.OK).json({msg:"cancel_like_success", tip:"取消赞成功"});
             }
-            return res.status(HttpStatus.OK).json({msg:"", tip:"请先登录"});
+            
+        }
+        else {
+            return res.status(HttpStatus.OK).json({msg:"without_login", tip:"请先登录"});
+        }
+    }
+
+    @Get('/getmyuser_id') 
+    async getmyuser_id(@Res() res, @Param() param, @Request() request) { 
+        var user_id = request.session.user_id;
+        user_id = 1;
+        if(user_id != null) {
+            return res.status(HttpStatus.OK).json({msg:"get_success", tip:"请先登录",user_id:user_id});
         }
         else {
             return res.status(HttpStatus.OK).json({msg:"without_login", tip:"请先登录"});

@@ -6,13 +6,15 @@ import { RedisModule } from 'nestjs-redis';
 import { Article } from './entity/article.entity';
 import { ArticleComment } from './entity/article-comment.entity';
 import { CacheService } from 'src/cache/cache.service';
+import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Article, ArticleComment]), 
+    TypeOrmModule.forFeature([Article, ArticleComment, User]), 
     RedisModule.register({host:'101.132.105.38',port:6379,password:'',db:1})
   ],
   controllers: [ArticleController],
-  providers: [ArticleService, CacheService]
+  providers: [ArticleService, CacheService, UserService]
 })
 export class ArticleModule {}

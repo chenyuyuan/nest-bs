@@ -45,7 +45,7 @@ const routes = [
   
   { path: '/create', name: 'Create', component: () => import(/* webpackChunkName: "about" */ '../components/post/Create.vue') },
   { path: '/edit/:id', name: 'Edit', component: () => import(/* webpackChunkName: "about" */ '../components/post/Edit.vue') },
-  { path: '/post/:id', name: 'Post', component: () => import(/* webpackChunkName: "about" */ '../components/post/Post.vue') },
+  { path: '/post', name: 'Post', component: () => import(/* webpackChunkName: "about" */ '../components/post/Post.vue') },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
   { path: '/profile', name: 'Profile', component: Profile },

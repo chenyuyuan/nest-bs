@@ -128,6 +128,29 @@ export default {
                 verify_code: this.value
             }
         }
-    }
+    },
+    mounted() {
+        axios.get(`${server.baseURL}/article/article/` + this.$route.query.id, ).then(data => {
+        if(data.data.msg == "get_article_success") {
+            this.postList1 = data.data.articles
+            var pLen = this.postList1.length;
+            for (var i = 0;i < pLen; ++i) {
+            console.log(this.postList1[i]["img"])
+            if(this.postList1[i]["img"] == null || this.postList1[i]["img"] == "") {
+                this.postList1[i]["img"] == null
+            }
+            else {
+                this.postList1[i]["img"] = server.baseURL+"/public/upload/"+this.postList1[i]["author_id"]+"/"+this.postList1[i]["img"]
+                console.log(this.postList1[i]["img"])
+                console.log("            ")
+            }
+
+            }
+
+        }
+        
+    });
+
+  }
 };
 </script>

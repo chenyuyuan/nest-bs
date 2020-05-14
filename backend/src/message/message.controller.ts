@@ -6,7 +6,7 @@ import { UserService } from 'src/user/user.service';
 
 @Controller('message')
 export class MessageController {
-    constructor(private readonly messageService: MessageService,private readonly userService:UserService) { }
+    constructor(private readonly messageService: MessageService, private readonly userService:UserService) { }
 
     // add message
     @Post('/add')
