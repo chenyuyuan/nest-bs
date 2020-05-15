@@ -112,7 +112,7 @@ export default {
 				article_id: this.post.id,
 				to_user_id: 0,
 			}
-			axios.post(`${server.baseURL}/article/addComment`, postdata).then(data => {
+			axios.post(`${server.baseURL}/article/addcomment`, postdata).then(data => {
 				if(data.data.msg == "add_comment_success") {
 					this.$message('评论成功');
 					axios.get(`${server.baseURL}/article/article/` + this.$route.query.id, ).then(data => {

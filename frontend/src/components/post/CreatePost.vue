@@ -16,15 +16,15 @@
                     <el-input
                     type="textarea"
                     autosize
-                    placeholder="请输入内容"
-                    v-model="textarea1">
+                    placeholder="请输入标题"
+                    v-model="title">
                     </el-input>
                     <div style="margin: 20px 0;"></div>
                     <el-input
                     type="textarea"
                     :autosize="{ minRows: 5, maxRows: 12}"
                     placeholder="请输入内容"
-                    v-model="textarea2">
+                    v-model="content">
                     </el-input>
                 </el-card>
                 <el-card class="box-card" shadow="hover">
@@ -50,7 +50,7 @@
                         inactive-color="#ff4949">
                         </el-switch>
                         <div style="width:20px"></div>
-                        <el-button type="" v-on:click="sendPost" style="float:right">发送</el-button>
+                        <el-button type="" v-on:click="sendPost" style="float:right">发布</el-button>
                     </div>
                 </el-card>
             </el-col>
@@ -80,17 +80,14 @@ export default {
         return {
             id: 0,
             post: {},
-            textarea1: '',
-            textarea2: '',
+            title: '',
+            content: '',
             value: false,
             dialogImageUrl: '',
             dialogVisible: false,
             disabled: false,
             fileList:[],
             fileName:'',
-            title:'',
-            content: '',
-
         };
     },
     created() {
@@ -121,36 +118,26 @@ export default {
         sendPost() {
             console.log("the upload picture url: ")
             console.log(this.fileList)
-            var postData = {
+            var verify = 0;
+            if(this.value == true) {
+                verify = 1;
+            }
+            var postdata = {
                 img: this.fileName,
                 title: this.title,
                 content: this.content,
-                verify_code: this.value
+                verify_code: verify
             }
+            axios.post(`${server.baseURL}/article/add`, postdata).then(data => {
+				if(data.data.msg == "add_comment_success") {
+					this.$message('发布成功');
+				}
+					
+			});
         }
     },
     mounted() {
-        axios.get(`${server.baseURL}/article/article/` + this.$route.query.id, ).then(data => {
-        if(data.data.msg == "get_article_success") {
-            this.postList1 = data.data.articles
-            var pLen = this.postList1.length;
-            for (var i = 0;i < pLen; ++i) {
-            console.log(this.postList1[i]["img"])
-            if(this.postList1[i]["img"] == null || this.postList1[i]["img"] == "") {
-                this.postList1[i]["img"] == null
-            }
-            else {
-                this.postList1[i]["img"] = server.baseURL+"/public/upload/"+this.postList1[i]["author_id"]+"/"+this.postList1[i]["img"]
-                console.log(this.postList1[i]["img"])
-                console.log("            ")
-            }
 
-            }
-
-        }
-        
-    });
-
-  }
+    }
 };
 </script>
