@@ -16,6 +16,7 @@ import ForgetPwd from '../components/user/ForgetPwd'
 import Message from '../components/user/Message'
 import PostList from '../components/post/PostList'
 import CreatePost from '../components/post/CreatePost'
+import UpdatePost from '../components/post/UpdatePost'
 
 
 Vue.use(VueRouter)
@@ -61,6 +62,7 @@ const routes = [
 
   { path: '/postlist', name: 'PostList', component: PostList },
   { path: '/createpost', name: 'CreatePost', component: CreatePost },
+  { path: '/updatepost', name: 'UpdatePost', component: UpdatePost },
 
 ]
 

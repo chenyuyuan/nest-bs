@@ -37,7 +37,7 @@ def rcv_data(queue):
 def get_data():
     # data = random.randint(1, 9999)
     data = temperature()
-    data_hex = (hex(struct.unpack('>H', struct.pack('>h', data))[0]))
+    data_hex = hex(data)
     data_hex = data_hex[2:] if len(data_hex) % 2 == 0 else "0" + data_hex[2:]
     return data_hex
 

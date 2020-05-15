@@ -35,6 +35,7 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :file-list="fileList"
+                    :limit="1"
                     :on-success="setFileName"
                     list-type="picture">
                     <el-button size="small" type="primary">点击上传</el-button>
@@ -48,7 +49,7 @@
                         v-model="value"
                         active-color="#13ce66"
                         inactive-color="#ff4949">
-                        </el-switch>
+                        </el-switch> 
                         <div style="width:20px"></div>
                         <el-button type="" v-on:click="sendPost" style="float:right">发布</el-button>
                     </div>

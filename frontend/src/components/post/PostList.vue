@@ -32,13 +32,13 @@
                     
                     <el-image style="height:auto;width:300px" :fit="fill" v-if="p.img != null" :src="p.img" v-on:click="toPost(p)"></el-image>
                     <div class="form-inline" style="margin-top:5px" v-on:click="toPost(p)">
-                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                        <i class="el-icon-arrow-up" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px">&nbsp;</div>
-                        <div style="color:blue;font-size:15px">{{p.like}}</div>
+                        <div style="color:#5CB6FF;font-size:15px">{{p.like}}</div>
                         <div style="width:24px">&nbsp;</div>
-                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <i class="el-icon-chat-round" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px">&nbsp;</div>
-                        <div style="color:blue;font-size:15px">{{p.comment}}</div>
+                        <div style="color:#5CB6FF;font-size:15px">{{p.comment}}</div>
                     </div>
                 </el-card>
             </el-col>
@@ -70,14 +70,17 @@
                         {{p.content}}
                     </div>
                     <el-image style="height:auto;width:300px" :fit="fill" v-if="p.img != null" :src="p.img" v-on:click="toPost(p)"></el-image>
-                    <div class="form-inline" style="margin-top:5px" v-on:click="toPost(p)">
-                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                    <div class="form-inline" style="margin-top:5px">
+                        <i class="el-icon-arrow-up" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px"></div>
-                        <div style="color:blue;font-size:15px">{{p.like}}</div>
+                        <div style="color:#5CB6FF;font-size:15px">{{p.like}}</div>
                         <div style="width:24px"></div>
-                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <i class="el-icon-chat-round" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px"></div>
-                        <div style="color:blue;font-size:15px">{{p.comment}}</div>
+                        <div style="color:#5CB6FF;font-size:15px" v-on:click="toPost(p)">{{p.comment}}</div>
+                        <div style="width:20px"></div>
+                        <i class="el-icon-edit-outline" style="color:#5CB6FF;font-size:22px" v-on:click="toUpdatePost(p)"></i>
+                        <div style="color:#5CB6FF;font-size:15px" v-on:click="toUpdatePost(p)">修改</div>
                     </div>
                 </el-card>
             </el-col>
@@ -108,13 +111,13 @@
                     
                     <el-image style="height:auto;width:300px" :fit="fill" v-if="p.img != null" :src="p.img" v-on:click="toPost(p)"></el-image>
                     <div class="form-inline" style="margin-top:5px" v-on:click="toPost(p)">
-                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                        <i class="el-icon-arrow-up" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px">&nbsp;</div>
-                        <div style="color:blue;font-size:15px">{{p.like}}</div>
+                        <div style="color:#5CB6FF;font-size:15px">{{p.like}}</div>
                         <div style="width:24px">&nbsp;</div>
-                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <i class="el-icon-chat-round" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px">&nbsp;</div>
-                        <div style="color:blue;font-size:15px">{{p.comment}}</div>
+                        <div style="color:#5CB6FF;font-size:15px">{{p.comment}}</div>
                     </div>
                 </el-card>
             </el-col>
@@ -146,13 +149,13 @@
                     
                     <el-image style="height:auto;width:300px" :fit="fill" v-if="p.img != null" :src="p.img" v-on:click="toPost(p)"></el-image>
                     <div class="form-inline" style="margin-top:5px" v-on:click="toPost(p)">
-                        <i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+                        <i class="el-icon-arrow-up" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px">&nbsp;</div>
-                        <div style="color:blue;font-size:15px">{{p.like}}</div>
+                        <div style="color:#5CB6FF;font-size:15px">{{p.like}}</div>
                         <div style="width:24px">&nbsp;</div>
-                        <i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+                        <i class="el-icon-chat-round" style="color:#5CB6FF;font-size:22px"></i>
                         <div style="width:8px">&nbsp;</div>
-                        <div style="color:blue;font-size:15px">{{p.comment}}</div>
+                        <div style="color:#5CB6FF;font-size:15px">{{p.comment}}</div>
                     </div>
                 </el-card>
             </el-col>
@@ -211,9 +214,13 @@ export default {
 
 
 	methods: {
-		toPost(p1) {
-			console.log(p1)
-			this.$router.push({path:'/post', query:{id: p1.id}})
+		toPost(p) {
+			console.log(p)
+			this.$router.push({path:'/post', query:{id: p.id}})
+        },
+        toUpdatePost(p) {
+			console.log(p)
+			this.$router.push({path:'/updatepost', query:{id: p.id}})
 		},
 		toCreatePost() {
 			this.$router.push({path:'/createpost'})
@@ -223,7 +230,8 @@ export default {
 		axios.get(`${server.baseURL}/article/articlelist/0`, ).then(data => {
 			if(data.data.msg == "get_article_success") {
 				this.postList1 = data.data.articles
-				var pLen = this.postList1.length;
+                var pLen = this.postList1.length;
+                console.log(this.postList1)
 				for (var i = 0;i < pLen; ++i) {
 					if(this.postList1[i]["img"] == null || this.postList1[i]["img"] == "") {
 						this.postList1[i]["img"] == null
