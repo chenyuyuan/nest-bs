@@ -5,7 +5,7 @@ import threading
 import multiprocessing
 import time
 # import random
-import struct
+# import struct
 
 
 def rcv_data(queue):

@@ -20,9 +20,9 @@ export class ArticleController {
         var user_id = request.session.user_id;
         console.log(user_id)
 
-        await this.articleService.delete(1, 4);
+        //await this.articleService.delete(1, 4);
 
-        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", user_id:user_id});
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
     }
 
     @Post('/add') 
