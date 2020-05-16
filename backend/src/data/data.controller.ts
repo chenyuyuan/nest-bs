@@ -3,10 +3,11 @@ import { DataService } from './data.service';
 import { SysService } from 'src/sys/sys.service';
 import { Data } from './entity/data.entity';
 import { CacheService } from 'src/cache/cache.service';
+import { DeviceService } from 'src/device/device.service';
 
 @Controller('data')
 export class DataController {
-    constructor(private readonly dataService: DataService,private readonly cacheService: CacheService) { }
+    constructor(private readonly dataService: DataService, private readonly deviceService: DeviceService, private readonly cacheService: CacheService) { }
 
 
 
@@ -23,7 +24,12 @@ export class DataController {
 			}
         }
 
-        
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
+	}
+	@Post('/test')
+    async test(@Res() res, @Request() request, @Body() body): Promise<string> {
+		console.log(body)
+		console.log(body['a'])
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
     }
@@ -40,16 +46,23 @@ export class DataController {
 			}
         }
 		console.log(list)
-        
-
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: list});
 	}
 	@Post('/device_shadow_push')
-    async msgpush(@Res() res, @Request() request): Promise<string> {
+    async msgpush(@Res() res, @Request() request, @Body() body): Promise<string> {
         // var user_id = request.session.user_id;
         // console.log(user_id)
 
         // //await this.articleService.delete(1, 4);
+		console.log(body)
+		var ocdevice_id = body['devieId']
+		var device = await this.deviceService.findDevice(ocdevice_id);
+		if(device != null) {
+			var device_id = device['id'];
+			//await this.cacheService.rpush(device_id.toString(), body["property"]);
+		}
+
+		
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
     }
