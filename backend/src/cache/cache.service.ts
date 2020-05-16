@@ -33,4 +33,32 @@ export class CacheService {
         if (!data) return;
         return JSON.parse(data);       
     }
+
+
+    //设置值的方法
+    async rpush(key:string, value:any) {
+        value = JSON.stringify(value);
+        if(!this.client){
+            await this.getClient();
+        }
+        await this.client.rpush(key, value);
+    }
+    //获取值的方法
+    async lpop(key:string) {
+        if(!this.client){
+            await this.getClient();
+        }
+        var data = await this.client.lpop(key);           
+        if (!data) return;
+        return data;       
+    }
+    //获取值的方法
+    async lrange(key:string) {
+        if(!this.client){
+            await this.getClient();
+        }
+        var data = await this.client.lpop(key,0,19);           
+        if (!data) return;
+        return data;       
+    }
 }

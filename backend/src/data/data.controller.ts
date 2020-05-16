@@ -2,12 +2,60 @@ import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,
 import { DataService } from './data.service';
 import { SysService } from 'src/sys/sys.service';
 import { Data } from './entity/data.entity';
+import { CacheService } from 'src/cache/cache.service';
 
 @Controller('data')
 export class DataController {
-    constructor(private readonly dataService: DataService,private readonly sysService: SysService) { }
+    constructor(private readonly dataService: DataService,private readonly cacheService: CacheService) { }
 
-    @Get('/a')
+
+
+    @Get('/b')
+    async b(@Res() res, @Request() request): Promise<string> {
+        await this.cacheService.rpush("2","1");
+        await this.cacheService.rpush("2","2");
+        await this.cacheService.rpush("2","3");
+        while (true) {
+			var list = await this.cacheService.lpop("2");
+			console.log(list)
+			if(list == null){
+				break;
+			}
+        }
+
+        
+
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
+    }
+
+    @Get('/getdata')
+    async getdata(@Res() res, @Request() request): Promise<string> {
+		var device_id = 1;
+		var list:number[];
+        while (true) {
+			var data = await this.cacheService.lpop(device_id.toString());
+			list.push(data)
+			if(list == null){
+				break;
+			}
+        }
+		console.log(list)
+        
+
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: list});
+	}
+	@Post('/device_shadow_push')
+    async msgpush(@Res() res, @Request() request): Promise<string> {
+        // var user_id = request.session.user_id;
+        // console.log(user_id)
+
+        // //await this.articleService.delete(1, 4);
+
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
+    }
+
+
+    @Get('/all')
     async findAll(@Res() res): Promise<string> {
         var nodeCmd = require('node-cmd');
 
