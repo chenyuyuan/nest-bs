@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Data } from './entity/data.entity';
 import { Repository } from 'typeorm';
 import { DataType } from './entity/datatype.entity';
-import { DeviceDatatype } from './entity/devicedatatype.entity';
+import { ProductDatatype } from './entity/productdatatype.entity';
 
 @Injectable()
 export class DataService {
@@ -12,13 +12,13 @@ export class DataService {
         private readonly DataRepository: Repository<Data>,
         @InjectRepository(DataType)
         private readonly DataTypeRepository: Repository<DataType>,
-        @InjectRepository(DeviceDatatype)
-        private readonly DeviceDatatypeRepository: Repository<DeviceDatatype>,
+        @InjectRepository(ProductDatatype)
+        private readonly DeviceDatatypeRepository: Repository<ProductDatatype>,
       ) { }
     
     private readonly datas: Data[] = [];
     private readonly datatypes: DataType[] = [];
-    private readonly devicedatatypes: DeviceDatatype[] = [];
+    private readonly productdatatypes: ProductDatatype[] = [];
 
     async getDataNew(device_id:number, datatype_id: number): Promise<Data> {
         //var data: Data = await this.DataRepository.findOne({device_id:device_id, datatype_id:datatype_id}) 
@@ -35,6 +35,21 @@ export class DataService {
         //console.log(alldata)
         return alldata;
     }
+
+    async addData(value:number, device_id:number, datatype_id: number, time:string): Promise<Data> {
+        const data = new Data();
+        if((await this.DataRepository.find()).length == 0) {
+            data.id=1;
+        }
+        data.value = value;
+        data.device_id = device_id;
+        data.datatype_id = datatype_id;
+        data.time = time;
+        return await data.save();
+    }
+
+
+
 
 
 

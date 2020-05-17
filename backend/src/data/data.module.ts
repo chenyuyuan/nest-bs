@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { DataService } from './data.service';
 import { DataController } from './data.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DeviceDatatype } from './entity/devicedatatype.entity';
+import { ProductDatatype } from './entity/productdatatype.entity';
 import { DataType } from './entity/datatype.entity';
 import { Data } from './entity/data.entity';
 import { SysService } from 'src/sys/sys.service';
@@ -18,7 +18,7 @@ import { DeviceService } from 'src/device/device.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Data, DataType,DeviceDatatype , Device,Product,UserDevice,AlarmValue]), 
+    TypeOrmModule.forFeature([Data, DataType, ProductDatatype , Device,Product,UserDevice,AlarmValue]), 
     RedisModule.register({host:'101.132.105.38',port:6379,password:'',db:1})
   ],
 

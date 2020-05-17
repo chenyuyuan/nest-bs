@@ -28,8 +28,11 @@ export class DataController {
 	}
 	@Post('/test')
     async test(@Res() res, @Request() request, @Body() body): Promise<string> {
-		console.log(body)
-		console.log(body['a'])
+        //"20200415T082803Z"
+        var timestr = "20200415T082803Z"
+        var timeformat=timestr.substring(0,4)+'/'+timestr.substring(4,6)+'/'+timestr.substring(6,8)+' '+timestr.substring(9,11)+':'+timestr.substring(11,13)+':'+timestr.substring(13,15)
+        var t = new Date(timeformat)
+        console.log("timestamp"+t.getTime())
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
     }
@@ -40,10 +43,10 @@ export class DataController {
 		var list:number[];
         while (true) {
 			var data = await this.cacheService.lpop(device_id.toString());
-			list.push(data)
 			if(list == null){
 				break;
-			}
+            }
+            list.push(data)
         }
 		console.log(list)
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: list});
@@ -56,10 +59,19 @@ export class DataController {
         // //await this.articleService.delete(1, 4);
 		console.log(body)
 		var ocdevice_id = body['devieId']
-		var device = await this.deviceService.findDevice(ocdevice_id);
+        var device = await this.deviceService.findDevice(ocdevice_id);
+        var serviceName = 'up';
 		if(device != null) {
-			var device_id = device['id'];
-			//await this.cacheService.rpush(device_id.toString(), body["property"]);
+            var device_id = device['id'];
+            var value = body['service']['data'][serviceName]
+            //redis
+            await this.cacheService.rpush(device_id.toString(), value);
+            //mysql
+
+            var timestr = body['service']['eventTime']
+            var timeformat=timestr.substring(0,4)+timestr.substring(4,6)+timestr.substring(6,8)+timestr.substring(9,11)+timestr.substring(11,13)+timestr.substring(13,15)
+            var datatype_id = 1
+            await this.dataService.addData(value, device_id, datatype_id, timeformat)
 		}
 
 		
