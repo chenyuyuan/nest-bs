@@ -66,6 +66,7 @@ export class DataController {
 		if(device != null) {
             var device_id = device['id'];
             var value = body['service']['data'][serviceName]
+            console.log(value)
             //redis
             await this.cacheService.rpush(device_id.toString(), value);
             //mysql
