@@ -70,11 +70,11 @@ export class DataController {
 
             var timestr = body['service']['eventTime']
             var timeformat=timestr.substring(0,4)+timestr.substring(4,6)+timestr.substring(6,8)+timestr.substring(9,11)+timestr.substring(11,13)+timestr.substring(13,15)
-            var datatype_id = 1
+            
+            var product_id = await this.deviceService.findProduct(device['ocproduct_id'])['id']
+            var datatype_id = await this.dataService.getDataTypeId(product_id)
             await this.dataService.addData(value, device_id, datatype_id, timeformat)
 		}
-
-		
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
     }

@@ -13,7 +13,7 @@ export class DataService {
         @InjectRepository(DataType)
         private readonly DataTypeRepository: Repository<DataType>,
         @InjectRepository(ProductDatatype)
-        private readonly DeviceDatatypeRepository: Repository<ProductDatatype>,
+        private readonly ProductDatatypeRepository: Repository<ProductDatatype>,
       ) { }
     
     private readonly datas: Data[] = [];
@@ -35,6 +35,14 @@ export class DataService {
         //console.log(alldata)
         return alldata;
     }
+
+    async getDataTypeId(product_id: number): Promise<number> {
+        var productDatatype = await this.ProductDatatypeRepository.findOne({product_id:product_id});
+        return productDatatype['datatype_id'];
+    }
+
+
+
 
     async addData(value:number, device_id:number, datatype_id: number, time:string): Promise<Data> {
         const data = new Data();
