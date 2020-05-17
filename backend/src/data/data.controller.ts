@@ -31,7 +31,7 @@ export class DataController {
 	@Post('/test')
     async test(@Res() res, @Request() request, @Body() body): Promise<string> {
         //"20200415T082803Z"
-        var time = "20200517T082650Z"
+        var time = "20200517T122650Z"
         var timeformat=time.substring(0,4)+'/'+time.substring(4,6)+'/'+time.substring(6,8)+' '+time.substring(9,11)+':'+time.substring(11,13)+':'+time.substring(13,15)
         console.log(timeformat)
         var t0 = new Date(timeformat)
@@ -51,6 +51,9 @@ export class DataController {
               
         var time1 = y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s)
 
+
+
+        await this.dataService.addData(30000, 1, 1, time1)
         console.log(time1)
         
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});

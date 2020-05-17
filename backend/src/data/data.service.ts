@@ -55,6 +55,8 @@ export class DataService {
         data.device_id = device_id;
         data.datatype_id = datatype_id;
         data.time = time;
+        console.log(time)
+        console.log(data.time)
         return await data.save();
     }
 
