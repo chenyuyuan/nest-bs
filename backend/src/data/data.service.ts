@@ -36,9 +36,10 @@ export class DataService {
         return alldata;
     }
 
-    async getDataTypeId(product_id: number): Promise<number> {
+    async getDataType(product_id: number): Promise<DataType> {
         var productDatatype = await this.ProductDatatypeRepository.findOne({product_id:product_id});
-        return productDatatype['datatype_id'];
+        var datatype = await this.DataTypeRepository.findOne({id: productDatatype['datatype_id']}) 
+        return datatype;
     }
 
 

@@ -58,9 +58,11 @@ export class DataController {
 
         // //await this.articleService.delete(1, 4);
 		console.log(body)
-		var ocdevice_id = body['devieId']
+		var ocdevice_id = body['deviceId']
         var device = await this.deviceService.findDevice(ocdevice_id);
-        var serviceName = 'up';
+        var product_id = await this.deviceService.findProduct(device['ocproduct_id'])['id']
+        var datatype = await this.dataService.getDataType(product_id)
+        var serviceName = datatype['properties'];
 		if(device != null) {
             var device_id = device['id'];
             var value = body['service']['data'][serviceName]
@@ -70,10 +72,8 @@ export class DataController {
 
             var timestr = body['service']['eventTime']
             var timeformat=timestr.substring(0,4)+timestr.substring(4,6)+timestr.substring(6,8)+timestr.substring(9,11)+timestr.substring(11,13)+timestr.substring(13,15)
-            
-            var product_id = await this.deviceService.findProduct(device['ocproduct_id'])['id']
-            var datatype_id = await this.dataService.getDataTypeId(product_id)
-            await this.dataService.addData(value, device_id, datatype_id, timeformat)
+        
+            await this.dataService.addData(value, device_id, datatype['id'], timeformat)
 		}
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
