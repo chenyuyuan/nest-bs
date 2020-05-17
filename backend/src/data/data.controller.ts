@@ -60,7 +60,7 @@ export class DataController {
 		console.log(body)
 		var ocdevice_id = body['deviceId']
         var device = await this.deviceService.findDevice(ocdevice_id);
-        var product_id = await this.deviceService.findProduct(device['ocproduct_id'])['id']
+        var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
         var datatype = await this.dataService.getDataType(product_id)
         var serviceName = datatype['properties'];
 		if(device != null) {
