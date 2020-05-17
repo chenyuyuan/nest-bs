@@ -40,15 +40,16 @@ export class DataController {
     @Get('/getdata')
     async getdata(@Res() res, @Request() request): Promise<string> {
 		var device_id = 1;
-		var list:number[];
+        var list:number[];
+        var ocdevice_id = (await this.deviceService.findDeviceByDeviceId(device_id))['ocdevice_id']
         while (true) {
-			var data = await this.cacheService.lpop(device_id.toString());
+			var data = await this.cacheService.lpop(ocdevice_id);
 			if(list == null){
 				break;
             }
             list.push(data)
         }
-		console.log(list)
+		console.log(list.toString())
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: list});
 	}
 	@Post('/device_shadow_push')
@@ -68,7 +69,7 @@ export class DataController {
             var value = body['service']['data'][serviceName]
             console.log(value)
             //redis
-            await this.cacheService.rpush(device_id.toString(), value);
+            await this.cacheService.rpush(ocdevice_id, value);
             //mysql
 
             var timestr = body['service']['eventTime']

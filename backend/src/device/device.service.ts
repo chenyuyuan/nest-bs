@@ -55,6 +55,10 @@ export class DeviceService {
         return await this.ProductRepository.findOne({ocproduct_id:ocproduct_id});
     }
 
+    async findDeviceByDeviceId(device_id: number): Promise<Device> {
+        return await this.DeviceRepository.findOne({id: device_id});
+    }
+    ////////////????????????????????????????????????????????????????
     async findDeviceByUserId(user_id:number): Promise<Device[]> {//测试 ++ ✔✔
         var user_device:UserDevice[] = await this.User_DeviceRepository.find({user_id:user_id})
         
