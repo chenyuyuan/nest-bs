@@ -54,6 +54,8 @@ export class DataService {
         data.value = value;
         data.device_id = device_id;
         data.datatype_id = datatype_id;
+
+        //用createquery设置时间
         return await data.save();
     }
 

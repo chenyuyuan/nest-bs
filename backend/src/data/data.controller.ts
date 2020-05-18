@@ -62,17 +62,21 @@ export class DataController {
     @Get('/getdata')
     async getdata(@Res() res, @Request() request): Promise<string> {
 		var device_id = 1;
-        var list:number[];
+        var datalist: {[key:string]: string;};
+        var datalistCount = 0;
         var ocdevice_id = (await this.deviceService.findDeviceByDeviceId(device_id))['ocdevice_id']
         while (true) {
-			var data = await this.cacheService.lpop(ocdevice_id);
-			if(list == null){
+            var value = await this.cacheService.lpop('data_'+ocdevice_id);
+            var time = await this.cacheService.lpop('time_'+ocdevice_id)
+			if(datalist == null){
 				break;
             }
-            list.push(data)
+            datalist[datalistCount]['value'] = value;
+            datalist[datalistCount]['time'] = time;
+            datalistCount++;
         }
-		console.log(list.toString())
-        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: list});
+		console.log(datalist)
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist});
 	}
 	@Post('/device_shadow_push')
     async msgpush(@Res() res, @Request() request, @Body() body): Promise<string> {
@@ -81,7 +85,8 @@ export class DataController {
 
         // //await this.articleService.delete(1, 4);
 		console.log(body)
-		var ocdevice_id = body['deviceId']
+        var ocdevice_id = body['deviceId']
+        var time = body['service']['eventTime']
         var device = await this.deviceService.findDevice(ocdevice_id);
         var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
         var datatype = await this.dataService.getDataType(product_id)
@@ -91,7 +96,8 @@ export class DataController {
             var value = body['service']['data'][serviceName]
             console.log(value)
             //redis
-            await this.cacheService.rpush(ocdevice_id, value);
+            await this.cacheService.rpush('data_'+ocdevice_id, value);
+            await this.cacheService.rpush('time_'+ocdevice_id, time);
 
             //mysql
             await this.dataService.addData(value, device_id, datatype['id'])
