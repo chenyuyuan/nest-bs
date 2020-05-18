@@ -12,7 +12,7 @@ import { CacheService } from 'src/cache/cache.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]), 
-    RedisModule.register({host:'101.132.105.38',port:6379,password:'',db:0})
+    RedisModule.register({host:'106.54.90.108',port:6379,password:'',db:0})
   ],
   providers: [UserService, CacheService],
   controllers: [UserController]

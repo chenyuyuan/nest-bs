@@ -157,35 +157,33 @@ export default {
         //console.log(this.now)
         //console.log(setdata)
         //console.log(_this.data)
-        axios.get(`${server.baseURL}/data/a`, ).then(resdata => {
+        axios.get(`${server.baseURL}/data/getdata`, ).then(resdata => {
 
-            var temp = resdata.data.sensordata.value
-            var datatime = new Date((resdata.data.sensordata.time).toString());
-            
-            if((timestamp - Date.parse(datatime)) < 60*1000) {
-              var minute = datatime.getMinutes()<10?'0'+datatime.getMinutes():datatime.getMinutes();
-              var second = datatime.getSeconds()<10?'0'+datatime.getSeconds():datatime.getSeconds();
-              
-              var timestr = datatime.getFullYear() + '/' + (datatime.getMonth()+1) +'/'+ datatime.getDate()+' ' +datatime.getHours()+':'+minute+':'+second
-              console.log(timestr)
-              console.log(temp/1000)
-              //console.log(_this.data)
-              //_this.data.shift();
-              _this.data.push({
-              name: timestr,
-                  value: [
-                      timestr,
-                      temp/1000
-                  ]
-              });
+			var datas = resdata.data.datas;
+			for(var i = 0;i < datas.length; ++i) {
+				var temp = parseFloat(datas[i]['value'])
+				var t0 = datas[i]['time']
+				//var datatime = new Date((datas[i]['time']).toString());
+				var timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(9,11)+':'+t0.substring(11,13)+':'+t0.substring(13,15)
+				console.log(timestr)
+				console.log(temp/1000)
+				//console.log(_this.data)
+				//_this.data.shift();
+				_this.data.push({
+				name: timestr,
+					value: [
+						timestr,
+						temp/1000
+					]
+				});
 
-              myChart.setOption({
-              series: [{
-                  data: _this.data
-                  }]
-              });
+				myChart.setOption({
+				series: [{
+					data: _this.data
+					}]
+				});
 
-            }
+			}
             
         
       });

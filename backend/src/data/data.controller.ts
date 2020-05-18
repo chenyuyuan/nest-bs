@@ -28,7 +28,35 @@ export class DataController {
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
 	}
-	@Post('/test')
+	@Post('/time')
+    async time(@Res() res, @Request() request, @Body() body): Promise<string> {
+        //"20200415T082803Z"
+        var time = "20200517T122650Z"
+        var timeformat=time.substring(0,4)+'/'+time.substring(4,6)+'/'+time.substring(6,8)+' '+time.substring(9,11)+':'+time.substring(11,13)+':'+time.substring(13,15)
+        console.log(timeformat)
+        var t0 = new Date(timeformat)
+        var timestamp0 = t0.getTime()
+        console.log(timestamp0)
+        timestamp0 = timestamp0 + 8*60*60*1000
+
+        var t1 = new Date(timestamp0)
+        console.log(t1.getTime())
+
+        var y = t1.getFullYear();
+        var m = t1.getMonth()+1;
+        var d = t1.getDate();
+        var h = t1.getHours();
+        var mm = t1.getMinutes();
+        var s = t1.getSeconds();
+              
+        var time1 = y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s)
+        await this.dataService.addData(30000, 1, 1)
+        console.log(time1)
+        
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
+    }
+
+    @Post('/test')
     async test(@Res() res, @Request() request, @Body() body): Promise<string> {
         //"20200415T082803Z"
         var time = "20200517T122650Z"
@@ -50,9 +78,6 @@ export class DataController {
         var s = t1.getSeconds();
               
         var time1 = y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s)
-
-
-
         await this.dataService.addData(30000, 1, 1)
         console.log(time1)
         
@@ -62,20 +87,26 @@ export class DataController {
     @Get('/getdata')
     async getdata(@Res() res, @Request() request): Promise<string> {
 		var device_id = 1;
-        var datalist: {[key:string]: string;};
+        var datalist = [];
         var datalistCount = 0;
         var ocdevice_id = (await this.deviceService.findDeviceByDeviceId(device_id))['ocdevice_id']
         while (true) {
             var value = await this.cacheService.lpop('data_'+ocdevice_id);
             var time = await this.cacheService.lpop('time_'+ocdevice_id)
-			if(datalist == null){
+			if(value == null || time == null){
 				break;
             }
-            datalist[datalistCount]['value'] = value;
-            datalist[datalistCount]['time'] = time;
-            datalistCount++;
+            time = time.substring(1,17)
+            datalist.push({
+                'value': value,
+                'time': time
+            })
         }
-		console.log(datalist)
+        while(datalist.length>20) {
+            datalist.pop()
+        }
+        console.log(datalist)
+        console.log("datalist length "+ datalist.length)
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist});
 	}
 	@Post('/device_shadow_push')

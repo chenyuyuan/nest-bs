@@ -19,7 +19,7 @@ import { DeviceService } from 'src/device/device.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Data, DataType, ProductDatatype , Device,Product,UserDevice,AlarmValue]), 
-    RedisModule.register({host:'101.132.105.38',port:6379,password:'',db:3})
+    RedisModule.register({host:'106.54.90.108',port:6379,password:'',db:3})
   ],
 
   providers: [DataService, DeviceService, CacheService],
