@@ -53,7 +53,7 @@ export class DataController {
 
 
 
-        await this.dataService.addData(30000, 1, 1, time1)
+        await this.dataService.addData(30000, 1, 1)
         console.log(time1)
         
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
@@ -92,31 +92,9 @@ export class DataController {
             console.log(value)
             //redis
             await this.cacheService.rpush(ocdevice_id, value);
+
             //mysql
-
-            var time = body['service']['eventTime']
-            var timeformat=time.substring(0,4)+'/'+time.substring(4,6)+'/'+time.substring(6,8)+' '+time.substring(9,11)+':'+time.substring(11,13)+':'+time.substring(13,15)
-            
-            var t0 = new Date(timeformat)
-            var timestamp0 = t0.getTime()
-            timestamp0 = timestamp0 + 8*60*60*1000
-
-            var t1 = new Date(timestamp0)
-            console.log(t1.getTime())
-
-            var y = t1.getFullYear();
-            var m = t1.getMonth()+1;
-            var d = t1.getDate();
-            var h = t1.getHours();
-            var mm = t1.getMinutes();
-            var s = t1.getSeconds();
-                
-            var time1 = y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s)
-
-
-
-
-            await this.dataService.addData(value, device_id, datatype['id'], time1)
+            await this.dataService.addData(value, device_id, datatype['id'])
 		}
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
@@ -129,14 +107,14 @@ export class DataController {
 
         var a;
         // 'python ../utils/ocapi/testapi.py'
-        nodeCmd.get(
-          'python ./src/utils/ocapi/oc_get_data.py',
-          function(err, data, stderr){
-            console.log("cmd: python ./src/utils/ocapi/get_data.py")
-            console.log(data)
-            console.log(err)
-          }
-        );
+        // nodeCmd.get(
+        //   'python ./src/utils/ocapi/oc_get_data.py',
+        //   function(err, data, stderr){
+        //     console.log("cmd: python ./src/utils/ocapi/get_data.py")
+        //     console.log(data)
+        //     console.log(err)
+        //   }
+        // );
         var device_id = 1
         var datatype_id = 1
 

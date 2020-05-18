@@ -17,7 +17,7 @@ export class Data extends BaseEntity {
   @Column('int',{nullable:true})
   device_id: number;
 
-  @Column('datetime',{nullable:true})
+  @Column('datetime',{nullable:true, default:() => 'CURRENT_TIMESTAMP'})
   time: string;
   
 

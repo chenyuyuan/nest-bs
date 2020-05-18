@@ -46,7 +46,7 @@ export class DataService {
 
 
 
-    async addData(value:number, device_id:number, datatype_id: number, time:string): Promise<Data> {
+    async addData(value:number, device_id:number, datatype_id: number): Promise<Data> {
         const data = new Data();
         if((await this.DataRepository.find()).length == 0) {
             data.id=1;
@@ -54,9 +54,6 @@ export class DataService {
         data.value = value;
         data.device_id = device_id;
         data.datatype_id = datatype_id;
-        data.time = time;
-        console.log(time)
-        console.log(data.time)
         return await data.save();
     }
 
