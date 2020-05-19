@@ -23,10 +23,10 @@ export class Device extends BaseEntity {
   @Column('varchar',{nullable: true})
   imsi: string;
 
-  @Column('datetime',{nullable: true})
+  @Column('datetime',{nullable: true, default:() => 'CURRENT_TIMESTAMP'})
   reg_time: string;
 
-  @Column('int',{nullable: true})
+  @Column('int',{nullable: true, default: 0})
   status: number;
 
 }

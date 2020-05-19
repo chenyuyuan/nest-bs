@@ -90,6 +90,11 @@ export class DataController {
         var datalist = [];
         var datalistCount = 0;
         var ocdevice_id = (await this.deviceService.findDeviceByDeviceId(device_id))['ocdevice_id']
+        //01006f25-ab60-4a7e-8b0a-6dcfa15e43cc
+        if(ocdevice_id == '01006f25-ab60-4a7e-8b0a-6dcfa15e43cc') {
+            //消息推送测试用的
+            return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
+        }
         while (true) {
             var value = await this.cacheService.lpop('data_'+ocdevice_id);
             var time = await this.cacheService.lpop('time_'+ocdevice_id)

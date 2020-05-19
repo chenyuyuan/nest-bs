@@ -5,5 +5,16 @@
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Args": [
         "--max-line-length=248"
+    ],
+    "sqltools.connections": [
+        {
+            "database": "bs",
+            "dialect": "MySQL",
+            "name": "txcloud",
+            "password": "root",
+            "port": 3306,
+            "server": "106.54.90.108",
+            "username": "yuan"
+        }
     ]
 }

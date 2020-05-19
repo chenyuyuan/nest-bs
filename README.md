@@ -1,6 +1,7 @@
 nest.js + vue.js
 
 backend: 
+    npm config set registry https://registry.npm.taobao.org
     npm i -g @nestjs/cli
     npm install --save @nestjs/mongoose mongoose
     npm install --save @nestjs/typeorm typeorm mysql
@@ -8,8 +9,8 @@ backend:
     npm install axios
     npm i --save redis
     npm install nestjs-redis --save
-    cnpm install express-session --save
-    cnpm install node-cmd
+    npm install express-session --save
+    npm install node-cmd
     npm run start
 
     generate:
