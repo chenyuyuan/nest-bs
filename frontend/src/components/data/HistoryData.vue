@@ -26,8 +26,8 @@
     <el-col :span="1" style="border:1px solid transparent">
       <div style="display:none" class="grid-content bg-purple">1</div>
     </el-col>
-    <el-col :span="21">
-      <div id="my-chart" style="width: 100%;height: 500px;"></div>
+    <el-col :span="20">
+      <div id="my-chart-30days" style="width: 100%;height: 500px;"></div>
     </el-col>
   </el-row>
 </div>
@@ -46,135 +46,109 @@ import echarts from 'echarts'
 
 
 export default {
-  name: "HistoryData",
-  components: {
-    Header
-  },
-  data() {
-    
-    return {
-        charts: '',
-        data: []
-
-    }
-  },
-  methods: {
-    toData(){
-      this.$router.push({path:'/data'})
-    },
-    toHistoryData(){
-      this.$router.push({path:'/historydata'})
-    },
-
-  },
-  mounted() {
-    // this.$nextTick(function() {
-    //   this.drawPie('main')
-    // })
-        
-    var data = [];
-    //var now = +new Date(2020,4,19,19,52,0);
-    // var now = +new Date("2020-04-19T05:34:10.000Z");
-    var now = +new Date();
-    var oneDay = 24 * 3600 * 1000;
-    var oneSecond = 1;
-    var value = 0;
-    const _this = this
-    axios.get(`${server.baseURL}/data/datas`, ).then(resdata => {
-
-      console.log(resdata)
-      console.log("length:"+resdata.data.sensordata.length)
-      var len=resdata.data.sensordata.length;
-      var temp = resdata.data.sensordata
-      
-      for(var i=0;i<len;++i) {
-        var now = new Date((temp[i].time).toString())
-        var thevalue = temp[i].value
-        var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
-        //console.log(timestr)
-        //console.log(thevalue/10)
-        //console.log(this.data)
-        //_this.data.shift();
-        this.data.push({
-        name: now.toString(),
-            value: [
-                timestr,
-                thevalue/1000
-            ]
-        });
-      }
-    data = this.data
-    console.log(data)
-
-    var dataLen = data.length
-
-    var option = {
-        title: {
-            text: '数据 + 时间坐标轴'
-        },
-        tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-                params = params[0];
-                var date = new Date(params.name);
-                return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
-            },
-            axisPointer: {
-                animation: false
-            }
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            
-        }, 
-        yAxis: {
-            type: 'value',
-            boundaryGap: [0, '100%'],
-            splitLine: {
-                show: true
-            }
-        },dataZoom: [{
-            type: 'slider',
-            start: dataLen-20,
-            end: dataLen
-        }, {
-            start: 0,
-            end: 10,
-            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-            handleSize: '80%',
-            handleStyle: {
-                color: '#fff',
-                shadowBlur: 3,
-                shadowColor: 'rgba(0, 0, 0, 0.6)',
-                shadowOffsetX: 2,
-                shadowOffsetY: 2
-            }
-        }],
-        series: [{
-            name: '模拟数据',
-            type: 'line',
-            //smooth: true,
-            showSymbol: false,
-            hoverAnimation: false,
-            
-            data: data
-        }]
-    };
-
-    var dom = document.getElementById("my-chart");
-    var myChart = echarts.init(dom);
-
-    
-    if (option && typeof option === "object") {
-       myChart.setOption(option, true);
-    } 
-    
-    });
-    
-  }
-  
- 
+	name: "HistoryData",
+	components: {
+		Header
+	},
+	data() {
+		return {
+			charts: '',
+			data_days: [],
+		}
+	},
+	methods: {
+		renderItem(params, api) {
+			var xValue = api.value(0),highPoint = api.coord([xValue, api.value(1)]),lowPoint = api.coord([xValue, api.value(2)]),halfWidth = api.size([1, 0])[0] * 0.1;
+			var style = api.style({stroke: api.visual('color'), fill: null});
+			return { type: 'group',
+				children: [{type: 'line',shape: {x1: highPoint[0] - halfWidth, y1: highPoint[1],x2: highPoint[0] + halfWidth, y2: highPoint[1]},style: style}, 
+					{type: 'line',shape: {x1: highPoint[0], y1: highPoint[1],x2: lowPoint[0], y2: lowPoint[1]},style: style}, 
+					{type: 'line',shape: {x1: lowPoint[0] - halfWidth, y1: lowPoint[1],x2: lowPoint[0] + halfWidth, y2: lowPoint[1]},style: style}]};
+		}
+	},
+	mounted() {
+		const _this = this
+		var categoryData = [],errorData = [],barData = [];
+		var dateCount = 30;
+		var timestamptoday = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))
+		axios.get(`${server.baseURL}/data/datas`, ).then(resdata => {
+			var data_days = resdata.data.sensordata;
+			var data_daysLen = data_days.length
+			for (var i = 0; i < dateCount; i++) {
+				var max=0, min=99,avg=0,sum=0,count=0;
+				var thisDate=new Date(timestamptoday-i*24*60*60*1000);
+				for(var j = 0;j < data_daysLen;++j) {
+					var thisTimestamp = Date.parse(new Date(data_days[j]['time']))
+					if(thisTimestamp>(timestamptoday-i*24*60*60*1000) && thisTimestamp<(timestamptoday-(i-1)*24*60*60*1000)) {
+						var value = echarts.number.round(data_days[j]['value']/1000, 2)
+						sum+=value;
+						if(value<min){ min = value; }
+						if(value>max){ max = value; }
+						count++;
+					}
+				}
+				if(count>0){avg=sum/count;}
+				console.log(max + " " + min + " "+ avg + " " + count)
+				if(count==0) {max=0;min=0;avg=0;}
+				var thisDateStr=thisDate.getFullYear() + '/' + (thisDate.getMonth()+1) +'/'+ thisDate.getDate()
+				categoryData.push(thisDateStr);
+				errorData.push([i, max, min]);
+				barData.push(echarts.number.round(avg, 2));
+			}
+			var option = {
+				tooltip: {
+					trigger: 'axis',
+					formatter: function (params) {
+						var barsdata = params[0], linesdata = params[1];
+						var date = new Date(barsdata.name);
+						return date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+',平均值:'+barsdata.data+',最大值:'+linesdata.data[1]+',最小值:'+linesdata.data[2];
+					},
+					axisPointer: {type: 'shadow'}
+				},
+				title: {text: '近三十日每日平均值 最大值和最小值'},
+				legend: {data: ['bar', 'error']},
+				dataZoom: [{
+					type: 'slider',
+					start: 0,
+					end:21
+				}, {
+					type: 'inside',
+					start: 50,
+					end: 70
+				}],
+				xAxis: {data: categoryData},
+				yAxis: {},
+				series: [{
+					type: 'bar',
+					name: '当日平均值',
+					data: barData,
+					itemStyle: {
+						color: '#77bef7'
+					}
+				}, {
+					type: 'custom',
+					name: '最大和最小值',
+					itemStyle: {
+						normal: {
+							borderWidth: 1.5
+						}
+					},
+					renderItem: this.renderItem,
+					encode: {
+						x: 0,
+						y: [1, 2]
+					},
+					data: errorData,
+					z: 100
+				}]
+			};
+			var dom = document.getElementById("my-chart-30days");
+			var myChart = echarts.init(dom);
+			if (option && typeof option === "object") {
+				myChart.setOption(option, true);
+			} 
+		});
+	}
 };
 </script>
 
