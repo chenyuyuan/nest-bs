@@ -18,7 +18,7 @@
       </div>
       <div class="form-inline" style="margin-top:10px">
         <div style="width:10%">设备号:</div>
-        <div >{{device.imei}}</div>
+        <div >{{device.name}}</div>
       </div>
       <div class="form-inline" style="margin-top:10px">
         <div style="width:10%">设备名:</div>

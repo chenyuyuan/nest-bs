@@ -23,6 +23,9 @@ export class DeviceController {
   
       //session
         var user_id: number = request.session.user_id;
+        if(user_id == null) {
+            return res.status(HttpStatus.OK).json({msg:"without_login", tip:"请先登录"});
+        }
         var ocproduct_id: string = addDeviceDTO.ocproduct_id
         var ocdevice_id: string = addDeviceDTO.ocdevice_id
         console.log("ocproduct_id:"+ ocproduct_id + " ocdevice_id:" +ocdevice_id +" user_id: "+ user_id+" username"+request.session.user_id)

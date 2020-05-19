@@ -154,7 +154,10 @@ export default {
     },
     __add(data) {
       axios.post(`${server.baseURL}/device/adddevice`, data).then(data => {
-        if(data.data.msg == "add_device_success") {
+        if(data.data.msg == "without_login") {
+          this.$message('请先登录');
+        }
+        else if(data.data.msg == "add_device_success") {
           this.$message('添加成功');
         }
         else if(data.data.msg == "user_device_exists") {

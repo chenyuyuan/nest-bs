@@ -164,11 +164,11 @@ export default {
 				var temp = parseFloat(datas[i]['value'])
 				var t0 = datas[i]['time']
 				//var datatime = new Date((datas[i]['time']).toString());
-				var timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(9,11)+':'+t0.substring(11,13)+':'+t0.substring(13,15)
+				var timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(8,10)+':'+t0.substring(10,12)+':'+t0.substring(12,14)
 				console.log(timestr)
 				console.log(temp/1000)
 				//console.log(_this.data)
-				//_this.data.shift();
+				_this.data.shift();
 				_this.data.push({
 				name: timestr,
 					value: [

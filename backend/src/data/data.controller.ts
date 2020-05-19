@@ -90,11 +90,7 @@ export class DataController {
         var datalist = [];
         var datalistCount = 0;
         var ocdevice_id = (await this.deviceService.findDeviceByDeviceId(device_id))['ocdevice_id']
-        //01006f25-ab60-4a7e-8b0a-6dcfa15e43cc
-        if(ocdevice_id == '01006f25-ab60-4a7e-8b0a-6dcfa15e43cc') {
-            //消息推送测试用的
-            return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
-        }
+        
         while (true) {
             var value = await this.cacheService.lpop('data_'+ocdevice_id);
             var time = await this.cacheService.lpop('time_'+ocdevice_id)
@@ -122,7 +118,24 @@ export class DataController {
         // //await this.articleService.delete(1, 4);
 		console.log(body)
         var ocdevice_id = body['deviceId']
+        //01006f25-ab60-4a7e-8b0a-6dcfa15e43cc
+        if(ocdevice_id == '01006f25-ab60-4a7e-8b0a-6dcfa15e43cc') {
+            //消息推送测试用的
+            return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
+        }
+        
+
         var time = body['service']['eventTime']
+        var timeformat=time.substring(0,4)+'/'+time.substring(4,6)+'/'+time.substring(6,8)+' '+time.substring(9,11)+':'+time.substring(11,13)+':'+time.substring(13,15)
+        var t0 = new Date(timeformat)
+        var timestamp0 = t0.getTime()
+        timestamp0 = timestamp0 + 8*60*60*1000
+        var t1 = new Date(timestamp0)
+
+        var y = t1.getFullYear();var m = t1.getMonth()+1;var d = t1.getDate();var h = t1.getHours();var mm = t1.getMinutes();var s = t1.getSeconds();
+              
+        var time1 = y+add0(m)+add0(d)+add0(h)+add0(mm)+add0(s)
+
         var device = await this.deviceService.findDevice(ocdevice_id);
         var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
         var datatype = await this.dataService.getDataType(product_id)
@@ -133,7 +146,7 @@ export class DataController {
             console.log(value)
             //redis
             await this.cacheService.rpush('data_'+ocdevice_id, value);
-            await this.cacheService.rpush('time_'+ocdevice_id, time);
+            await this.cacheService.rpush('time_'+ocdevice_id, time1);
 
             //mysql
             await this.dataService.addData(value, device_id, datatype['id'])
