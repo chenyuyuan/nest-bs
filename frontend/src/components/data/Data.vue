@@ -3,11 +3,9 @@
   <el-container>
     <Header></Header>
   </el-container>
-<!-- <div id="my-chart-data" style="width: 100%;height: 500px;"></div>
-<div id="my-chart-his" style="width: 100%;height: 500px;"></div> -->
 <div>
 	<div style="height:1px"></div>
-	<el-tabs :tab-position="tabPosition" style="height: 800px;width:100%">
+	<el-tabs :tab-position="tabPosition" style="width:100%">
 		<el-tab-pane label="实时数据">
 			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
 			<div id="my-chart-data" style="width: 1400px;height: 500px;"></div>
@@ -17,7 +15,8 @@
 			<div id="my-chart-his" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
 		<el-tab-pane label="其他报表">
-			<div id="my-chart-30days" style="width: 100%;height: 500px;"></div>
+			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
+			<div id="my-chart-30days" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
 		<el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
   </el-tabs>
@@ -27,14 +26,10 @@
 </template>
 <script>
 import axios from "axios";
-
 import Header from "../Header"
 import router from "../../router";
 import { server } from "../../utils/helper";
-
 import echarts from 'echarts'
-
-
 
 export default {
 	name: "Device",
@@ -53,6 +48,97 @@ export default {
 	methods: {
 		goBack() {
 			this.$router.push({path:'/managedevice'})
+		},
+		renderItem(params, api) {
+			var xValue = api.value(0),highPoint = api.coord([xValue, api.value(1)]),lowPoint = api.coord([xValue, api.value(2)]),halfWidth = api.size([1, 0])[0] * 0.1;
+			var style = api.style({stroke: api.visual('color'), fill: null});
+			return { type: 'group',
+				children: [{type: 'line',shape: {x1: highPoint[0] - halfWidth, y1: highPoint[1],x2: highPoint[0] + halfWidth, y2: highPoint[1]},style: style}, 
+					{type: 'line',shape: {x1: highPoint[0], y1: highPoint[1],x2: lowPoint[0], y2: lowPoint[1]},style: style}, 
+					{type: 'line',shape: {x1: lowPoint[0] - halfWidth, y1: lowPoint[1],x2: lowPoint[0] + halfWidth, y2: lowPoint[1]},style: style}]};
+		},
+		set30daysChart() {
+			const _this = this
+			var categoryData = [],errorData = [],barData = [];
+			var dateCount = 30;
+			var timestamptoday = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))
+			axios.get(`${server.baseURL}/data/datas`, ).then(resdata => {
+				var data_days = resdata.data.sensordata;
+				var data_daysLen = data_days.length
+				for (var i = 0; i < dateCount; i++) {
+					var max=0, min=99,avg=0,sum=0,count=0;
+					var thisDate=new Date(timestamptoday-i*24*60*60*1000);
+					for(var j = 0;j < data_daysLen;++j) {
+						var thisTimestamp = Date.parse(new Date(data_days[j]['time']))
+						if(thisTimestamp>(timestamptoday-i*24*60*60*1000) && thisTimestamp<(timestamptoday-(i-1)*24*60*60*1000)) {
+							var value = echarts.number.round(data_days[j]['value']/1000, 2)
+							sum+=value;
+							if(value<min){ min = value; }
+							if(value>max){ max = value; }
+							count++;
+						}
+					}
+					if(count>0){avg=sum/count;}
+					console.log(max + " " + min + " "+ avg + " " + count)
+					if(count==0) {max=0;min=0;avg=0;}
+					var thisDateStr=thisDate.getFullYear() + '/' + (thisDate.getMonth()+1) +'/'+ thisDate.getDate()
+					categoryData.push(thisDateStr);
+					errorData.push([i, max, min]);
+					barData.push(echarts.number.round(avg, 2));
+				}
+				var option = {
+					tooltip: {
+						trigger: 'axis',
+						formatter: function (params) {
+							var barsdata = params[0], linesdata = params[1];
+							var date = new Date(barsdata.name);
+							return date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+',平均值:'+barsdata.data+',最大值:'+linesdata.data[1]+',最小值:'+linesdata.data[2];
+						},
+						axisPointer: {type: 'shadow'}
+					},
+					title: {text: '近三十日每日平均值 最大值和最小值'},
+					legend: {data: ['bar', 'error']},
+					dataZoom: [{
+						type: 'slider',
+						start: 0,
+						end:21
+					}, {
+						type: 'inside',
+						start: 50,
+						end: 70
+					}],
+					xAxis: {data: categoryData},
+					yAxis: {},
+					series: [{
+						type: 'bar',
+						name: '当日平均值',
+						data: barData,
+						itemStyle: {
+							color: '#77bef7'
+						}
+					}, {
+						type: 'custom',
+						name: '最大和最小值',
+						itemStyle: {
+							normal: {
+								borderWidth: 1.5
+							}
+						},
+						renderItem: this.renderItem,
+						encode: {
+							x: 0,
+							y: [1, 2]
+						},
+						data: errorData,
+						z: 100
+					}]
+				};
+				var dom = document.getElementById("my-chart-30days");
+				var myChart = echarts.init(dom);
+				if (option && typeof option === "object") {
+					myChart.setOption(option, true);
+				} 
+			});
 		},
 		setHistoryData() {
 			var data_his = [];
@@ -146,7 +232,8 @@ export default {
 	},
 	mounted() {
 		this.setHistoryData();
-			
+		this.set30daysChart();
+
 		var data = [];
 		var timestamp = Date.parse(new Date());
 		console.log("timestamp is "+timestamp)
