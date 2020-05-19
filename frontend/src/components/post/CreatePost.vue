@@ -130,7 +130,7 @@ export default {
                 verify_code: verify
             }
             axios.post(`${server.baseURL}/article/add`, postdata).then(data => {
-				if(data.data.msg == "add_comment_success") {
+				if(data.data.msg == "add_article_success") {
 					this.$message('发布成功');
 				}
 					

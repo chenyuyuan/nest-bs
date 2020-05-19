@@ -7,7 +7,7 @@
 <div>
   <div style="height:1px"></div>
   <el-row class="tac">
-    <el-col :span="3">
+    <el-col :span="2">
       <el-menu
         default-active=""
         class="el-menu-vertical-demo"
@@ -30,7 +30,7 @@
     <el-col :span="1" style="border:1px solid transparent">
       <div style="display:none" class="grid-content bg-purple">1</div>
     </el-col>
-    <el-col :span="20">
+    <el-col :span="21">
       <div id="my-chart" style="width: 100%;height: 500px;"></div>
     </el-col>
   </el-row>

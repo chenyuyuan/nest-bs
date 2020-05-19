@@ -107,7 +107,7 @@ export class DataController {
             datalist.pop()
         }
         console.log(datalist)
-        console.log("datalist length "+ datalist.length)
+        // console.log("datalist length "+ datalist.length)
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist});
 	}
 	@Post('/device_shadow_push')

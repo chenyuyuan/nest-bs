@@ -24,7 +24,7 @@ async function bootstrap() {
     extensions: ['jpg', 'jpeg', 'png', 'gif'],
    }));
 
-  app.use(session({ secret: 'keyword', cookie: { maxAge: 60000 }}))
+  app.use(session({ secret: 'keyword', cookie: { maxAge: 3600000 }}))
 
   const options = new DocumentBuilder()
     .setTitle('Nodejs + Vuejs 全栈项目-后台管理API')
