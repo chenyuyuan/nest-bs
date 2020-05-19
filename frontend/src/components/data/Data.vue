@@ -5,17 +5,18 @@
   </el-container>
 <div>
 	<div style="height:1px"></div>
-	<el-tabs :tab-position="tabPosition" style="width:100%">
-		<el-tab-pane label="实时数据">
-			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
-			<div id="my-chart-data" style="width: 1400px;height: 500px;"></div>
-		</el-tab-pane>
+	<el-tabs :tab-position="tabPosition" type="card" style="width:100%">
 		<el-tab-pane label="历史数据">
 			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
 			<div id="my-chart-his" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
+		<el-tab-pane label="实时数据">
+			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
+			<div id="my-chart-data" style="width: 1400px;height: 500px;"></div>
+		</el-tab-pane>
 		<el-tab-pane label="其他报表">
 			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
+
 			<div id="my-chart-30days" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
 		<el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>

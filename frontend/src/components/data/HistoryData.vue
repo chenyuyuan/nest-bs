@@ -24,10 +24,11 @@
       </el-menu>
     </el-col>
     <el-col :span="1" style="border:1px solid transparent">
-      <div style="display:none" class="grid-content bg-purple">1</div>
+		<div style="display:none" class="grid-content bg-purple">1</div>
     </el-col>
     <el-col :span="20">
-      <div id="my-chart-30days" style="width: 100%;height: 500px;"></div>
+		<el-button plain v-on:click="clickGeneratePicture">下载图片</el-button>
+		<div id="my-chart-30days" style="width: 100%;height: 500px;" ref="imageDom"></div>
     </el-col>
   </el-row>
 </div>
@@ -36,12 +37,11 @@
 </template>
 <script>
 import axios from "axios";
-
 import Header from "../Header"
 import router from "../../router";
 import { server } from "../../utils/helper";
-
-import echarts from 'echarts'
+import echarts from 'echarts';
+import html2canvas from "html2canvas";
 
 
 
@@ -64,7 +64,28 @@ export default {
 				children: [{type: 'line',shape: {x1: highPoint[0] - halfWidth, y1: highPoint[1],x2: highPoint[0] + halfWidth, y2: highPoint[1]},style: style}, 
 					{type: 'line',shape: {x1: highPoint[0], y1: highPoint[1],x2: lowPoint[0], y2: lowPoint[1]},style: style}, 
 					{type: 'line',shape: {x1: lowPoint[0] - halfWidth, y1: lowPoint[1],x2: lowPoint[0] + halfWidth, y2: lowPoint[1]},style: style}]};
-		}
+		},
+		clickGeneratePicture() {
+			html2canvas(this.$refs.imageDom).then(canvas => {
+				// 转成图片，生成图片地址
+				console.log(this.imgUrl)
+				this.imgUrl = canvas.toDataURL("image/png");
+				var eleLink = document.createElement("a");
+				eleLink.href = this.imgUrl; // 转换后的图片地址
+				var now=new Date();
+				var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
+				var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
+				var nowStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+'-'+now.getHours()+'-'+minute+'-'+second;
+				eleLink.download = "30days曲线图"+nowStr;
+				document.body.appendChild(eleLink);
+				// 触发点击
+				eleLink.click();
+				// 然后移除
+				document.body.removeChild(eleLink);
+				
+				
+			});
+		},
 	},
 	mounted() {
 		const _this = this
