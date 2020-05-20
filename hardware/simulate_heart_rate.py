@@ -1,5 +1,5 @@
 import random
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 # import numpy as np
 from matplotlib.font_manager import FontProperties
 font = FontProperties(fname=r"C:\Windows\Fonts\simhei.ttf", size=14)
@@ -33,19 +33,20 @@ def heartrate():
         sign = getprobability(heart_rate)
         add = random.randint(0, 2)
         heart_rate = heart_rate + sign * add
+    return heart_rate
 
 
-plt.title(u'散点图示例', FontProperties=font)
+# plt.title(u'散点图示例', FontProperties=font)
 
-plt.xlabel('x-value')
-plt.ylabel('y-label')
-# plt.scatter(x, y, s, c, marker)
-# x: x轴坐标
-# y：y轴坐标
-# s：点的大小/粗细 标量或array_like 默认是 rcParams['lines.markersize'] ** 2
-# c: 点的颜色
-# marker: 标记的样式 默认是 'o'
-plt.legend()
+# plt.xlabel('x-value')
+# plt.ylabel('y-label')
+# # plt.scatter(x, y, s, c, marker)
+# # x: x轴坐标
+# # y：y轴坐标
+# # s：点的大小/粗细 标量或array_like 默认是 rcParams['lines.markersize'] ** 2
+# # c: 点的颜色
+# # marker: 标记的样式 默认是 'o'
+# plt.legend()
 
-plt.plot(xlist, ylist, marker='o')
-plt.show()
+# plt.plot(xlist, ylist, marker='o')
+# plt.show()

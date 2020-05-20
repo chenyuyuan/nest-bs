@@ -1,5 +1,6 @@
 at+cm2mclinew="49.4.85.232","5683","868334033365754"
-at+cm2mclisend=6557
+at+cm2mclinew="49.4.85.232","5683","00200001"
+at+cm2mclisend=0010
 at+cm2mclidel
 
 AT+CM2MCLIGET?

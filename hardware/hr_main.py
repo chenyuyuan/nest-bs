@@ -70,6 +70,7 @@ def heartrate():
         sign = getprobability(heart_rate)
         add = random.randint(0, 2)
         heart_rate = heart_rate + sign * add
+    return heart_rate
 
 
 def temperature():
