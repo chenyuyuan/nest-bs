@@ -106,7 +106,7 @@ export class DataController {
         while(datalist.length>20) {
             datalist.pop()
         }
-        console.log(datalist)
+        process.stdout.write(datalist.toString())
         // console.log("datalist length "+ datalist.length)
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist});
 	}
