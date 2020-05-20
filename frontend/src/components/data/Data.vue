@@ -11,13 +11,15 @@
 			<div id="my-chart-his" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
 		<el-tab-pane label="实时数据">
-			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
+			<el-page-header @back="goBack" content="返回选择设备">
+				
+			</el-page-header>
 			<div id="my-chart-data" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
 		<el-tab-pane label="其他报表">
 			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
-
-			<div id="my-chart-30days" style="width: 1400px;height: 500px;"></div>
+			<el-button plain v-on:click="clickGeneratePicture30days">下载图片</el-button>
+			<div id="my-chart-30days" style="width: 1400px;height: 500px;" ref="imageDom30days"></div>
 		</el-tab-pane>
 		<el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
   </el-tabs>
@@ -27,10 +29,11 @@
 </template>
 <script>
 import axios from "axios";
-import Header from "../Header"
+import Header from "../Header";
 import router from "../../router";
 import { server } from "../../utils/helper";
-import echarts from 'echarts'
+import echarts from 'echarts';
+import html2canvas from "html2canvas";
 
 export default {
 	name: "Device",
@@ -57,6 +60,23 @@ export default {
 				children: [{type: 'line',shape: {x1: highPoint[0] - halfWidth, y1: highPoint[1],x2: highPoint[0] + halfWidth, y2: highPoint[1]},style: style}, 
 					{type: 'line',shape: {x1: highPoint[0], y1: highPoint[1],x2: lowPoint[0], y2: lowPoint[1]},style: style}, 
 					{type: 'line',shape: {x1: lowPoint[0] - halfWidth, y1: lowPoint[1],x2: lowPoint[0] + halfWidth, y2: lowPoint[1]},style: style}]};
+		},
+		clickGeneratePicture30days() {
+			html2canvas(this.$refs.imageDom30days).then(canvas => {
+				// 转成图片，生成图片地址
+				this.imgUrl = canvas.toDataURL("image/png");
+				var eleLink = document.createElement("a");
+				eleLink.href = this.imgUrl; // 转换后的图片地址
+				var now=new Date();
+				var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
+				var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
+				var nowStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+'-'+now.getHours()+'-'+minute+'-'+second;
+				eleLink.download = "30days曲线图"+nowStr;
+				document.body.appendChild(eleLink);
+				// 触发点击, 然后移除
+				eleLink.click();
+				document.body.removeChild(eleLink);
+			});
 		},
 		set30daysChart() {
 			const _this = this

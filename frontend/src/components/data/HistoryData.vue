@@ -78,12 +78,9 @@ export default {
 				var nowStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+'-'+now.getHours()+'-'+minute+'-'+second;
 				eleLink.download = "30days曲线图"+nowStr;
 				document.body.appendChild(eleLink);
-				// 触发点击
+				// 触发点击, 然后移除
 				eleLink.click();
-				// 然后移除
 				document.body.removeChild(eleLink);
-				
-				
 			});
 		},
 	},

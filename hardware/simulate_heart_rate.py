@@ -26,19 +26,13 @@ def getprobability(hr):
         return int(1 if (random.randint(-50, 50)) >= 0 else -1)
 
 
-basic = random.randint(65, 75)
-heart_rate = basic
-xlist = []
-ylist = []
-
-for i in range(0, 400):
-    xlist.append(i)
-    low = 45
-    high = 105
-    sign = getprobability(heart_rate)
-    add = random.randint(0, 2)
-    heart_rate = heart_rate + sign * add
-    ylist.append(heart_rate)
+def heartrate():
+    basic = random.randint(65, 75)
+    heart_rate = basic
+    for i in range(0, 400):
+        sign = getprobability(heart_rate)
+        add = random.randint(0, 2)
+        heart_rate = heart_rate + sign * add
 
 
 plt.title(u'散点图示例', FontProperties=font)
