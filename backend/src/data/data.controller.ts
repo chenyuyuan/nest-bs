@@ -89,6 +89,7 @@ export class DataController {
         var device_id = 1;
         device_id = param.device_id
         var datalist = [];
+        var timelist = [];
         var datalistCount = 0;
         var device = await this.deviceService.findDeviceByDeviceId(device_id)
         if(device == null) {
@@ -96,35 +97,36 @@ export class DataController {
             return res.status(HttpStatus.OK).json({msg:"not_device", tip:"未找到设备"});
         }
         var ocdevice_id = device['ocdevice_id']
-        var device = await this.deviceService.findDevice(ocdevice_id);
+        var device = await this.deviceService.findDeviceByDeviceId(device_id);
         var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
         var datatypes = await this.dataService.getDataTypes(product_id);
         
         for (var i = 0;i<datatypes.length;++i) {
+            var time = await this.cacheService.lpop('time_'+ocdevice_id)
+            timelist.push({'time': time,})
+            var data0 = [];
             while (true) {
                 var serviceName = datatypes[i]['properties'];
                 var value = await this.cacheService.lpop(serviceName+'_'+ocdevice_id);
-                var time = await this.cacheService.lpop('time_'+ocdevice_id)
                 if(value == null || time == null){
                     break;
                 }
                 time = time.substring(1,17)
-                datalist[i].push({
-                    serviceName: value,
-                    'time': time
-                })
+                data0.push({'value': value,})
             }
-            while(datalist[i].length>20) {
+            while(data0.length>20) {
                 datalist.pop()
             }
+            datalist.push(data0)
         }
         
         while(datalist.length>20) {
             datalist.pop()
         }
         console.log(datalist)
+        console.log(timelist)
         // console.log("datalist length "+ datalist.length)
-        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist, datatype: datatypes});
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", times:timelist, datas: datalist, datatype: datatypes});
     }
     @Get('/getdataall/:device_id')
     async getdataall(@Res() res, @Request() request, @Param() param,): Promise<string> {
@@ -166,11 +168,10 @@ export class DataController {
                 console.log(value)
                 //redis
                 await this.cacheService.rpush(serviceName+'_'+ocdevice_id, value);
-                await this.cacheService.rpush('time_'+ocdevice_id, time1);
-    
                 //mysql
                 await this.dataService.addData(value, device_id, datatypes[i]['id'])
             }
+            await this.cacheService.rpush('time_'+ocdevice_id, time1);
 
 		}
 
