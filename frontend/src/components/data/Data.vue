@@ -12,9 +12,9 @@
 		</el-tab-pane>
 		<el-tab-pane label="实时数据">
 			<el-page-header @back="goBack" content="返回选择设备">
-
 			</el-page-header>
 			<div id="my-chart-data" style="width: 1400px;height: 500px;"></div>
+			<div id="my-chart-data2" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
 		<el-tab-pane label="其他报表">
 			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
@@ -283,6 +283,7 @@ export default {
 		this.set30daysChart(device_id);
 
 		var data = [];
+		var data0 = []
 		var timestamp = Date.parse(new Date());
 		console.log("timestamp is "+timestamp)
 		var now = new Date(timestamp);
@@ -296,8 +297,11 @@ export default {
 			var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
 			var timeformat = now.getFullYear() + '/' + (now.getMonth() + 1) +'/'+ now.getDate()+' ' +now.getHours()+':'+minute+':'+second;
 			data.push({name: now.toString(),value: [timeformat,]});
+			data0.push({name: now.toString(),value: [timeformat,]});
 		}
+		
 		this.data = data
+		this.data2 = data0
 		var option = {
 			title: {text: '动态数据 + 时间坐标轴'},
 			tooltip: {
@@ -336,43 +340,53 @@ export default {
 				type: 'line',
 				showSymbol: false,
 				hoverAnimation: false,
-				data: data
+				data: data0
 			}
 			]
 		};
 		var dom = document.getElementById("my-chart-data");
 		var myChart = echarts.init(dom);
+	
 		const _this=this;
 		setInterval(function () {
+			var data1 = data
+			var data2 = data0
 			axios.get(`${server.baseURL}/data/getdata/`+device_id, ).then(resdata => {
 				var datas = resdata.data.datas;
+				
 				for(var i = 0;i < datas[0].length; ++i) {
 					var temp = parseFloat(datas[0][i]['value']);
+					console.log(datas[0])
 					var t0 = datas[0][i]['time'];
 					temp = (device_id==1||device_id==4)?temp/1000:temp;
 					
-					console.log('temp '+temp)
+					console.log('temp0 '+temp)
 					var timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(8,10)+':'+t0.substring(10,12)+':'+t0.substring(12,14);
-					console.log(timestr)
-					_this.data.shift();
-					_this.data.push({name: timestr,value: [timestr,temp]});
-					myChart.setOption({series: [{data: _this.data}]});
+					console.log("time0 "+timestr)
+					data1.shift();
+					data1.push({name: timestr,value: [timestr,temp]});
+					//myChart.setOption({series: [{data: data1}]});
 				}
+				
 				if(device_id == 3) {
 					for(i = 0;i < datas[1].length; ++i) {
-						temp = parseFloat(datas[0][i]['value']);
+						temp = parseFloat(datas[1][i]['value']);
 						t0 = datas[1][i]['time'];
+						console.log('temp1 '+temp)
 						timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(8,10)+':'+t0.substring(10,12)+':'+t0.substring(12,14);
-						
-						_this.data2.shift();
-						_this.data2.push({name: timestr,value: [timestr,temp]});
-						myChart.setOption({series: [{},{data: _this.data2}]});
+						console.log("time1 "+timestr)
+						data2.shift();
+						data2.push({name: timestr,value: [timestr,temp]});
 					}
+					
 				}
+				myChart.setOption({series: [{data: data1}, {data: data2}]});
+				
 			});
 		}, 5000);
 		if (option && typeof option === "object") {
 			myChart.setOption(option, true);
+			
 		} 
 	}
 };
