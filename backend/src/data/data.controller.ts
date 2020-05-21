@@ -102,31 +102,26 @@ export class DataController {
         var datatypes = await this.dataService.getDataTypes(product_id);
         
         for (var i = 0;i<datatypes.length;++i) {
-            var time = await this.cacheService.lpop('time_'+ocdevice_id)
             timelist.push({'time': time,})
             var data0 = [];
             while (true) {
                 var serviceName = datatypes[i]['properties'];
-                var value = await this.cacheService.lpop(serviceName+'_'+ocdevice_id);
-                if(value == null || time == null){
+                var timevalue = await this.cacheService.lpop(ocdevice_id);
+                if(timevalue == null){
                     break;
                 }
-                time = time.substring(1,17)
-                data0.push({'value': value,})
+                var time = timevalue.substring(1,17)
+                var value = timevalue.substring(18)
+                data0.push({'value': value, 'time': time})
             }
             while(data0.length>20) {
                 datalist.pop()
             }
             datalist.push(data0)
         }
-        
-        while(datalist.length>20) {
-            datalist.pop()
-        }
         console.log(datalist)
-        console.log(timelist)
         // console.log("datalist length "+ datalist.length)
-        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", times:timelist, datas: datalist, datatype: datatypes});
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist, datatype: datatypes});
     }
     @Get('/getdataall/:device_id')
     async getdataall(@Res() res, @Request() request, @Param() param,): Promise<string> {
@@ -167,14 +162,13 @@ export class DataController {
                 var value = body['service']['data'][serviceName]
                 console.log(value)
                 //redis
-                await this.cacheService.rpush(serviceName+'_'+ocdevice_id, value);
+                var timevalue = time + value
+                console.log(timevalue)
+                await this.cacheService.rpush(ocdevice_id, timevalue);
                 //mysql
                 await this.dataService.addData(value, device_id, datatypes[i]['id'])
             }
-            await this.cacheService.rpush('time_'+ocdevice_id, time1);
-
 		}
-
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
     }
 
