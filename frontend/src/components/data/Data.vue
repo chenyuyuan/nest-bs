@@ -92,7 +92,9 @@ export default {
 					for(var j = 0;j < data_daysLen;++j) {
 						var thisTimestamp = Date.parse(new Date(data_days[j]['time']))
 						if(thisTimestamp>(timestamptoday-i*24*60*60*1000) && thisTimestamp<(timestamptoday-(i-1)*24*60*60*1000)) {
-							var value = echarts.number.round(data_days[j]['value']/1000, 2)
+							var temp = data_days[j]['value']
+							temp = (device_id==1||device_id==4)?temp/1000:temp;//////////////
+							var value = echarts.number.round(temp, 2)
 							sum+=value;
 							if(value<min){ min = value; }
 							if(value>max){ max = value; }
@@ -171,10 +173,11 @@ export default {
 				var temp = resdata.data.sensordata
 				for(var i=0;i<len;++i) {
 					var now = new Date((temp[i].time).toString())
-					var thevalue = temp[i].value
+					var value = temp[i].value;
+					value = (device_id==1||device_id==4)?value/1000:value;
 					var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
 					//_this.data.shift();
-					this.data_his.push({name: now.toString(),value: [timestr,thevalue/1000]});
+					this.data_his.push({name: now.toString(),value: [timestr, value]});
 				}
 				data_his = this.data_his
 				var dataLen = data_his.length
