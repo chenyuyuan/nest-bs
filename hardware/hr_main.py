@@ -66,7 +66,7 @@ def getprobability(hr):
 def heartrate():
     basic = random.randint(65, 75)
     heart_rate = basic
-    for i in range(0, 400):
+    for i in range(0, 1):
         sign = getprobability(heart_rate)
         add = random.randint(0, 2)
         heart_rate = heart_rate + sign * add

@@ -12,7 +12,7 @@
 		</el-tab-pane>
 		<el-tab-pane label="实时数据">
 			<el-page-header @back="goBack" content="返回选择设备">
-				
+
 			</el-page-header>
 			<div id="my-chart-data" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
@@ -78,12 +78,12 @@ export default {
 				document.body.removeChild(eleLink);
 			});
 		},
-		set30daysChart() {
+		set30daysChart(device_id) {
 			const _this = this
 			var categoryData = [],errorData = [],barData = [];
 			var dateCount = 30;
 			var timestamptoday = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))
-			axios.get(`${server.baseURL}/data/datas`, ).then(resdata => {
+			axios.get(`${server.baseURL}/data/getdataall/`+device_id, ).then(resdata => {
 				var data_days = resdata.data.sensordata;
 				var data_daysLen = data_days.length
 				for (var i = 0; i < dateCount; i++) {
@@ -161,12 +161,12 @@ export default {
 				} 
 			});
 		},
-		setHistoryData() {
+		setHistoryData(device_id) {
 			var data_his = [];
 			var now = +new Date();
 			var value = 0;
 			const _this = this
-			axios.get(`${server.baseURL}/data/datas`, ).then(resdata => {
+			axios.get(`${server.baseURL}/data/getdataall/`+device_id, ).then(resdata => {
 				var len=resdata.data.sensordata.length;
 				var temp = resdata.data.sensordata
 				for(var i=0;i<len;++i) {
@@ -252,8 +252,9 @@ export default {
 		}
 	},
 	mounted() {
-		this.setHistoryData();
-		this.set30daysChart();
+		var device_id = this.$route.query.id;
+		this.setHistoryData(device_id);
+		this.set30daysChart(device_id);
 
 		var data = [];
 		var timestamp = Date.parse(new Date());
@@ -309,7 +310,7 @@ export default {
 		var myChart = echarts.init(dom);
 		const _this=this;
 		setInterval(function () {
-			axios.get(`${server.baseURL}/data/getdata`, ).then(resdata => {
+			axios.get(`${server.baseURL}/data/getdata/`+device_id, ).then(resdata => {
 				var datas = resdata.data.datas;
 				for(var i = 0;i < datas.length; ++i) {
 					var temp = parseFloat(datas[i]['value'])

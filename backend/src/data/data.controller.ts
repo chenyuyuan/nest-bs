@@ -84,13 +84,18 @@ export class DataController {
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
     }
 
-    @Get('/getdata')
-    async getdata(@Res() res, @Request() request): Promise<string> {
-		var device_id = 1;
+    @Get('/getdata/:device_id')
+    async getdata(@Res() res, @Request() request, @Param() param,): Promise<string> {
+        var device_id = 1;
+        device_id = param.device_id
         var datalist = [];
         var datalistCount = 0;
-        var ocdevice_id = (await this.deviceService.findDeviceByDeviceId(device_id))['ocdevice_id']
-        
+        var device = await this.deviceService.findDeviceByDeviceId(device_id)
+        if(device == null) {
+            console.log("未找到设备")
+            return res.status(HttpStatus.OK).json({msg:"not_device", tip:"未找到设备"});
+        }
+        var ocdevice_id = device['ocdevice_id']
         while (true) {
             var value = await this.cacheService.lpop('data_'+ocdevice_id);
             var time = await this.cacheService.lpop('time_'+ocdevice_id)
@@ -106,25 +111,31 @@ export class DataController {
         while(datalist.length>20) {
             datalist.pop()
         }
-        process.stdout.write(datalist.toString())
+        //process.stdout.write(datalist.toString())
         // console.log("datalist length "+ datalist.length)
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist});
+    }
+    @Get('/getdataall/:device_id')
+    async getdataall(@Res() res, @Request() request, @Param() param,): Promise<string> {
+        var device_id = 1;
+        device_id = param.device_id
+        var datalist = []
+        var datas = await this.dataService.getAllDataByDeviceId(device_id)
+
+        // console.log("datalist length "+ datalist.length)
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", sensordata: datas});
 	}
 	@Post('/device_shadow_push')
     async msgpush(@Res() res, @Request() request, @Body() body): Promise<string> {
         // var user_id = request.session.user_id;
         // console.log(user_id)
-
-        // //await this.articleService.delete(1, 4);
 		console.log(body)
         var ocdevice_id = body['deviceId']
-        //01006f25-ab60-4a7e-8b0a-6dcfa15e43cc
         if(ocdevice_id == '01006f25-ab60-4a7e-8b0a-6dcfa15e43cc') {
             //消息推送测试用的
             return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
         }
         
-
         var time = body['service']['eventTime']
         var timeformat=time.substring(0,4)+'/'+time.substring(4,6)+'/'+time.substring(6,8)+' '+time.substring(9,11)+':'+time.substring(11,13)+':'+time.substring(13,15)
         var t0 = new Date(timeformat)

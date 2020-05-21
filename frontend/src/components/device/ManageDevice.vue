@@ -8,7 +8,7 @@
   <div style="height:1px"></div>
   <el-row class="tac">
     
-    <el-tabs :tab-position="tabPosition" style="height: 200px;">
+    <el-tabs :tab-position="tabPosition" style="">
       <el-tab-pane label="设备管理">
         <el-col :span="1" style="border:1px solid transparent">
           <div style="display:none" class="grid-content bg-purple">1</div>
@@ -24,7 +24,7 @@
             </el-table-column>
             <el-table-column
                 prop="ocproduct_id"
-                label="产品id">
+                label="产品service_id">
             </el-table-column>
             <el-table-column
                 prop="imei"

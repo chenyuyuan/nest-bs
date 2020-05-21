@@ -36,6 +36,12 @@ export class DataService {
         return alldata;
     }
 
+    async getAllDataByDeviceId(device_id: number): Promise<Data[]> { 
+        var alldata:Data[] = await this.DataRepository.find({device_id: device_id})
+        //console.log(alldata)
+        return alldata;
+    }
+
     async getDataType(product_id: number): Promise<DataType> {
         var productDatatype = await this.ProductDatatypeRepository.findOne({product_id:product_id});
         console.log(product_id+" / "+ productDatatype)

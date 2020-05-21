@@ -141,7 +141,7 @@ export default {
       this.$router.push({path:'/managedevice'})
     },
     nowdata() {
-      this.$router.push({path:'/data'})
+      this.$router.push({path:'/data', query:{id: this.device.id}})
     },
     historydata(){
       this.$router.push({path:'/historydata'})
