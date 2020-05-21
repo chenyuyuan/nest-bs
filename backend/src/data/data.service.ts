@@ -55,7 +55,7 @@ export class DataService {
         .where('productdatatype.product_id = :product_id',{product_id:product_id})
         .getMany()
         
-        console.log(result)
+        // console.log(result)
         return result;
     }
 

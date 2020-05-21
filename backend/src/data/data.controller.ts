@@ -102,7 +102,6 @@ export class DataController {
         var datatypes = await this.dataService.getDataTypes(product_id);
         
         for (var i = 0;i<datatypes.length;++i) {
-            timelist.push({'time': time,})
             var data0 = [];
             while (true) {
                 var serviceName = datatypes[i]['properties'];
@@ -110,14 +109,14 @@ export class DataController {
                 if(timevalue == null){
                     break;
                 }
-                var time = timevalue.substring(1,17)
-                var value = timevalue.substring(17)
+                var time = timevalue.substring(1,15)
+                var value = timevalue.substring(15,timevalue.length-1)
                 data0.push({'value': value, 'time': time})
             }
             while(data0.length>20) {
-                datalist.pop()
+                data0.pop()
             }
-            datalist[i].push(data0)
+            datalist.push(data0)
         }
         console.log(datalist)
         // console.log("datalist length "+ datalist.length)
@@ -162,7 +161,7 @@ export class DataController {
                 var value = body['service']['data'][serviceName]
                 console.log(value)
                 //redis
-                var timevalue = time + value
+                var timevalue = time1 + value
                 console.log(timevalue)
                 await this.cacheService.rpush(serviceName+'_'+ocdevice_id, timevalue);
                 //mysql

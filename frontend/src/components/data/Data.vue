@@ -44,6 +44,7 @@ export default {
 		return {
 			charts: '',
 			data: [],
+			data2: [],
 			chart_his: '',
 			data_his: [],
 			tabPosition: 'left',
@@ -329,7 +330,15 @@ export default {
 				showSymbol: false,
 				hoverAnimation: false,
 				data: data
-			}]
+			},
+			{
+				name: '模拟数据',
+				type: 'line',
+				showSymbol: false,
+				hoverAnimation: false,
+				data: data
+			}
+			]
 		};
 		var dom = document.getElementById("my-chart-data");
 		var myChart = echarts.init(dom);
@@ -337,14 +346,28 @@ export default {
 		setInterval(function () {
 			axios.get(`${server.baseURL}/data/getdata/`+device_id, ).then(resdata => {
 				var datas = resdata.data.datas;
-				for(var i = 0;i < datas.length; ++i) {
-					var temp = parseFloat(datas[i]['value']);
-					var t0 = datas[i]['time'];
+				for(var i = 0;i < datas[0].length; ++i) {
+					var temp = parseFloat(datas[0][i]['value']);
+					var t0 = datas[0][i]['time'];
 					temp = (device_id==1||device_id==4)?temp/1000:temp;
+					
+					console.log('temp '+temp)
 					var timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(8,10)+':'+t0.substring(10,12)+':'+t0.substring(12,14);
+					console.log(timestr)
 					_this.data.shift();
 					_this.data.push({name: timestr,value: [timestr,temp]});
 					myChart.setOption({series: [{data: _this.data}]});
+				}
+				if(device_id == 3) {
+					for(i = 0;i < datas[1].length; ++i) {
+						temp = parseFloat(datas[0][i]['value']);
+						t0 = datas[1][i]['time'];
+						timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(8,10)+':'+t0.substring(10,12)+':'+t0.substring(12,14);
+						
+						_this.data2.shift();
+						_this.data2.push({name: timestr,value: [timestr,temp]});
+						myChart.setOption({series: [{},{data: _this.data2}]});
+					}
 				}
 			});
 		}, 5000);
