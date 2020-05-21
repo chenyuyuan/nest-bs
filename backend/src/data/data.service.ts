@@ -50,10 +50,13 @@ export class DataService {
     }
 
     async getDataTypes(product_id: number): Promise<DataType[]> {
-        var productDatatype = await this.ProductDatatypeRepository.findOne({product_id:product_id});
-        console.log(product_id+" / "+ productDatatype)
-        var datatype = await this.DataTypeRepository.find({id: productDatatype['datatype_id']}) 
-        return datatype;
+        const result = await this.DataTypeRepository.createQueryBuilder('datatype')
+        .leftJoinAndSelect(ProductDatatype, "productdatatype",'productdatatype.datatype_id = datatype.id')
+        .where('productdatatype.product_id = :product_id',{product_id:product_id})
+        .getMany()
+        
+        console.log(result)
+        return result;
     }
 
 
