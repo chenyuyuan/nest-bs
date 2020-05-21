@@ -106,18 +106,18 @@ export class DataController {
             var data0 = [];
             while (true) {
                 var serviceName = datatypes[i]['properties'];
-                var timevalue = await this.cacheService.lpop(ocdevice_id);
+                var timevalue = await this.cacheService.lpop(serviceName+'_'+ocdevice_id);
                 if(timevalue == null){
                     break;
                 }
                 var time = timevalue.substring(1,17)
-                var value = timevalue.substring(18)
+                var value = timevalue.substring(17)
                 data0.push({'value': value, 'time': time})
             }
             while(data0.length>20) {
                 datalist.pop()
             }
-            datalist.push(data0)
+            datalist[i].push(data0)
         }
         console.log(datalist)
         // console.log("datalist length "+ datalist.length)
@@ -164,7 +164,7 @@ export class DataController {
                 //redis
                 var timevalue = time + value
                 console.log(timevalue)
-                await this.cacheService.rpush(ocdevice_id, timevalue);
+                await this.cacheService.rpush(serviceName+'_'+ocdevice_id, timevalue);
                 //mysql
                 await this.dataService.addData(value, device_id, datatypes[i]['id'])
             }
