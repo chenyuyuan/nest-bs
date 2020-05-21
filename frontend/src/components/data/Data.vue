@@ -172,15 +172,28 @@ export default {
 			axios.get(`${server.baseURL}/data/getdataall/`+device_id, ).then(resdata => {
 				var len=resdata.data.sensordata.length;
 				var temp = resdata.data.sensordata;
+				var temp0 = resdata.data.datalist;
 				var data_his_2 = [];
-				for(var i=0;i<len;++i) {
-					var now = new Date((temp[i].time).toString())
-					var value = temp[i].value;
+				for(var i=0;i<temp0[0].length;++i) {
+					var now = new Date((temp0[0][i].time).toString())
+					var value = temp0[0][i].value;
 					value = (device_id==1||device_id==4)?value/1000:value;
 					var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
 					this.data_his.push({name: now.toString(),value: [timestr, value]});
-					data_his_2.push({name: now.toString(),value: [timestr, 50]});
+					if(device_id == 3) {
+						data_his_2.push({name: now.toString(),value: [timestr, temp0[1][i].value]});
+					}
+					
 				}
+				// if(device_id == 5) {
+				// 	for(var j=0;j<temp0[1].length;++j) {
+				// 		var now1 = new Date((temp0[1][j].time).toString())
+				// 		var value1 = temp0[1][j].value;
+				// 		value1 = (device_id==1||device_id==4)?value1/1000:value1;
+				// 		var timestr1 = now1.getFullYear() + '/' + (now1.getMonth()+1) +'/'+ now1.getDate()+' ' +now1.getHours()+':'+now1.getMinutes()+':'+now1.getSeconds();
+				// 		data_his_2.push({name: now1.toString(),value: [timestr1, value1]});
+				// 	}
+				// }
 				data_his = this.data_his
 				var dataLen = data_his.length
 				var option = {

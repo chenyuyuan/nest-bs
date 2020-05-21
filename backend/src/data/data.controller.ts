@@ -126,10 +126,25 @@ export class DataController {
     async getdataall(@Res() res, @Request() request, @Param() param,): Promise<string> {
         var device_id = param.device_id
         var datalist = []
+        var device = await this.deviceService.findDeviceByDeviceId(device_id);
+        var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
+        var datatypes = await this.dataService.getDataTypes(product_id);
+
         var datas = await this.dataService.getAllDataByDeviceId(device_id)
 
-        // console.log("datalist length "+ datalist.length)
-        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", sensordata: datas});
+        var datalist = []
+        for(var i = 0;i<datatypes.length;++i) {
+            var data0 = []
+            for(var j = 0;j < datas.length;++j) {
+                if(datatypes[i]['id'] == datas[j]['datatype_id']) {
+                    data0.push(datas[j])
+                }
+            }
+            datalist.push(data0)
+        }
+
+        //console.log("datalist "+ datalist)
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", sensordata: datas, datalist:datalist});
 	}
 	@Post('/device_shadow_push')
     async msgpush(@Res() res, @Request() request, @Body() body): Promise<string> {
