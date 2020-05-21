@@ -170,14 +170,15 @@ export default {
 			const _this = this
 			axios.get(`${server.baseURL}/data/getdataall/`+device_id, ).then(resdata => {
 				var len=resdata.data.sensordata.length;
-				var temp = resdata.data.sensordata
+				var temp = resdata.data.sensordata;
+				var data_his_2 = [];
 				for(var i=0;i<len;++i) {
 					var now = new Date((temp[i].time).toString())
 					var value = temp[i].value;
 					value = (device_id==1||device_id==4)?value/1000:value;
-					var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()
-					//_this.data.shift();
+					var timestr = now.getFullYear() + '/' + (now.getMonth()+1) +'/'+ now.getDate()+' ' +now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
 					this.data_his.push({name: now.toString(),value: [timestr, value]});
+					data_his_2.push({name: now.toString(),value: [timestr, 50]});
 				}
 				data_his = this.data_his
 				var dataLen = data_his.length
@@ -231,6 +232,27 @@ export default {
 						showSymbol: false,
 						hoverAnimation: false,
 						data: data_his,
+						markPoint: {
+							data: [
+								{type: 'max', name: '最大值'},
+								{type: 'min', name: '最小值'}
+							]
+						},
+						markLine: {
+							data: [
+								{type: 'average', name: '平均值'},
+								{type: 'max', name: '最大值'},
+								{type: 'min', name: '最小值'}
+							],
+						}
+					},
+					{
+						name: '模拟数据',
+						type: 'line',
+						//smooth: true,
+						showSymbol: false,
+						hoverAnimation: false,
+						data: data_his_2,
 						markPoint: {
 							data: [
 								{type: 'max', name: '最大值'},
@@ -316,11 +338,12 @@ export default {
 			axios.get(`${server.baseURL}/data/getdata/`+device_id, ).then(resdata => {
 				var datas = resdata.data.datas;
 				for(var i = 0;i < datas.length; ++i) {
-					var temp = parseFloat(datas[i]['value'])
-					var t0 = datas[i]['time']
-					var timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(8,10)+':'+t0.substring(10,12)+':'+t0.substring(12,14)
+					var temp = parseFloat(datas[i]['value']);
+					var t0 = datas[i]['time'];
+					temp = (device_id==1||device_id==4)?temp/1000:temp;
+					var timestr=t0.substring(0,4)+'/'+t0.substring(4,6)+'/'+t0.substring(6,8)+' '+t0.substring(8,10)+':'+t0.substring(10,12)+':'+t0.substring(12,14);
 					_this.data.shift();
-					_this.data.push({name: timestr,value: [timestr,temp/1000]});
+					_this.data.push({name: timestr,value: [timestr,temp]});
 					myChart.setOption({series: [{data: _this.data}]});
 				}
 			});

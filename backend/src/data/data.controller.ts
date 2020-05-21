@@ -96,29 +96,39 @@ export class DataController {
             return res.status(HttpStatus.OK).json({msg:"not_device", tip:"未找到设备"});
         }
         var ocdevice_id = device['ocdevice_id']
-        while (true) {
-            var value = await this.cacheService.lpop('data_'+ocdevice_id);
-            var time = await this.cacheService.lpop('time_'+ocdevice_id)
-			if(value == null || time == null){
-				break;
+        var device = await this.deviceService.findDevice(ocdevice_id);
+        var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
+        var datatypes = await this.dataService.getDataTypes(product_id);
+        
+        for (var i = 0;i<datatypes.length;++i) {
+            while (true) {
+                var serviceName = datatypes[i]['properties'];
+                var value = await this.cacheService.lpop(serviceName+'_'+ocdevice_id);
+                var time = await this.cacheService.lpop('time_'+ocdevice_id)
+                if(value == null || time == null){
+                    break;
+                }
+                time = time.substring(1,17)
+                datalist[i].push({
+                    serviceName: value,
+                    'time': time
+                })
             }
-            time = time.substring(1,17)
-            datalist.push({
-                'value': value,
-                'time': time
-            })
+            while(datalist[i].length>20) {
+                datalist.pop()
+            }
         }
+        
         while(datalist.length>20) {
             datalist.pop()
         }
-        //process.stdout.write(datalist.toString())
+        console.log(datalist)
         // console.log("datalist length "+ datalist.length)
-        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist});
+        return res.status(HttpStatus.OK).json({msg:"success", tip:"成功", datas: datalist, datatype: datatypes});
     }
     @Get('/getdataall/:device_id')
     async getdataall(@Res() res, @Request() request, @Param() param,): Promise<string> {
-        var device_id = 1;
-        device_id = param.device_id
+        var device_id = param.device_id
         var datalist = []
         var datas = await this.dataService.getAllDataByDeviceId(device_id)
 
@@ -131,10 +141,8 @@ export class DataController {
         // console.log(user_id)
 		console.log(body)
         var ocdevice_id = body['deviceId']
-        if(ocdevice_id == '01006f25-ab60-4a7e-8b0a-6dcfa15e43cc') {
-            //消息推送测试用的
-            return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
-        }
+        //消息推送测试用的
+        if(ocdevice_id == '01006f25-ab60-4a7e-8b0a-6dcfa15e43cc') {return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});}
         
         var time = body['service']['eventTime']
         var timeformat=time.substring(0,4)+'/'+time.substring(4,6)+'/'+time.substring(6,8)+' '+time.substring(9,11)+':'+time.substring(11,13)+':'+time.substring(13,15)
@@ -149,18 +157,21 @@ export class DataController {
 
         var device = await this.deviceService.findDevice(ocdevice_id);
         var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
-        var datatype = await this.dataService.getDataType(product_id)
-        var serviceName = datatype['properties'];
+        var datatypes = await this.dataService.getDataTypes(product_id)
 		if(device != null) {
-            var device_id = device['id'];
-            var value = body['service']['data'][serviceName]
-            console.log(value)
-            //redis
-            await this.cacheService.rpush('data_'+ocdevice_id, value);
-            await this.cacheService.rpush('time_'+ocdevice_id, time1);
+            for(var i = 0;i<datatypes.length;++i) {
+                var serviceName = datatypes[i]['properties'];
+                var device_id = device['id'];
+                var value = body['service']['data'][serviceName]
+                console.log(value)
+                //redis
+                await this.cacheService.rpush(serviceName+'_'+ocdevice_id, value);
+                await this.cacheService.rpush('time_'+ocdevice_id, time1);
+    
+                //mysql
+                await this.dataService.addData(value, device_id, datatypes[i]['id'])
+            }
 
-            //mysql
-            await this.dataService.addData(value, device_id, datatype['id'])
 		}
 
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});
