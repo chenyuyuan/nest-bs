@@ -22,6 +22,9 @@ export class AlarmValue extends BaseEntity {
   device_id: number;
 
   @Column('int',{nullable: true})
+  datatype_id: number;
+
+  @Column('int',{nullable: true})
   user_id: number;
 
   @Column('int',{nullable: true})

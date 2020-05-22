@@ -6,11 +6,14 @@ import { AddDeviceDTO } from './dto/add-device.dto'
 import 'axios';
 import { sys_config } from '../utils/sys_config'
 import { UpdateDeviceDTO } from './dto/update-device.dto';
+import { SetAlarmValueDTO } from './dto/set-alarmvalue.dto';
+import { DataService } from 'src/data/data.service';
+import { AlarmValue } from './alarm_value.entity';
 
 
 @Controller('device')
 export class DeviceController {
-    constructor(private readonly deviceService: DeviceService) { }
+    constructor(private readonly deviceService: DeviceService, private readonly dataService: DataService) { }
 
     @Get('/products')
     async getProducts(@Res() res): Promise<string> {
@@ -33,13 +36,13 @@ export class DeviceController {
     //   const user = await this.deviceService.getUserByName(loginUserDTO.name)
     //   if (!user) throw new NotFoundException('User does not exist!');
         if(flag == 1) {
-            return res.status(HttpStatus.OK).json({msg:"add_device_success",tip:"添加设备成功"});
+            return res.status(HttpStatus.OK).json({msg: "add_device_success", tip: "添加设备成功"});
         }
         if(flag == 2) {
-            return res.status(HttpStatus.OK).json({msg:"device_not_exists",tip:"设备不存在"});
+            return res.status(HttpStatus.OK).json({msg: "device_not_exists", tip: "设备不存在"});
         }
         if(flag == 3) {
-            return res.status(HttpStatus.OK).json({msg:"user_device_exists",tip:"设备已存在"});
+            return res.status(HttpStatus.OK).json({msg: "user_device_exists", tip: "设备已存在"});
         }
         
     }
@@ -86,6 +89,33 @@ export class DeviceController {
     async getProduct(@Res() res,@Param() param): Promise<string> {
         
         return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",products:(await this.deviceService.findProduct(param.ocproduct_id))});
+    }
+
+
+
+    @Get('/getalarmvalue/:device_id') // correct ✔
+    async getAlarmValue(@Res() res,@Param() param): Promise<string> {
+        var device_id = param.device_id
+        var device = await this.deviceService.findDeviceByDeviceId(device_id);
+        var product_id = (await this.deviceService.findProduct(device['ocproduct_id']))['id']
+        var datatypes = await this.dataService.getDataTypes(product_id);
+
+        for(var i = 0; i<datatypes.length;++i) {
+            var alarm_value_down = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'],0)
+            var alarm_value_up = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'],1)
+            datatypes[i]['down']=alarm_value_down
+            datatypes[i]['up']=alarm_value_up
+        }
+
+        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",products:(await this.deviceService.findProduct(param.ocproduct_id))});
+    }
+
+    @Get('/setalarmvalue') // correct ✔
+    async setAlarmValue(@Res() res,@Param() param,@Body() setAlarmValueDTO:SetAlarmValueDTO): Promise<string> {
+        var result = await this.deviceService.addAlarmValue(setAlarmValueDTO.value,setAlarmValueDTO.device_id,setAlarmValueDTO.datatype_id,
+            setAlarmValueDTO.up_down,1,setAlarmValueDTO.send_mail,setAlarmValueDTO.send_sms,setAlarmValueDTO.send_message)
+
+        return res.status(HttpStatus.OK).json({msg:"set_alarmvalue_success",tip:"设置预警值成功"});
     }
 
 }

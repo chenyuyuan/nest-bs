@@ -40,11 +40,11 @@
         <el-button type="" v-on:click="update">修改</el-button>
       </div>
       <div class="form-inline" style="margin-top:10px">
-        <el-button type="" v-on:click="nowdata">查看设备实时数据</el-button>
+        <el-button type="" v-on:click="nowdata">查看设备数据</el-button>
       </div>
-      <div class="form-inline" style="margin-top:10px">
+      <!-- <div class="form-inline" style="margin-top:10px">
         <el-button type="" v-on:click="historydata">查看设备历史数据</el-button>
-      </div>
+      </div> -->
     </el-col>
     <el-col :span="10" style="border:1px solid transparent">
       <div style="margin-top:10px;margin-bottom:10px">

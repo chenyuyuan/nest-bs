@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Device } from './device.entity';
 import { Product } from './product.entity';
 import { UserDevice } from './userdevice.entity';
+import { AlarmValue } from './alarm_value.entity';
 
 @Injectable()
 export class DeviceService {
@@ -16,6 +17,8 @@ export class DeviceService {
         private readonly ProductRepository: Repository<Product>,
         @InjectRepository(UserDevice)
         private readonly User_DeviceRepository: Repository<UserDevice>,
+        @InjectRepository(AlarmValue)
+        private readonly AlarmValueRepository: Repository<AlarmValue>,
     ) { }
     private readonly users: Device[] = [];
     private readonly products: Product[] = [];
@@ -93,44 +96,39 @@ export class DeviceService {
 
 
 
-
-
-
-
     //alarm value
-    async findAlarmValue(ocproduct_id:string): Promise<Product> {
-        return await this.ProductRepository.findOne({ocproduct_id:ocproduct_id});
+    // // 加user_id吗
+    async findAlarmValue(device_id: number, datatype_id: number, up_down:number): Promise<AlarmValue> {
+        return await this.AlarmValueRepository.findOne({device_id:device_id, datatype_id:datatype_id,up_down:up_down});
     }
-    async addAlarmValue(ocproduct_id:string, ocdevice_id: string,user_id:number): Promise<number> {
-        var device: Device = await this.DeviceRepository.findOne({ocdevice_id:ocdevice_id, ocproduct_id:ocproduct_id}) 
-        const user_device= new UserDevice();
-
-
-        if((await this.User_DeviceRepository.find()).length == 0) {
-          user_device.id=1;
+    async addAlarmValue(value:string,device_id: number, datatype_id: number, up_down: number, user_id:number, send_mail:number,send_sms:number,send_message:number): Promise<AlarmValue> {
+        var alarm_value: AlarmValue = await this.AlarmValueRepository.findOne({device_id:device_id, datatype_id:datatype_id, up_down:up_down}) 
+        if (alarm_value == null) {
+            const new_alarm_value = new AlarmValue()
+            if((await this.AlarmValueRepository.find()).length == 0) {
+                new_alarm_value.id=1;
+            }
+            new_alarm_value.value = value
+            new_alarm_value.device_id = device_id;
+            new_alarm_value.datatype_id = datatype_id;
+            new_alarm_value.user_id = 1;
+            new_alarm_value.up_down = up_down;
+            new_alarm_value.send_mail = send_mail;
+            new_alarm_value.send_sms = send_sms;
+            new_alarm_value.send_message_in_website = send_message;
+            return await this.User_DeviceRepository.save(new_alarm_value);
         }
-
-        if(device == null) {
-            return 2 //设备不存在
+        else {
+            alarm_value.value = value
+            alarm_value.device_id = device_id;
+            alarm_value.datatype_id = datatype_id;
+            alarm_value.user_id = 1;
+            alarm_value.up_down = up_down;
+            alarm_value.send_mail = send_mail;
+            alarm_value.send_sms = send_sms;
+            alarm_value.send_message_in_website = send_message;
+            return await this.User_DeviceRepository.save(alarm_value);
         }
-        if(await this.User_DeviceRepository.findOne({user_id:user_id,device_id:device.id}) !=null) {
-            return 3 //用户已添加
-        }
-        user_device.user_id = user_id;
-        user_device.device_id = device.id;
-
-        await this.User_DeviceRepository.save(user_device);
-        return 1;
     }
-    async updateAlarmValue(device_id:number, name: string, imei:string,imsi:string): Promise<Device> {
-        var device: Device = await this.DeviceRepository.findOne({id:device_id}) 
-        device.name = name
-        device.imei = imei
-        device.imsi = imsi
-        return await this.DeviceRepository.save(device);
-    }
 
-
-
-    
 }
