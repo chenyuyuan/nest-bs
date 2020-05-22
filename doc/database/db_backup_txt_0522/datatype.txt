@@ -1,0 +1,6 @@
+"id"	"name"	"datatype"	"operation"	"operate_number"	"order"	"properties"
+"1"	"温度"	"int"	"/"	"1000"	"1"	"up"
+"2"	"心率"	"int"	"+"	"0"	"1"	"up"
+"3"	"舒张压"	"int"	"+"	"0"	"1"	"low_pressure"
+"4"	"收缩压"	"int"	"+"	"0"	"2"	"high_pressure"
+"5"	"体温"	"int"	"/"	"1000"	"1"	"bodytemp"

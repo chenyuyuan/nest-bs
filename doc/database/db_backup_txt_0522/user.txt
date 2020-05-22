@@ -1,0 +1,4 @@
+"user_id"	"name"	"mail"	"pwd"	"phone"
+"1"	"yuan"	"cyuyuan15@qq.com"	"1234"	"17852227655"
+"2"	"yu"	"1695215206@qq.com"	"1234"	
+"3"	"系统"	"cyuyuan15@gmail.com"	"1234"	

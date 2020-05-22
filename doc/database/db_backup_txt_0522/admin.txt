@@ -1,0 +1,2 @@
+"admin_id"	"name"	"pwd"
+"1"	"yuan"	"1234"

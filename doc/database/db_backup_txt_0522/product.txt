@@ -1,0 +1,5 @@
+"id"	"name"	"ocproduct_id"	"device_type"	"protocol_type"
+"1"	"温度传感器"	"up"	"1"	"CoAP"
+"2"	"心率传感器"	"heart_tare_service"	"2"	"CoAP"
+"3"	"血压"	"service"	"3"	"CoAP"
+"4"	"体温"	"bodytemp_service"	"4"	"CoAP"
