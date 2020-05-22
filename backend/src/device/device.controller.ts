@@ -103,18 +103,20 @@ export class DeviceController {
         for(var i = 0; i<datatypes.length;++i) {
             var alarm_value_down = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'],0)
             var alarm_value_up = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'],1)
+
+            console.log(alarm_value_down)
             datatypes[i]['down']=alarm_value_down
             datatypes[i]['up']=alarm_value_up
         }
 
-        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",products:(await this.deviceService.findProduct(param.ocproduct_id))});
+        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",datatype:datatypes});
     }
 
-    @Get('/setalarmvalue') // correct ✔
+    @Post('/setalarmvalue') // correct ✔
     async setAlarmValue(@Res() res,@Param() param,@Body() setAlarmValueDTO:SetAlarmValueDTO): Promise<string> {
         var result = await this.deviceService.addAlarmValue(setAlarmValueDTO.value,setAlarmValueDTO.device_id,setAlarmValueDTO.datatype_id,
-            setAlarmValueDTO.up_down,1,setAlarmValueDTO.send_mail,setAlarmValueDTO.send_sms,setAlarmValueDTO.send_message)
-
+            setAlarmValueDTO.up_down,1,setAlarmValueDTO.send_mail,0,setAlarmValueDTO.send_message)
+        console.log(result)
         return res.status(HttpStatus.OK).json({msg:"set_alarmvalue_success",tip:"设置预警值成功"});
     }
 

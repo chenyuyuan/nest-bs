@@ -14,15 +14,19 @@ import { Product } from 'src/device/product.entity';
 import { UserDevice } from 'src/device/userdevice.entity';
 import { AlarmValue } from 'src/device/alarm_value.entity';
 import { DeviceService } from 'src/device/device.service';
+import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/user.entity';
+import { Message } from 'src/message/message.entity';
+import { MessageService } from 'src/message/message.service';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Data, DataType, ProductDatatype , Device,Product,UserDevice,AlarmValue]), 
+    TypeOrmModule.forFeature([Data, DataType, ProductDatatype , Device,Product,UserDevice,AlarmValue,  User,  Message, MessageAdmin]), 
     RedisModule.register({host:'106.54.90.108',port:6379,password:'',db:3})
   ],
 
-  providers: [DataService, DeviceService, CacheService],
+  providers: [DataService, DeviceService, CacheService, UserService, MessageService],
   controllers: [DataController]
 })
 export class DataModule {}

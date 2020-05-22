@@ -130,8 +130,7 @@
                 <div style="display:none" class="grid-content bg-purple">1</div>
             </el-col>
             <el-col :span="16">
-                <el-card class="box-card" shadow="hover" v-on:click="toPost(p)" v-for="p in postList4
-				" :key="p.id">
+                <el-card class="box-card" shadow="hover" v-on:click="toPost(p)" v-for="p in postList4" :key="p.id">
                     <div slot="header" class="clearfix" style="">
                         <div class="form-inline">
 							<div class="form-inline" style="font-size:18px;font-family:PingFang SC">

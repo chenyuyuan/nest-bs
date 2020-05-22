@@ -14,7 +14,7 @@ import { Data } from 'src/data/entity/data.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Device,Product,UserDevice,AlarmValue,  Data, DataType, ProductDatatype]), ],
-  providers: [DeviceService],
-  controllers: [DeviceController, DataService]
+  providers: [DeviceService,DataService],
+  controllers: [DeviceController]
 })
 export class DeviceModule {}

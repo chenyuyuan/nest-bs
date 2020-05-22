@@ -4,12 +4,15 @@ import { SysService } from 'src/sys/sys.service';
 import { Data } from './entity/data.entity';
 import { CacheService } from 'src/cache/cache.service';
 import { DeviceService } from 'src/device/device.service';
+import { UserService } from 'src/user/user.service';
+import { MessageService } from 'src/message/message.service';
 
 function add0(m){return m<10?'0'+m:m }
 
 @Controller('data')
 export class DataController {
-    constructor(private readonly dataService: DataService, private readonly deviceService: DeviceService, private readonly cacheService: CacheService) { }
+    constructor(private readonly dataService: DataService, private readonly deviceService: DeviceService, private readonly cacheService: CacheService,
+        private readonly userService: UserService, private readonly messageService: MessageService) { }
 
 
 
@@ -181,6 +184,57 @@ export class DataController {
                 await this.cacheService.rpush(serviceName+'_'+ocdevice_id, timevalue);
                 //mysql
                 await this.dataService.addData(value, device_id, datatypes[i]['id'])
+
+                //发送预警消息
+                var alarm_value_up = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 1)
+                var alarm_value_down = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 0)
+                var user_id = await this.deviceService.findUserDeviceByDeviceId(device_id)['user_id']
+                var sendcontent = ""
+                if(alarm_value_up!=null&&value>parseFloat(alarm_value_up.value)) {
+                    sendcontent = "您的数据已超上限值，达" + value;
+                    if(alarm_value_up.send_mail==1){
+                        const fs = require('fs');
+                        const child_process = require('child_process');
+                        var mail =await this.userService.findById(user_id)['mail']
+                        var workerProcess = child_process.spawn('node', ['./src/utils/mail.ts', mail, sendcontent]);
+                        workerProcess.stdout.on('data', function (data) {
+                           console.log('stdout: ' + data);
+                        });
+                        workerProcess.stderr.on('data', function (data) {
+                           console.log('stderr: ' + data);
+                           return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"预警邮箱发送失败"});
+                        });
+                        workerProcess.on('close', function (code) {
+                           console.log('子进程已退出，退出码 '+code);
+                        });
+                    }
+                    if(alarm_value_up.send_message_in_website==1) {
+                        await this.messageService.addMessage(3,user_id,sendcontent);
+                    }
+                }
+                else if(alarm_value_down!=null&&value<parseFloat(alarm_value_down.value)) {
+                    sendcontent = "您的数据已低于下限值，达" + value;
+                    if(alarm_value_down.send_mail==1){
+                        const fs = require('fs');
+                        const child_process = require('child_process');
+                        var mail =await this.userService.findById(user_id)['mail']
+                        var workerProcess = child_process.spawn('node', ['./src/utils/mail.ts', mail, sendcontent]);
+                        workerProcess.stdout.on('data', function (data) {
+                           console.log('stdout: ' + data);
+                        });
+                        workerProcess.stderr.on('data', function (data) {
+                           console.log('stderr: ' + data);
+                           return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"预警邮箱发送失败"});
+                        });
+                        workerProcess.on('close', function (code) {
+                           console.log('子进程已退出，退出码 '+code);
+                        });
+                    }
+                    if(alarm_value_down.send_message_in_website==1) {
+                        await this.messageService.addMessage(3,user_id,sendcontent);
+                    }
+                }
+
             }
 		}
         return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});

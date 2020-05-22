@@ -61,6 +61,9 @@ export class DeviceService {
     async findDeviceByDeviceId(device_id: number): Promise<Device> {
         return await this.DeviceRepository.findOne({id: device_id});
     }
+    async findUserDeviceByDeviceId(device_id: number): Promise<UserDevice> {
+        return await this.User_DeviceRepository.findOne({device_id: device_id});
+    }
     ////////////????????????????????????????????????????????????????
     async findDeviceByUserId(user_id:number): Promise<Device[]> {//测试 ++ ✔✔
         var user_device:UserDevice[] = await this.User_DeviceRepository.find({user_id:user_id})
@@ -116,7 +119,7 @@ export class DeviceService {
             new_alarm_value.send_mail = send_mail;
             new_alarm_value.send_sms = send_sms;
             new_alarm_value.send_message_in_website = send_message;
-            return await this.User_DeviceRepository.save(new_alarm_value);
+            return await this.AlarmValueRepository.save(new_alarm_value);
         }
         else {
             alarm_value.value = value
@@ -127,7 +130,7 @@ export class DeviceService {
             alarm_value.send_mail = send_mail;
             alarm_value.send_sms = send_sms;
             alarm_value.send_message_in_website = send_message;
-            return await this.User_DeviceRepository.save(alarm_value);
+            return await this.AlarmValueRepository.save(alarm_value);
         }
     }
 
