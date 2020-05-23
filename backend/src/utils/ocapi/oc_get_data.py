@@ -1,5 +1,5 @@
 import requests
-import sys
+# import sys
 import time
 import json
 import mysql.connector
@@ -20,23 +20,15 @@ mydb = mysql.connector.connect(
 )
 
 url = "https://49.4.92.191:8743/iocm/app/sec/v1.1.0/login"
-
 payload = {'appId': 'YsyupmenAZu8_AK1HOujaigWs68a', 'secret': 'pSEwWvokYIp0A1PvdKPfNiMC8b8a'}
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded'
 }
-
 response = requests.request("POST", url, headers=headers, data=payload, verify=False, cert=('\\client.crt', '\\client.key'))
-
-
 data_json = json.loads(response.text)
 print(data_json)
 print(data_json['accessToken'])
-
 accessToken = data_json['accessToken']
-
-# 获取设备影子
-
 authorization = "Bearer " + accessToken
 
 

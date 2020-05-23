@@ -20,4 +20,10 @@ export class Product extends BaseEntity {
   @Column('varchar',{nullable: true})
   protocol_type: string;
 
+  @Column('varchar',{nullable: true})
+  octype: string;
+  
+  @Column('varchar',{nullable: true})
+  ocdeviceType: string;
+
 }

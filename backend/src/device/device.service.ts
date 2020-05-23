@@ -93,6 +93,16 @@ export class DeviceService {
 
       
     // admin's service
+    async getAllDevice(): Promise<Device[]> {
+        return await this.DeviceRepository.find();
+    }
+    async getProductById(product_id:number): Promise<Product> {
+        return await this.ProductRepository.findOne({id:product_id});
+    }
+
+
+
+
 
 
 

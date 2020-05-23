@@ -17,7 +17,6 @@ export class DeviceController {
 
     @Get('/products')
     async getProducts(@Res() res): Promise<string> {
-        
         return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",products:(await this.deviceService.findAllProduct())});
     }
 
@@ -119,5 +118,8 @@ export class DeviceController {
         console.log(result)
         return res.status(HttpStatus.OK).json({msg:"set_alarmvalue_success",tip:"设置预警值成功"});
     }
+
+
+
 
 }
