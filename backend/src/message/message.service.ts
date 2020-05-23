@@ -33,6 +33,11 @@ export class MessageService {
         if(message == null) return null;
         return await this.MessageRepository.remove(message);
       }
+      async deleteMessageAdmin(message_id:number): Promise<Message> {
+        var message: Message = await this.MessageRepository.findOne({id:message_id}) 
+        if(message == null) return null;
+        return await this.MessageRepository.remove(message);
+      }
       async findMessage(message_id:number): Promise<Message> {
         return await this.MessageRepository.findOne({id:message_id});
       }

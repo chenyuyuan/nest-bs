@@ -3,15 +3,15 @@
     <el-header class="bg-white">
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <el-menu-item index="1">首页</el-menu-item>
-        <el-submenu index="2">
+        <!-- <el-submenu index="2">
           <template slot="title">数据报表</template>
           <el-menu-item index="2-1">实时数据</el-menu-item>
           <el-menu-item index="2-2">历史数据</el-menu-item>
-        </el-submenu>
-        <el-menu-item index="3"><a href="/managedevice">设备管理</a></el-menu-item>
-        <el-menu-item index="4">消息推送</el-menu-item>
-        <el-menu-item index="5"><a href="/profile" target="_blank">账号管理</a></el-menu-item>
-        <el-menu-item index="6"><a href="/profile" target="_blank">文章管理</a></el-menu-item>
+        </el-submenu> -->
+        <el-menu-item index="3"><a href="/admin/device">设备管理</a></el-menu-item>
+        <el-menu-item index="4"><a href="/admin/message" target="_blank">消息推送</a></el-menu-item>
+        <el-menu-item index="5"><a href="/admin/profile" target="_blank">账号管理</a></el-menu-item>
+        <el-menu-item index="6"><a href="/admin/article" target="_blank">文章管理</a></el-menu-item>
         <el-menu-item style="float:right" index="7"><i class="el-icon-user"></i></el-menu-item>
         <el-menu-item style="float:right" index="6">
           <el-badge is-dot class="item">

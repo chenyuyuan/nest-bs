@@ -54,12 +54,12 @@
           </el-table>
         </el-col>
       </el-tab-pane>
-      <el-tab-pane label="添加设备">
+      <el-tab-pane label="绑定设备">
         <el-col :span="1" style="border:1px solid transparent">
           <div style="display:none" class="grid-content bg-purple">1</div>
         </el-col>
         <el-col :span="22">
-          <div style="margin-top:10px;margin-bottom:10px">添加设备</div>
+          <div style="margin-top:10px;margin-bottom:10px">绑定设备</div>
           <div class="form-inline">
             <el-select v-model="value" placeholder="请选择产品" style="margin-right:full">
               <el-option

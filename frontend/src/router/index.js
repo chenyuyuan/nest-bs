@@ -11,6 +11,8 @@ import Data from '../components/data/Data'
 import HistoryData from '../components/data/HistoryData'
 import AdminLogin from '../components/admin/AdminLogin'
 import AdminHome from '../components/admin/AdminHome'
+import AdminDevice from '../components/admin/AdminDevice'
+import AdminMessage from '../components/admin/AdminMessage'
 import Profile from '../components/user/Profile'
 import ForgetPwd from '../components/user/ForgetPwd'
 import Message from '../components/user/Message'
@@ -58,6 +60,8 @@ const routes = [
 
   { path: '/admin/login', name: 'AdminLogin', component: AdminLogin  },
   { path: '/admin/home', name: 'AdminHome', component: AdminHome  },
+  { path: '/admin/device', name: 'AdminDevice', component: AdminDevice  },
+  { path: '/admin/message', name: 'AdminMessage', component: AdminMessage  },
 
 
   { path: '/postlist', name: 'PostList', component: PostList },

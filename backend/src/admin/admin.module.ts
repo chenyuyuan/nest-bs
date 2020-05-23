@@ -8,10 +8,13 @@ import { Device } from 'src/device/device.entity';
 import { Product } from 'src/device/product.entity';
 import { UserDevice } from 'src/device/userdevice.entity';
 import { AlarmValue } from 'src/device/alarm_value.entity';
+import { MessageAdmin } from 'src/message/message_admin.entity';
+import { Message } from 'src/message/message.entity';
+import { MessageService } from 'src/message/message.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Admin, Device,Product,UserDevice,AlarmValue,]), ],
+  imports: [TypeOrmModule.forFeature([Admin, Device,Product,UserDevice,AlarmValue,  Message, MessageAdmin]), ],
   controllers: [AdminController],
-  providers: [AdminService,DeviceService]
+  providers: [AdminService,DeviceService,MessageService]
 })
 export class AdminModule {}

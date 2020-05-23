@@ -2,11 +2,13 @@ import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,
 import { AdminService } from './admin.service';
 import { AdminLoginUserDTO } from './dto/admin-login-user.dto';
 import { DeviceService } from 'src/device/device.service';
+import { MessageService } from 'src/message/message.service';
+import { AddMessageDTO } from 'src/message/dto/add-message.dto';
 
 
 @Controller('admin')
 export class AdminController {
-	constructor(private readonly adminService: AdminService, private readonly deviceService: DeviceService) { }
+	constructor(private readonly adminService: AdminService, private readonly deviceService: DeviceService,private readonly messageService: MessageService) { }
 
 
 	@Post('/login') 
@@ -101,9 +103,29 @@ export class AdminController {
 		
 		return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
 	}
+	@Get('/getallmessage') // correct ✔ AddMessageDTO
+	async getAllMessage(@Res() res,@Param() param): Promise<string> {
+		var messages = await this.messageService.findMessageByUserId(4)
+		return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",message:messages});
+	}
 
+	@Post('/addmessage') 
+	async addMessage(@Res() res, @Body() addMessageDTO: AddMessageDTO, @Request() request) {
+		await this.messageService.addMessage(4, 0, addMessageDTO.content);
+		return res.status(HttpStatus.OK).json({msg:"send_message_success",tip:"发送消息成功"});
+	}
 
+	@Get('/delmessage/:message_id')
+    async deleteMessage(@Res() res, @Param() param,@Request() request): Promise<string> {
+        var message_id = param.message_id;
 
+        if(await this.messageService.deleteMessageAdmin(message_id)!=null){
+            return res.status(HttpStatus.OK).json({msg:"message_delete_success",tip:"消息删除成功"});
+        }
+        else {
+            console.log("delete message: delete return null")
+        }
+    }
 
 
 
