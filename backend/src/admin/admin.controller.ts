@@ -61,6 +61,7 @@ export class AdminController {
 		var product_id:number = param.product_id
 		var nodeCmd = require('node-cmd');
 		var product = await this.deviceService.getProductById(product_id)
+		var ocproduct_id = product['ocproduct_id']
 		if(product==null) {
 			return res.status(HttpStatus.OK).json({msg:"product_not_exists",tip:"产品不存在"});
 		}
@@ -68,7 +69,7 @@ export class AdminController {
 		var deviceType = product['ocdeviceType'];
 		// 'python ../utils/ocapi/testapi.py'
 		nodeCmd.get(
-		'python ./src/utils/ocapi/oc_reg_device.py '+imei+' '+model+" "+deviceType,
+		'python ./src/utils/ocapi/oc_reg_device.py '+imei+' '+model+" "+deviceType+" "+ocproduct_id,
 			function(err, data, stderr){
 				console.log('cmd: python ./src/utils/ocapi/oc_reg_device.py '+imei+' '+model+" "+deviceType)
 				console.log(data)

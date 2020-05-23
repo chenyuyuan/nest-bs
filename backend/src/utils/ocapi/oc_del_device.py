@@ -1,6 +1,7 @@
 import requests
 import json
 import sys
+import mysql.connector
 
 
 ocdevice_id = sys.argv[1]
@@ -31,3 +32,15 @@ headers = {
 response = requests.request("DELETE", url, headers=headers, data=payload, verify=False, cert=('\\client.crt', '\\client.key'))
 
 print(response.text.encode('utf8'))
+
+db = mysql.connector.connect(
+    host="106.54.90.108",
+    user="yuan",
+    passwd="root",
+    database="bs"
+)
+cursor = db.cursor()
+sql = "delete from device where ocdevice_id=\""+ocdevice_id+"\""
+cursor.execute(sql)
+db.commit()
+db.close()

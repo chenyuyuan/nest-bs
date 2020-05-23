@@ -99,6 +99,9 @@ export class DeviceService {
     async getProductById(product_id:number): Promise<Product> {
         return await this.ProductRepository.findOne({id:product_id});
     }
+    // async getProductByoctypeandocdevicetype(octype:string,ocdeviceType:string): Promise<Product> {
+    //     return await this.ProductRepository.findOne({octype:octype,ocdeviceType:ocdeviceType});
+    // }
 
 
 
