@@ -45,13 +45,14 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="100">
-              <template slot-scope="scope">
-                <el-button @click="editRow(scope.row)" type="text" size="small">编辑</el-button>
-                <el-button @click="deleteRow(scope.row)" type="text" size="small">解绑</el-button>
-              </template>
-          </el-table-column> 
-          </el-table>
+              width="160">
+				<template slot-scope="scope">
+					<el-button @click="toDataRow(scope.row)" type="text" size="small">查看数据</el-button>
+					<el-button @click="editRow(scope.row)" type="text" size="small">编辑</el-button>
+					<el-button @click="deleteRow(scope.row)" type="text" size="small">解绑</el-button>
+				</template>
+			</el-table-column> 
+			</el-table>
         </el-col>
       </el-tab-pane>
       <el-tab-pane label="绑定设备">
@@ -129,9 +130,12 @@ export default {
 	},
 	methods: {
 		editRow(row) {
-		console.log(row);
-		this.$router.push({path:"/device",query:{ocdevice_id:row.ocdevice_id}});
-		
+			console.log(row);
+			this.$router.push({path:"/device",query:{ocdevice_id:row.ocdevice_id}});
+		},
+		toDataRow(row) {
+			console.log(row);
+			this.$router.push({path:"/data",query:{id:row.id}});
 		},
 		deleteRow(row) {
 			console.log(row);

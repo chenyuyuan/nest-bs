@@ -8,12 +8,13 @@
 	<el-tabs :tab-position="tabPosition" type="card" style="width:100%">
 		<el-tab-pane label="历史数据">
 			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
-			<div id="my-chart-his" style="width: 1400px;height: 500px;"></div>
+			<el-button plain v-on:click="clickGeneratePicturehis">下载图片</el-button>
+			<div id="my-chart-his" style="width: 1400px;height: 500px;" ref="imageDomhis"></div>
 		</el-tab-pane>
 		<el-tab-pane label="实时数据">
-			<el-page-header @back="goBack" content="返回选择设备">
-			</el-page-header>
-			<div id="my-chart-data" style="width: 1400px;height: 500px;"></div>
+			<el-page-header @back="goBack" content="返回选择设备"></el-page-header>
+			<el-button plain v-on:click="clickGeneratePictureOntime">下载图片</el-button>
+			<div id="my-chart-data" style="width: 1400px;height: 500px;" ref="imageDomOntime"></div>
 			<div id="my-chart-data2" style="width: 1400px;height: 500px;"></div>
 		</el-tab-pane>
 		<el-tab-pane label="其他报表">
@@ -21,7 +22,7 @@
 			<el-button plain v-on:click="clickGeneratePicture30days">下载图片</el-button>
 			<div id="my-chart-30days" style="width: 1400px;height: 500px;" ref="imageDom30days"></div>
 		</el-tab-pane>
-		<el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+		<el-tab-pane label="列表显示">定时任务补偿</el-tab-pane>
   </el-tabs>
 </div>
 
@@ -73,6 +74,40 @@ export default {
 				var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
 				var nowStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+'-'+now.getHours()+'-'+minute+'-'+second;
 				eleLink.download = "30days曲线图"+nowStr;
+				document.body.appendChild(eleLink);
+				// 触发点击, 然后移除
+				eleLink.click();
+				document.body.removeChild(eleLink);
+			});
+		},
+		clickGeneratePicturehis() {
+			html2canvas(this.$refs.imageDomhis).then(canvas => {
+				// 转成图片，生成图片地址
+				this.imgUrl = canvas.toDataURL("image/png");
+				var eleLink = document.createElement("a");
+				eleLink.href = this.imgUrl; // 转换后的图片地址
+				var now=new Date();
+				var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
+				var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
+				var nowStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+'-'+now.getHours()+'-'+minute+'-'+second;
+				eleLink.download = "历史数据曲线图"+nowStr;
+				document.body.appendChild(eleLink);
+				// 触发点击, 然后移除
+				eleLink.click();
+				document.body.removeChild(eleLink);
+			});
+		},
+		clickGeneratePictureOntime() {
+			html2canvas(this.$refs.imageDomOntime).then(canvas => {
+				// 转成图片，生成图片地址
+				this.imgUrl = canvas.toDataURL("image/png");
+				var eleLink = document.createElement("a");
+				eleLink.href = this.imgUrl; // 转换后的图片地址
+				var now=new Date();
+				var minute = now.getMinutes()<10?'0'+now.getMinutes():now.getMinutes();
+				var second = now.getSeconds()<10?'0'+now.getSeconds():now.getSeconds();
+				var nowStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate()+'-'+now.getHours()+'-'+minute+'-'+second;
+				eleLink.download = "实时曲线图"+nowStr;
 				document.body.appendChild(eleLink);
 				// 触发点击, 然后移除
 				eleLink.click();
@@ -185,15 +220,6 @@ export default {
 					}
 					
 				}
-				// if(device_id == 5) {
-				// 	for(var j=0;j<temp0[1].length;++j) {
-				// 		var now1 = new Date((temp0[1][j].time).toString())
-				// 		var value1 = temp0[1][j].value;
-				// 		value1 = (device_id==1||device_id==4)?value1/1000:value1;
-				// 		var timestr1 = now1.getFullYear() + '/' + (now1.getMonth()+1) +'/'+ now1.getDate()+' ' +now1.getHours()+':'+now1.getMinutes()+':'+now1.getSeconds();
-				// 		data_his_2.push({name: now1.toString(),value: [timestr1, value1]});
-				// 	}
-				// }
 				data_his = this.data_his
 				var dataLen = data_his.length
 				var option = {
@@ -206,9 +232,9 @@ export default {
 							var params0 = params[0];
 							var params1 = params[1]
 							var date = new Date(params0.name);
-							if(params1.value[1]!=null) {
-								return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' : '+params0.value[1]+','+params1.value[1];	
-							}
+							// if(params1.value[1]!=null) {
+							// 	return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' : '+params0.value[1]+','+params1.value[1];	
+							// }
 							return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' : '+params0.value[1];
 						},
 						axisPointer: {
@@ -228,25 +254,17 @@ export default {
 						}
 					},dataZoom: [{
 						type: 'slider',
-						start: dataLen-20,
-						end: dataLen
-					}, {
 						start: 0,
-						end: 10,
-						handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-						handleSize: '80%',
-						handleStyle: {
-							color: '#fff',
-							shadowBlur: 3,
-							shadowColor: 'rgba(0, 0, 0, 0.6)',
-							shadowOffsetX: 2,
-							shadowOffsetY: 2
-						}
+						end:21
+					}, {
+						type: 'inside',
+						start: 50,
+						end: 70
 					}],
 					series: [{
 						name: '模拟数据',
 						type: 'line',
-						//smooth: true,
+						smooth: true,
 						showSymbol: false,
 						hoverAnimation: false,
 						data: data_his,
@@ -284,7 +302,8 @@ export default {
 								{type: 'min', name: '最小值'}
 							],
 						}
-					}]
+					}
+					]
 				};
 				var dom = document.getElementById("my-chart-his");
 				var myChart = echarts.init(dom);

@@ -67,12 +67,13 @@ export class DeviceController {
     async updateDevice(@Res() res,@Request() request,@Body() updateDeviceDTO:UpdateDeviceDTO): Promise<string> {
         
         var user_id:number = request.session.user_id;
+        var device_id:number = updateDeviceDTO.device_id;
         var name:string = updateDeviceDTO.name;
         var imei:string = updateDeviceDTO.imei;
         var imsi:string = updateDeviceDTO.imsi;
 
         //var user_id = 1
-        await this.deviceService.updateDevice(user_id, name,imei,imsi)
+        await this.deviceService.updateDevice(device_id, name,imei,imsi)
         return res.status(HttpStatus.OK).json({msg:"device_update_success",tip:"设备更新成功",});
     }
     @Get('/my_device') // correct ✔

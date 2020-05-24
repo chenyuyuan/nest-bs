@@ -18,7 +18,7 @@
       </div>
       <div class="form-inline" style="margin-top:10px">
         <div style="width:10%">设备号:</div>
-        <div >{{device.name}}</div>
+        <div >{{device.ocdevice_id}}</div>
       </div>
       <div class="form-inline" style="margin-top:10px">
         <div style="width:10%">设备名:</div>
@@ -139,7 +139,7 @@ export default {
 	},
 	methods: {
 		nowdata() {
-		this.$router.push({path:'/data', query:{id: this.device.id}})
+			this.$router.push({path:'/data', query:{id: this.device.id}})
 		},
 		up_update() {
 			var send_mail=this.alarm_value_0.up.mail==false?0:1;
@@ -190,13 +190,14 @@ export default {
 
 		
 		update() {
-		let updatedata = {
-			name: this.device.name,
-			imei: this.device.imei,
-			imsi: this.device.imsi
-		};
-		console.log("selected " + this.device.name)
-		this.__update(updatedata);
+			let updatedata = {
+				device_id: this.device.id,
+				name: this.device.name,
+				imei: this.device.imei,
+				imsi: this.device.imsi
+			};
+			console.log("selected " + this.device.name)
+			this.__update(updatedata);
 		},
 		__update(data) {
 			axios.post(`${server.baseURL}/device/update`, data).then(data => {
