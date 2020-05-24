@@ -125,43 +125,6 @@
                 <div style="display:none" class="grid-content bg-purple">1</div>
             </el-col>
         </el-tab-pane>
-        <el-tab-pane label="帮助文档">
-          <el-col :span="4" style="border:1px solid transparent">
-                <div style="display:none" class="grid-content bg-purple">1</div>
-            </el-col>
-            <el-col :span="16">
-                <el-card class="box-card" shadow="hover" v-on:click="toPost(p)" v-for="p in postList4" :key="p.id">
-                    <div slot="header" class="clearfix" style="">
-                        <div class="form-inline">
-							<div class="form-inline" style="font-size:18px;font-family:PingFang SC">
-								{{p.title}}
-							</div>
-							<div style="width:10px">&nbsp;</div>
-                            <div>{{p.name}}</div>
-                            <div>·</div>
-                            <div>{{p.time}}</div>
-                        </div>
-                    </div>
-                    <div v-on:click="toPost(p)">
-                        {{p.content}}
-                    </div>
-                    
-                    <el-image style="height:auto;width:300px" :fit="fill" v-if="p.img != null" :src="p.img" v-on:click="toPost(p)"></el-image>
-                    <div class="form-inline" style="margin-top:5px" v-on:click="toPost(p)">
-                        <i class="el-icon-arrow-up" style="color:#5CB6FF;font-size:22px"></i>
-                        <div style="width:8px">&nbsp;</div>
-                        <div style="color:#5CB6FF;font-size:15px">{{p.like}}</div>
-                        <div style="width:24px">&nbsp;</div>
-                        <i class="el-icon-chat-round" style="color:#5CB6FF;font-size:22px"></i>
-                        <div style="width:8px">&nbsp;</div>
-                        <div style="color:#5CB6FF;font-size:15px">{{p.comment}}</div>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="4" style="border:1px solid transparent">
-                <div style="display:none" class="grid-content bg-purple">1</div>
-            </el-col>
-        </el-tab-pane>
     </el-tabs>
 
   </el-row>

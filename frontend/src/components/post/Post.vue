@@ -15,13 +15,15 @@
 			<el-card class="box-card" shadow="hover">
 				<div slot="header" class="clearfix" style="">
 					<div class="form-inline">
-						<div>{{post.name}}</div>
-						<div>·</div>
+						<div style="font-size:18px;font-family:PingFang SC">
+							{{post.title}}
+						</div>
+						<div style="width:10px"></div>
+						<div style="color:blue">{{post.name}}</div>
+						<div>:</div>
+						<div style="width:20px"></div>
 						<div>{{post.time}}</div>
 					</div>
-				</div>
-				<div>
-					{{post.title}}
 				</div>
 				<div>
 					{{post.content}}
@@ -47,10 +49,11 @@
 			</el-card>
 			<el-card class="box-card" shadow="hover" v-for="c in comments" :key="c.id">
 				<div class="form-inline">
-					<div>{{c.username}}</div>
-					<div>: </div>
+					<div style="color:blue">{{c.username}}</div>
+					<div>:</div>
+					<div style="width:8px"></div>
 					<div>{{c.content}}</div>
-					<div>-</div>
+					<div style="width:30px"></div>
 					<div style="float:right">{{c.time}}</div>
 					<div style="float:right;color:red" v-if="myuser_id==c.user_id" v-on:click="delComment(c)">删除</div>
 				</div>
@@ -153,8 +156,13 @@ export default {
 				}else {
 					this.post["img"] = server.baseURL+"/public/upload/"+this.post["author_id"]+"/"+this.post["img"]
 				}
-				this.comments = data.data.comments
-				
+				var time = this.post["time"];
+				this.post["time"] = time.substring(0,10)+" "+time.substring(11,19);
+				this.comments = data.data.comments;
+				for(var i = 0;i<this.comments.length;++i) {
+					var ctime = this.comments[i]["time"];
+					this.comments[i]["time"] = ctime.substring(0,10)+" "+ctime.substring(11,19);	
+				}
 			}
         
 		});
