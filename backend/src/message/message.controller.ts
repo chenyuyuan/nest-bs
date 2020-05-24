@@ -43,17 +43,33 @@ export class MessageController {
     async getMessage(@Res() res, @Param() param,@Request() request): Promise<string> {
         var user_id = request.session.user_id;
         //user_id = 1;
-
         var messages = await this.messageService.findMessageByUserId(user_id)
         //console.log(messages.length)
         var msgLen:number = messages.length;
-
         for (var i = 0;i<msgLen;++i) {
             //console.log(messages[i]['sender_id'])
             var username = (await this.userService.findById(messages[i]['sender_id']))['name']
             messages[i]["sender_name"] = username;
         }
+        if(messages!=null){
+            return res.status(HttpStatus.OK).json({msg:"message_get_success",tip:"消息查找成功",message:messages});
+        }
+        else {
+            console.log("get message: get return null")
+        }
+    }
 
+    // get message
+    @Get('/getsystem')
+    async getSystemMessage(@Res() res, @Param() param,@Request() request): Promise<string> {
+        var messages = await this.messageService.findMessageByUserId(0)
+        //console.log(messages.length)
+        var msgLen:number = messages.length;
+        for (var i = 0;i<msgLen;++i) {
+            //console.log(messages[i]['sender_id'])
+            var username = (await this.userService.findById(messages[i]['sender_id']))['name']
+            messages[i]["sender_name"] = username;
+        }
         if(messages!=null){
             return res.status(HttpStatus.OK).json({msg:"message_get_success",tip:"消息查找成功",message:messages});
         }
