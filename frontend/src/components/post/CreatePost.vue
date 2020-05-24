@@ -108,12 +108,12 @@ export default {
             console.log(file);
         },
         getPost() {
-        axios
-            .get(`${server.baseURL}/blog/post/${this.id}`)
-            .then(data => (this.post = data.data));
+            axios
+                .get(`${server.baseURL}/blog/post/${this.id}`)
+                .then(data => (this.post = data.data));
         },
         navigate() {
-        router.go(-1);
+            router.go(-1);
         },
 
         sendPost() {

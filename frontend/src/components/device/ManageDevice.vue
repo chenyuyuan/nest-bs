@@ -23,8 +23,8 @@
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="ocproduct_id"
-                label="产品service_id">
+                prop="product_name"
+                label="产品名">
             </el-table-column>
             <el-table-column
                 prop="imei"
@@ -38,10 +38,10 @@
                 prop="reg_time"
                 label="注册时间">
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 prop="status"
                 label="状态">
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
               fixed="right"
               label="操作"
@@ -99,127 +99,140 @@ import { server } from "../../utils/helper";
 
 
 export default {
-  name: "ManageDevice",
-  components: {
-    Header
-  },
-  data() {
+	name: "ManageDevice",
+	components: {
+		Header
+	},
+	data() {
 
-    return {
-      tableData: [{
-        id: '',
-        name: '',
-        ocdevice_id: '',
-        ocproduct_id: '',
-        imei: '',
-        imsi:'',
-        reg_time: '',
-        status: '',
-      }],
-      tabPosition: 'left',
-      value:"",
-      device_id:"",
-      options: [{
-        value: '',
-        label: ''
-      },],
+		return {
+		tableData: [{
+			id: '',
+			name: '',
+			ocdevice_id: '',
+			ocproduct_id: '',
+			imei: '',
+			imsi:'',
+			reg_time: '',
+			status: '',
+			product_name: '',
+		}],
+		tabPosition: 'left',
+		value:"",
+		device_id:"",
+		options: [{
+			value: '',
+			label: ''
+		},],
 
-    }
-  },
-  methods: {
-    editRow(row) {
-      console.log(row);
-      this.$router.push({path:"/device",query:{ocdevice_id:row.ocdevice_id}});
-      
-    },
-    deleteRow(row) {
-      console.log(row);
-      axios.get(`${server.baseURL}/device/delete/`+row.id, ).then(data => {
-      console.log(data)
-      this.$message('设备解除绑定成功');
-      axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
-        console.log(data)
-        this.tableData = data.data.devices
-          
-      });
-    });
-    },
-    add() {
-      let adddata = {
-        ocproduct_id: this.value,
-        ocdevice_id: this.device_id,
-      };
-      console.log("selected " + this.value)
-      this.__add(adddata);
-    },
-    __add(data) {
-      axios.post(`${server.baseURL}/device/adddevice`, data).then(data => {
-        if(data.data.msg == "without_login") {
-          this.$message('请先登录');
-        }
-        else if(data.data.msg == "add_device_success") {
-          this.$message('添加成功');
-        }
-        else if(data.data.msg == "user_device_exists") {
-          this.$message('设备已存在，请到管理设备查看');
-        }
-        else if(data.data.msg == "device_not_exists") {
-          this.$message('设备不存在');
-        }
-        
-      });
-    }
-  },
-  mounted() {
-    axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
-      console.log(data)
-      this.tableData = data.data.devices
-      
-    });
-    axios.get(`${server.baseURL}/device/products`, ).then(data => {
-      console.log(data.data.products)
-      this.options = data.data.products
-      
-        
-    });
-  }
-  
- 
-};
+		}
+	},
+	methods: {
+		editRow(row) {
+		console.log(row);
+		this.$router.push({path:"/device",query:{ocdevice_id:row.ocdevice_id}});
+		
+		},
+		deleteRow(row) {
+			console.log(row);
+			axios.get(`${server.baseURL}/device/delete/`+row.id, ).then(data => {
+				console.log(data)
+				this.$message('设备解除绑定成功');
+				axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
+					console.log(data)
+					this.tableData = data.data.devices
+					
+				});
+			});
+		},
+		add() {
+			let adddata = {
+				ocproduct_id: this.value,
+				ocdevice_id: this.device_id,
+			};
+		console.log("selected " + this.value)
+		this.__add(adddata);
+		},
+		__add(data) {
+		axios.post(`${server.baseURL}/device/adddevice`, data).then(data => {
+			if(data.data.msg == "without_login") {
+				this.$message('请先登录');
+			}
+			else if(data.data.msg == "add_device_success") {
+				this.$message('添加成功');
+			}
+			else if(data.data.msg == "user_device_exists") {
+				this.$message('设备已存在，请到管理设备查看');
+			}
+			else if(data.data.msg == "device_not_exists") {
+				this.$message('设备不存在');
+			}
+			
+		});
+		}
+	},
+	mounted() {
+		axios.get(`${server.baseURL}/device/my_device`, ).then(data => {
+			console.log(data.data)
+			this.tableData = data.data.devices
+			axios.get(`${server.baseURL}/device/products`, ).then(data => {
+				console.log(data.data.products)
+				this.options = data.data.products
+				for(var i = 0;i<this.tableData.length;++i) {
+					var time = this.tableData[i]["reg_time"];
+					this.tableData[i]["reg_time"] = time.substring(0,10)+" "+time.substring(11,19);
+					for(var j = 0;j<this.options.length;++j) {
+						console.log(this.options[j]['name'])
+						if(this.tableData[i]['ocproduct_id'] == this.options[j]['ocproduct_id']) {
+							this.tableData[i]['product_name']=this.options[j]['name']
+							
+						}
+					}
+					
+				}
+				
+			});
+		});
+		
+		
+	}
+	
+	
+	};
 </script>
 
 <style>
-  .el-header, .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
-  
-  .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
-  
-  .el-main {
-    background-color: #ffffff;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-  }
-  
-  body > .el-container {
-    margin-bottom: 40px;
-  }
-  
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
-  
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
+.el-header, .el-footer {
+	background-color: #B3C0D1;
+	color: #333;
+	text-align: center;
+	line-height: 60px;
+}
+
+.el-aside {
+	background-color: #D3DCE6;
+	color: #333;
+	text-align: center;
+	line-height: 200px;
+}
+
+.el-main {
+	background-color: #ffffff;
+	color: #333;
+	text-align: center;
+	line-height: 160px;
+}
+
+body > .el-container {
+	margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+	line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+	line-height: 320px;
+}
 </style>

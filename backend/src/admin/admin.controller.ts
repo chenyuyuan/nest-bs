@@ -4,11 +4,14 @@ import { AdminLoginUserDTO } from './dto/admin-login-user.dto';
 import { DeviceService } from 'src/device/device.service';
 import { MessageService } from 'src/message/message.service';
 import { AddMessageDTO } from 'src/message/dto/add-message.dto';
+import { ArticleService } from 'src/article/article.service';
+import { AddArticleDTO } from './dto/add-article.dto';
 
 
 @Controller('admin')
 export class AdminController {
-	constructor(private readonly adminService: AdminService, private readonly deviceService: DeviceService,private readonly messageService: MessageService) { }
+	constructor(private readonly adminService: AdminService, private readonly deviceService: DeviceService,private readonly messageService: MessageService,
+		private readonly articleService: ArticleService) { }
 
 
 	@Post('/login') 
@@ -111,7 +114,7 @@ export class AdminController {
 
 	@Post('/addmessage') 
 	async addMessage(@Res() res, @Body() addMessageDTO: AddMessageDTO, @Request() request) {
-		await this.messageService.addMessage(4, 0, addMessageDTO.content);
+		await this.messageService.addMessage(0, 4, addMessageDTO.content);
 		return res.status(HttpStatus.OK).json({msg:"send_message_success",tip:"发送消息成功"});
 	}
 
@@ -127,6 +130,19 @@ export class AdminController {
         }
     }
 
+
+
+
+	@Post('/addarticle') 
+    async addArticle(@Res() res, @Request() request, @Body() addArticleDTO:AddArticleDTO) { // correct
+        
+        var article = await this.articleService.addArticle(4, addArticleDTO.title, addArticleDTO.content, addArticleDTO.img, 3);
+        if (article != null) {
+            return res.status(HttpStatus.OK).json({msg:"add_article_success",tip:"添加文章成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"add_article_failed",tip:"添加文章失败"});
+      
+    }
 
 
 

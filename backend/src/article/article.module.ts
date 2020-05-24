@@ -11,7 +11,7 @@ import { User } from 'src/user/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Article, ArticleComment, User]), 
+    TypeOrmModule.forFeature([Article, ArticleComment,  User]), 
     RedisModule.register({host:'106.54.90.108',port:6379,password:'',db:1})
   ],
   controllers: [ArticleController],

@@ -135,6 +135,11 @@ export default {
     axios.get(`${server.baseURL}/message/get`, ).then(data => {
       console.log(data.data)
       this.tableData = data.data.message
+      for(var i = 0;i<this.tableData.length;++i) {
+					var time = this.tableData[i]["reg_time"];
+					this.tableData[i]["reg_time"] = time.substring(0,10)+" "+time.substring(11,19);
+					
+				}
       
     });
     

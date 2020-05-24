@@ -347,9 +347,4 @@ export default {
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }
-
-
-
-
-
 </style>
