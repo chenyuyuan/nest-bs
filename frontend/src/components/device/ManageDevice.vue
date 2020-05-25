@@ -154,25 +154,25 @@ export default {
 				ocproduct_id: this.value,
 				ocdevice_id: this.device_id,
 			};
-		console.log("selected " + this.value)
-		this.__add(adddata);
+			console.log("selected " + this.value)
+			this.__add(adddata);
 		},
 		__add(data) {
-		axios.post(`${server.baseURL}/device/adddevice`, data).then(data => {
-			if(data.data.msg == "without_login") {
-				this.$message('请先登录');
-			}
-			else if(data.data.msg == "add_device_success") {
-				this.$message('添加成功');
-			}
-			else if(data.data.msg == "user_device_exists") {
-				this.$message('设备已存在，请到管理设备查看');
-			}
-			else if(data.data.msg == "device_not_exists") {
-				this.$message('设备不存在');
-			}
-			
-		});
+			axios.post(`${server.baseURL}/device/adddevice`, data).then(data => {
+				if(data.data.msg == "without_login") {
+					this.$message('请先登录');
+				}
+				else if(data.data.msg == "add_device_success") {
+					this.$message('添加成功');
+				}
+				else if(data.data.msg == "user_device_exists") {
+					this.$message('设备已存在，请到管理设备查看');
+				}
+				else if(data.data.msg == "device_not_exists") {
+					this.$message('设备不存在');
+				}
+				
+			});
 		}
 	},
 	mounted() {
@@ -188,21 +188,16 @@ export default {
 					for(var j = 0;j<this.options.length;++j) {
 						console.log(this.options[j]['name'])
 						if(this.tableData[i]['ocproduct_id'] == this.options[j]['ocproduct_id']) {
-							this.tableData[i]['product_name']=this.options[j]['name']
-							
+							this.tableData[i]['product_name']=this.options[j]['name'];
 						}
 					}
-					
 				}
-				
 			});
 		});
-		
-		
 	}
 	
 	
-	};
+};
 </script>
 
 <style>

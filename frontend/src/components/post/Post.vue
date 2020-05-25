@@ -19,7 +19,7 @@
 							{{post.title}}
 						</div>
 						<div style="width:10px"></div>
-						<div style="color:blue">{{post.name}}</div>
+						<div style="color:#5CB6FF">{{post.name}}</div>
 						<div>:</div>
 						<div style="width:20px"></div>
 						<div>{{post.time}}</div>
@@ -30,13 +30,13 @@
 				</div>
 				<el-image style="height:auto;width:300px" :fit="fill" v-if="post.img != null" :src="post.img"></el-image>
 				<div class="form-inline" style="margin-top:5px">
-					<i class="el-icon-arrow-up" style="color:blue;font-size:22px"></i>
+					<i class="el-icon-arrow-up" style="color:#5CB6FF;font-size:22px"></i>
 					<div style="width:8px">&nbsp;</div>
-					<div style="color:blue;font-size:15px">{{post.like}}</div>
+					<div style="color:#5CB6FF;font-size:15px">{{post.like}}</div>
 					<div style="width:24px">&nbsp;</div>
-					<i class="el-icon-chat-round" style="color:blue;font-size:22px"></i>
+					<i class="el-icon-chat-round" style="color:#5CB6FF;font-size:22px"></i>
 					<div style="width:8px">&nbsp;</div>
-					<div style="color:blue;font-size:15px">{{post.comment}}</div>
+					<div style="color:#5CB6FF;font-size:15px">{{post.comment}}</div>
 				</div>
 			</el-card>
 			<el-card class="box-card" shadow="hover">
@@ -49,12 +49,13 @@
 			</el-card>
 			<el-card class="box-card" shadow="hover" v-for="c in comments" :key="c.id">
 				<div class="form-inline">
-					<div style="color:blue">{{c.username}}</div>
+					<div style="color:#5CB6FF">{{c.username}}</div>
 					<div>:</div>
 					<div style="width:8px"></div>
 					<div>{{c.content}}</div>
 					<div style="width:30px"></div>
 					<div style="float:right">{{c.time}}</div>
+					<div style="width:30px"></div>
 					<div style="float:right;color:red" v-if="myuser_id==c.user_id" v-on:click="delComment(c)">删除</div>
 				</div>
 					

@@ -10,48 +10,48 @@
     
     <el-tabs :tab-position="tabPosition" style="">
       <el-tab-pane label="设备管理">
-        <el-col :span="1" style="border:1px solid transparent">
-          <div style="display:none" class="grid-content bg-purple">1</div>
-        </el-col>
-        <el-col :span="22">
-          <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="name" label="设备名" width="120">
-            </el-table-column>
-            <el-table-column
-                prop="ocdevice_id"
-                label="设备id"
-                width="120">
-            </el-table-column>
-            <el-table-column
-                prop="ocproduct_id"
-                label="产品service_id">
-            </el-table-column>
-            <el-table-column
-                prop="imei"
-                label="imei">
-            </el-table-column>
-            <el-table-column
-                prop="imsi"
-                label="imsi">
-            </el-table-column>
-            <el-table-column
-                prop="reg_time"
-                label="注册时间">
-            </el-table-column>
-            <!-- <el-table-column
-                prop="status"
-                label="状态">
-            </el-table-column> -->
-            <el-table-column
-              fixed="right"
-              label="操作"
-              width="100">
-              <template slot-scope="scope">
-                <el-button @click="deleteRow(scope.row)" type="text" size="small">删除</el-button>
-              </template>
-          </el-table-column> 
-          </el-table>
-        </el-col>
+			<el-col :span="1" style="border:1px solid transparent">
+				<div style="display:none" class="grid-content bg-purple">1</div>
+			</el-col>
+			<el-col :span="22">
+				<el-table :data="tableData" style="width: 100%">
+					<el-table-column prop="name" label="设备名" width="120">
+					</el-table-column>
+					<el-table-column
+						prop="ocdevice_id"
+						label="设备id"
+						width="120">
+					</el-table-column>
+					<el-table-column
+						prop="product_name"
+						label="产品名">
+					</el-table-column>
+					<el-table-column
+						prop="imei"
+						label="imei">
+					</el-table-column>
+					<el-table-column
+						prop="imsi"
+						label="imsi">
+					</el-table-column>
+					<el-table-column
+						prop="reg_time"
+						label="注册时间">
+					</el-table-column>
+					<!-- <el-table-column
+						prop="status"
+						label="状态">
+					</el-table-column> -->
+					<el-table-column
+					fixed="right"
+					label="操作"
+					width="100">
+					<template slot-scope="scope">
+						<el-button @click="deleteRow(scope.row)" type="text" size="small">删除</el-button>
+					</template>
+				</el-table-column> 
+				</el-table>
+			</el-col>
       </el-tab-pane>
       <el-tab-pane label="添加设备">
         <el-col :span="1" style="border:1px solid transparent">
@@ -82,20 +82,15 @@
       </el-tab-pane>
       <!-- <el-tab-pane label="角色管理">角色管理</el-tab-pane> -->
     </el-tabs>
-
   </el-row>
 </div>
-
 </div>
-
 </template>
 <script>
 import axios from "axios";
-
 import AdminHeader from "./AdminHeader"
 import router from "../../router";
 import { server } from "../../utils/helper";
-
 
 export default {
 	name: "AdminDevice",
@@ -133,20 +128,42 @@ export default {
 				console.log(data)
 				this.$message('设备删除成功');
 				axios.get(`${server.baseURL}/admin/getalldevice`, ).then(data => {
-					console.log(data)
 					this.tableData = data.data.device
+					this.options = data.data.product
+					for(var i = 0;i<this.tableData.length;++i) {
+						var time = this.tableData[i]["reg_time"];
+						this.tableData[i]["reg_time"] = time.substring(0,10)+" "+time.substring(11,19);
+						for(var j = 0;j<this.options.length;++j) {
+							if(this.tableData[i]['ocproduct_id'] == this.options[j]['ocproduct_id']) {
+								this.tableData[i]['product_name']=this.options[j]['name'];
+							}
+						}
+					}
 				});
 			});
 		},
 		add(data) {
-		axios.get(`${server.baseURL}/admin/regdevice/`+this.imei+`/`+this.value, data).then(data => {
-			if(data.data.msg == "product_not_exists") {
-				this.$message('产品不存在');
-			}
-			else if(data.data.msg == "success") {
-				this.$message('添加成功');
-			}
-		});
+			axios.get(`${server.baseURL}/admin/regdevice/`+this.imei+`/`+this.value, data).then(data => {
+				if(data.data.msg == "product_not_exists") {
+					this.$message('产品不存在');
+				}
+				else if(data.data.msg == "success") {
+					this.$message('添加成功');
+					axios.get(`${server.baseURL}/admin/getalldevice`, ).then(data => {
+						this.tableData = data.data.device
+						this.options = data.data.product
+						for(var i = 0;i<this.tableData.length;++i) {
+							var time = this.tableData[i]["reg_time"];
+							this.tableData[i]["reg_time"] = time.substring(0,10)+" "+time.substring(11,19);
+							for(var j = 0;j<this.options.length;++j) {
+								if(this.tableData[i]['ocproduct_id'] == this.options[j]['ocproduct_id']) {
+									this.tableData[i]['product_name']=this.options[j]['name'];
+								}
+							}
+						}
+					});
+				}
+			});
 		}
 	},
 	mounted() {
@@ -154,6 +171,17 @@ export default {
 			console.log(data)
 			this.tableData = data.data.device
 			this.options = data.data.product
+
+			for(var i = 0;i<this.tableData.length;++i) {
+				var time = this.tableData[i]["reg_time"];
+				this.tableData[i]["reg_time"] = time.substring(0,10)+" "+time.substring(11,19);
+				for(var j = 0;j<this.options.length;++j) {
+					console.log(this.options[j]['name'])
+					if(this.tableData[i]['ocproduct_id'] == this.options[j]['ocproduct_id']) {
+						this.tableData[i]['product_name']=this.options[j]['name'];
+					}
+				}
+			}
 		});
 	}
 };

@@ -187,8 +187,6 @@ export default {
 			}
 			
 		},
-
-		
 		update() {
 			let updatedata = {
 				device_id: this.device.id,
@@ -204,11 +202,8 @@ export default {
 				if(data.data.msg == "device_update_success") {
 					this.$message('修改成功');
 				}
-				
 			});
 		}
-
-
 	},
 	mounted() {
 		console.log(this.$route)
@@ -237,15 +232,9 @@ export default {
 					this.alarm_value_0.down.sms = av[0].down.send_mail==1?true:false;
 					this.alarm_value_0.down.message = av[0].down.send_message_in_website==1?true:false;
 				}
-
-			
 			});
 		});
-		
-		
 	}
-  
- 
 };
 </script>
 

@@ -41,7 +41,7 @@ db = mysql.connector.connect(
     database="bs"
 )
 cursor = db.cursor()
-sql = "insert into device(ocdevice_id,ocproduct_id) values (\""+deviceId+"\",\""+ocproduct_id+"\")"
+sql = "insert into device(ocdevice_id,ocproduct_id,imei) values (\""+deviceId+"\",\""+ocproduct_id+"\",\""+imei+"\")"
 cursor.execute(sql)
 db.commit()
 
