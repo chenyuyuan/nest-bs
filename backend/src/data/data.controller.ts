@@ -189,6 +189,7 @@ export class DataController {
                 var alarm_value_up = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 1)
                 var alarm_value_down = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 0)
                 var user_id = await this.deviceService.findUserDeviceByDeviceId(device_id)['user_id']
+                console.log(device_id)
                 console.log(user_id)
                 var sendcontent = ""
                 if(alarm_value_up!=null&&value>parseFloat(alarm_value_up.value)) {
