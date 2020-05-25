@@ -196,45 +196,37 @@ export class DataController {
                     value0 = value / 1000;
                 }
                 var sendcontent = ""
-                if(alarm_value_up!=null&&value>parseFloat(alarm_value_up.value)) {
+                if(alarm_value_up!=null&&value0>parseFloat(alarm_value_up.value)) {
                     sendcontent = "您的数据已超上限值，达" + value;
                     if(alarm_value_up.send_mail==1){
                         const fs = require('fs');
                         const child_process = require('child_process');
-                        var mail =await this.userService.findById(user_id)['mail']
+                        var mail = (await this.userService.findById(user_id))['mail']
                         var workerProcess = child_process.spawn('node', ['./src/utils/mail.ts', mail, sendcontent]);
-                        workerProcess.stdout.on('data', function (data) {
-                           console.log('stdout: ' + data);
-                        });
+                        workerProcess.stdout.on('data', function (data) {console.log('stdout: ' + data);});
                         workerProcess.stderr.on('data', function (data) {
                            console.log('stderr: ' + data);
                            return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"预警邮箱发送失败"});
                         });
-                        workerProcess.on('close', function (code) {
-                           console.log('子进程已退出，退出码 '+code);
-                        });
+                        workerProcess.on('close', function (code) {console.log('子进程已退出，退出码 '+code);});
                     }
                     if(alarm_value_up.send_message_in_website==1) {
                         await this.messageService.addMessage(user_id,3,sendcontent);
                     }
                 }
-                else if(alarm_value_down!=null&&value<parseFloat(alarm_value_down.value)) {
+                else if(alarm_value_down!=null&&value0<parseFloat(alarm_value_down.value)) {
                     sendcontent = "您的数据已低于下限值，达" + value;
                     if(alarm_value_down.send_mail==1){
                         const fs = require('fs');
                         const child_process = require('child_process');
-                        var mail =await this.userService.findById(user_id)['mail']
+                        var mail = (await this.userService.findById(user_id))['mail']
                         var workerProcess = child_process.spawn('node', ['./src/utils/mail.ts', mail, sendcontent]);
-                        workerProcess.stdout.on('data', function (data) {
-                           console.log('stdout: ' + data);
-                        });
+                        workerProcess.stdout.on('data', function (data) {console.log('stdout: ' + data);});
                         workerProcess.stderr.on('data', function (data) {
                            console.log('stderr: ' + data);
                            return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"预警邮箱发送失败"});
                         });
-                        workerProcess.on('close', function (code) {
-                           console.log('子进程已退出，退出码 '+code);
-                        });
+                        workerProcess.on('close', function (code) {console.log('子进程已退出，退出码 '+code);});
                     }
                     if(alarm_value_down.send_message_in_website==1) {
                         await this.messageService.addMessage(user_id,3,sendcontent);
