@@ -191,6 +191,10 @@ export class DataController {
                 var user_id = (await this.deviceService.findUserDeviceByDeviceId(device_id))['user_id']
                 //console.log(device_id)
                 //console.log(user_id)
+                var value0 = value;
+                if(datatypes[i].operation=='/') {
+                    value0 = value / 1000;
+                }
                 var sendcontent = ""
                 if(alarm_value_up!=null&&value>parseFloat(alarm_value_up.value)) {
                     sendcontent = "您的数据已超上限值，达" + value;
