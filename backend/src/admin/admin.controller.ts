@@ -158,13 +158,13 @@ export class AdminController {
 		if(param.ifpass == 1) {
 			var sendcontent = '文章 '+article['title']+' 已通过审核';
 			await this.articleService.passArticle(param.article_id, 1);
-			await this.messageService.addMessage(3,user_id,sendcontent);
+			await this.messageService.addMessage(user_id,3,sendcontent);
         	return res.status(HttpStatus.OK).json({msg:"pass_article_success",tip:"审核文章成功"});
 		}
 		else {
 			var sendcontent = '文章 '+article['title']+' 未通过审核';
 			await this.articleService.passArticle(param.article_id, 0);
-			await this.messageService.addMessage(3,user_id,sendcontent);
+			await this.messageService.addMessage(user_id,3,sendcontent);
 			return res.status(HttpStatus.OK).json({msg:"article_not_pass",tip:"文章未通过成功"});
 		}
 	}
