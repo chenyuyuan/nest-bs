@@ -34,7 +34,7 @@ export class MessageService {
 			return await this.MessageRepository.remove(message);
 		}
 		async deleteMessageAdmin(message_id:number): Promise<Message> {
-			var message: Message = await this.MessageRepository.findOne({id:message_id}) 
+			var message: Message = await this.MessageRepository.findOne({id:message_id});
 			if(message == null) return null;
 			return await this.MessageRepository.remove(message);
 		}
@@ -42,7 +42,10 @@ export class MessageService {
 			return await this.MessageRepository.findOne({id:message_id});
 		}
 		async findMessageByUserId(user_id:number): Promise<Message[]> {
-			return await this.MessageRepository.find({user_id:user_id});
+			var messages = await this.MessageRepository.find({user_id:user_id});
+			console.log("messages: ")
+			console.log(messages)
+			return messages;
 		}
 		async findMessageByUserIdAndSenderId(user_id:number,sender_id:number): Promise<Message[]> {
 			return await this.MessageRepository.find({user_id:user_id, sender_id:sender_id});

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,Req,Request,Header } from '@nestjs/common';
+import { Controller, Get, Post, HttpStatus, Res, Param, Body, NotFoundException,Req,Request,Header, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminLoginUserDTO } from './dto/admin-login-user.dto';
 import { DeviceService } from 'src/device/device.service';
@@ -6,7 +6,10 @@ import { MessageService } from 'src/message/message.service';
 import { AddMessageDTO } from 'src/message/dto/add-message.dto';
 import { ArticleService } from 'src/article/article.service';
 import { AddArticleDTO } from './dto/add-article.dto';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
+import { createWriteStream } from 'fs';
+const fs = require('fs');
 
 @Controller('admin')
 export class AdminController {
@@ -108,7 +111,7 @@ export class AdminController {
 	}
 	@Get('/getallmessage') // correct ✔ AddMessageDTO
 	async getAllMessage(@Res() res,@Param() param): Promise<string> {
-		var messages = await this.messageService.findMessageByUserId(4)
+		var messages = await this.messageService.findMessageByUserId(0)
 		return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",message:messages});
 	}
 
@@ -135,13 +138,28 @@ export class AdminController {
 
 	@Post('/addarticle') 
     async addArticle(@Res() res, @Request() request, @Body() addArticleDTO:AddArticleDTO) { // correct
-        
-        var article = await this.articleService.addArticle(4, addArticleDTO.title, addArticleDTO.content, addArticleDTO.img, 3);
+        var article = await this.articleService.addArticle(4, addArticleDTO.title, addArticleDTO.content, addArticleDTO.img, 2);
         if (article != null) {
             return res.status(HttpStatus.OK).json({msg:"add_article_success",tip:"添加文章成功"});
         }
         return res.status(HttpStatus.OK).json({msg:"add_article_failed",tip:"添加文章失败"});
-      
+	}
+	
+
+	@Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    async uploadFile(@Res() res, @UploadedFile() file, @Request() request): Promise<string> {
+        console.log(file);
+        var user_id = 4;
+        // user_id = 1;
+        var dir = join(__dirname, '..','../public/upload', '/', user_id.toString())
+        if(fs.existsSync(dir) == false) {
+            fs.mkdirSync(dir);
+            console.log(fs.existsSync(join(__dirname, '..','../public/upload', '/', user_id.toString())))
+        }
+        const writeImage = createWriteStream(join(__dirname, '..','../public/upload/', user_id.toString(), `${file.originalname}`))
+        writeImage.write(file.buffer)
+        return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
     }
 
 

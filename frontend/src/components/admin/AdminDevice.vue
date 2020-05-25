@@ -19,7 +19,7 @@
 					</el-table-column>
 					<el-table-column
 						prop="ocdevice_id"
-						label="设备id"
+						label="设备号"
 						width="120">
 					</el-table-column>
 					<el-table-column
@@ -100,24 +100,24 @@ export default {
 	data() {
 
 		return {
-		tableData: [{
-			id: '',
-			name: '',
-			ocdevice_id: '',
-			ocproduct_id: '',
-			imei: '',
-			imsi:'',
-			reg_time: '',
-			status: '',
-		}],
-		tabPosition: 'left',
-		value:"",
-		device_id:"",
-		imei:"",
-		options: [{
-			value: '',
-			label: ''
-		},],
+			tableData: [{
+				id: '',
+				name: '',
+				ocdevice_id: '',
+				ocproduct_id: '',
+				imei: '',
+				imsi:'',
+				reg_time: '',
+				status: '',
+			}],
+			tabPosition: 'left',
+			value:"",
+			device_id:"",
+			imei:"",
+			options: [{
+				value: '',
+				label: ''
+			},],
 
 		}
 	},

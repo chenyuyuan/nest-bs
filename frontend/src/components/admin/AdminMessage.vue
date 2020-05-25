@@ -1,60 +1,63 @@
 <template>
 <div>
-  <el-container>
-    <AdminHeader></AdminHeader>
-  </el-container>
+    <el-container>
+        <AdminHeader></AdminHeader>
+    </el-container>
 
 <div>
-  <div style="height:1px"></div>
-  <el-row class="tac">
-    
-    <el-tabs :tab-position="tabPosition" style="height: 200px;">
-      <el-tab-pane label="已发消息">
-        <el-col :span="1" style="border:1px solid transparent">
-            <div style="display:none" class="grid-content bg-purple">1</div>
-        </el-col>
-        <el-col :span="22">
-            <el-table :data="tableData" style="width: 100%">
-                <el-table-column
-                    prop="content"
-                    label="消息">
-                </el-table-column>
-                <el-table-column
-                    prop="time"
-                    label="时间"
-                    width="250">
-                </el-table-column>
-                <el-table-column
-                fixed="right"
-                label="操作"
-                width="100">
-                <template slot-scope="scope">
-                    <el-button @click="deleteRow(scope.row)" type="text" size="small">删除</el-button>
-                </template>
-            </el-table-column> 
-            </el-table>
-        </el-col>
-      </el-tab-pane>
-      <el-tab-pane label="推送消息">
+    <div style="height:1px"></div>
+    <el-row class="tac">
         
-        <div class="form-inline" style="margin-top:10px">
+        <el-tabs :tab-position="tabPosition" style="">
+        <el-tab-pane label="已发消息">
+            <el-col :span="1" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
+            </el-col>
             <el-col :span="22">
-            <el-input
-            type="textarea"
-            :autosize="{ minRows: 5, maxRows: 12}"
-            placeholder="请输入消息内容"
-            v-model="content">
-            </el-input>
-        </el-col>
-        </div>
-        <div class="form-inline" style="margin-top:10px">
-            <el-button type="primary" v-on:click="add">发送</el-button>
-        </div>
-      </el-tab-pane>
-      <!-- <el-tab-pane label="角色管理">角色管理</el-tab-pane> -->
-    </el-tabs>
+                <el-table :data="tableData" style="width: 100%">
+                    <el-table-column
+                        prop="content"
+                        label="消息">
+                    </el-table-column>
+                    <el-table-column
+                        prop="time"
+                        label="时间"
+                        width="250">
+                    </el-table-column>
+                    <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="100">
+                    <template slot-scope="scope">
+                        <el-button @click="deleteRow(scope.row)" type="text" size="small">删除</el-button>
+                    </template>
+                </el-table-column> 
+                </el-table>
+            </el-col>
+        </el-tab-pane>
+        <el-tab-pane label="推送消息">
+            <div style="height:10px"></div>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
+            </el-col>
+            <el-col :span="16">
+                <el-input
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 12}"
+                placeholder="请输入消息内容"
+                v-model="content">
+                </el-input>
+                <div style="height:10px"></div>
+                <el-button type="primary" v-on:click="add">发送</el-button>
+            </el-col>
+            <el-col :span="4" style="border:1px solid transparent">
+                <div style="display:none" class="grid-content bg-purple">1</div>
+            </el-col>
+        </el-tab-pane>
+        <!-- <el-tab-pane label="角色管理">角色管理</el-tab-pane> -->
+        </el-tabs>
 
-  </el-row>
+    </el-row>
 </div>
 
 </div>
@@ -66,6 +69,7 @@ import axios from "axios";
 import AdminHeader from "./AdminHeader"
 import router from "../../router";
 import { server } from "../../utils/helper";
+import { parse } from 'querystring';
 
 
 export default {
@@ -99,11 +103,22 @@ export default {
                     console.log(data)
                     this.$message('删除成功');
                     axios.get(`${server.baseURL}/admin/getallmessage`, ).then(data => {
-                        this.tableData = data.data.message
+                        this.tableData = data.data.message;
+                        for(var i = 0;i<this.tableData.length;++i) {
+                            this.tableData[i]["time"] = this.fixTime(this.tableData[i]["time"]);	
+                        }
                     });
                 }
 			});
-		},
+        },
+        fixTime(origin_timestr) {
+            var origin_time = new Date(origin_timestr);
+            var origin_timestamp = Date.parse(origin_time);
+            var time = new Date(origin_timestamp);
+            var minute = time.getMinutes()<10?'0'+time.getMinutes():time.getMinutes();
+			var second = time.getSeconds()<10?'0'+time.getSeconds():time.getSeconds();
+            return time.getFullYear()+'/'+(time.getMonth()+1)+'/'+time.getDate()+' '+time.getHours()+':'+minute+':'+second;
+        },
 		add(data) {
             data= {
                 content:this.content
@@ -112,8 +127,10 @@ export default {
                 if(data.data.msg == "send_message_success") {
                     this.$message('发送成功');
                     axios.get(`${server.baseURL}/admin/getallmessage`, ).then(data => {
-                        console.log(data)
-                        this.tableData = data.data.message
+                        this.tableData = data.data.message;
+                        for(var i = 0;i<this.tableData.length;++i) {
+                            this.tableData[i]["time"] = this.fixTime(this.tableData[i]["time"]);
+                        }
                     });
                 }
             });
@@ -122,7 +139,10 @@ export default {
 	mounted() {
 		axios.get(`${server.baseURL}/admin/getallmessage`, ).then(data => {
 			console.log(data)
-			this.tableData = data.data.message
+            this.tableData = data.data.message;
+            for(var i = 0;i<this.tableData.length;++i) {
+                this.tableData[i]["time"] = this.fixTime(this.tableData[i]["time"]);	
+            }
 		});
 	}
 };

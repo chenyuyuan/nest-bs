@@ -19,7 +19,7 @@
             </el-table-column>
             <el-table-column
                 prop="ocdevice_id"
-                label="设备id"
+                label="设备号"
                 width="120">
             </el-table-column>
             <el-table-column

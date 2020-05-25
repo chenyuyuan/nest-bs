@@ -8,7 +8,7 @@
 	<div style="height:1px"></div>
 	<el-row class="tac">
 		
-		<el-tabs :tab-position="tabPosition" style="height: 200px;">
+		<el-tabs :tab-position="tabPosition" style="">
 		<el-tab-pane label="用户消息">
 			<el-col :span="1" style="border:1px solid transparent">
 			<div style="display:none" class="grid-content bg-purple">1</div>
@@ -83,7 +83,6 @@ export default {
 		Header
 	},
 	data() {
-		
 		return {
 			tableData: [{
 				sender_id:"",
@@ -130,39 +129,36 @@ export default {
 		deleteRow(row) {
 			axios.get(`${server.baseURL}/message/delete/`+row.id, ).then(data => {
 				if(data.data.msg == "message_delete_success") {
-				this.$message('删除成功成功');
-				axios.get(`${server.baseURL}/message/get`, ).then(data => {
-					console.log(data.data)
-					this.tableData = data.data.message
-					
-				});
+					this.$message('删除成功成功');
+					axios.get(`${server.baseURL}/message/get`, ).then(data => {
+						this.tableData = data.data.message
+					});
 				}
-			
 			});
-		}
-
-
+		},
+		fixTime(origin_timestr) {
+            var origin_time = new Date(origin_timestr);
+            var origin_timestamp = Date.parse(origin_time);
+            var time = new Date(origin_timestamp);
+            var minute = time.getMinutes()<10?'0'+time.getMinutes():time.getMinutes();
+			var second = time.getSeconds()<10?'0'+time.getSeconds():time.getSeconds();
+            return time.getFullYear()+'/'+(time.getMonth()+1)+'/'+time.getDate()+' '+time.getHours()+':'+minute+':'+second;
+        },
 	},
 	mounted() {
-		
 		axios.get(`${server.baseURL}/message/get`, ).then(data => {
 			console.log(data.data)
 			this.tableData = data.data.message
 			for(var i = 0;i<this.tableData.length;++i) {
-				var time = this.tableData[i]["time"];
-				this.tableData[i]["time"] = time.substring(0,10)+" "+time.substring(11,19);	
+				this.tableData[i]["time"] = this.fixTime(this.tableData[i]["time"]);
 			}
-		
 		});
-		
 		axios.get(`${server.baseURL}/message/getsystem`, ).then(data => {
 			console.log(data.data)
 			this.tableDataSys = data.data.message
 			for(var i = 0;i<this.tableDataSys.length;++i) {
-				var time = this.tableDataSys[i]["time"];
-				this.tableDataSys[i]["time"] = time.substring(0,10)+" "+time.substring(11,19);	
+				this.tableDataSys[i]["time"] = this.fixTime(this.tableDataSys[i]["time"]);
 			}
-		
 		});
 	}
 };

@@ -197,18 +197,17 @@ export class ArticleController {
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadFile(@Res() res, @UploadedFile() file): Promise<string> {
+    async uploadFile(@Res() res, @UploadedFile() file, @Request() request): Promise<string> {
         console.log(file);
-        var user_id = 1;
+        var user_id = request.session.user_id;
+        // user_id = 1;
         var dir = join(__dirname, '..','../public/upload', '/', user_id.toString())
         if(fs.existsSync(dir) == false) {
             fs.mkdirSync(dir);
             console.log(fs.existsSync(join(__dirname, '..','../public/upload', '/', user_id.toString())))
         }
-
         const writeImage = createWriteStream(join(__dirname, '..','../public/upload/', user_id.toString(), `${file.originalname}`))
         writeImage.write(file.buffer)
-
         return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
     }
 
