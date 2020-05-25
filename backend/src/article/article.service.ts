@@ -86,6 +86,15 @@ export class ArticleService {
         return await this.ArticleCommentRepository.remove(articleComment);
     }
 
+    async passArticle(article_id:number, ifpass:number): Promise<Article> {
+        var article: Article = await this.ArticleRepository.findOne({id: article_id})
+        article.verify_code = 2;
+        if(ifpass == 0) {
+            article.verify_code = 0;
+        }
+        return await this.ArticleRepository.save(article);
+    }
+
 
 
 

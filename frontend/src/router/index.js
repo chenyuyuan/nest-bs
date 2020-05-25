@@ -14,6 +14,7 @@ import AdminHome from '../components/admin/AdminHome'
 import AdminDevice from '../components/admin/AdminDevice'
 import AdminMessage from '../components/admin/AdminMessage'
 import AdminArticle from '../components/admin/AdminArticle'
+import AdminArticleUpdate from '../components/admin/AdminArticleUpdate'
 import Profile from '../components/user/Profile'
 import ForgetPwd from '../components/user/ForgetPwd'
 import Message from '../components/user/Message'
@@ -64,6 +65,7 @@ const routes = [
   { path: '/admin/device', name: 'AdminDevice', component: AdminDevice  },
   { path: '/admin/message', name: 'AdminMessage', component: AdminMessage  },
   { path: '/admin/article', name: 'AdminArticle', component: AdminArticle  },
+  { path: '/admin/articleupdate', name: 'AdminArticleUpdate', component: AdminArticleUpdate  },
 
 
   { path: '/postlist', name: 'PostList', component: PostList },

@@ -14,10 +14,12 @@ import { MessageService } from 'src/message/message.service';
 import { Article } from 'src/article/entity/article.entity';
 import { ArticleComment } from 'src/article/entity/article-comment.entity';
 import { ArticleService } from 'src/article/article.service';
+import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Admin, Device,Product,UserDevice,AlarmValue,  Message, MessageAdmin,  Article, ArticleComment]), ],
+  imports: [TypeOrmModule.forFeature([Admin, Device,Product,UserDevice,AlarmValue,  Message, MessageAdmin,  Article, ArticleComment,  User]), ],
   controllers: [AdminController],
-  providers: [AdminService,DeviceService,MessageService,ArticleService]
+  providers: [AdminService,DeviceService,MessageService,ArticleService,UserService]
 })
 export class AdminModule {}

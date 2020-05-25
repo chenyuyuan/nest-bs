@@ -1,13 +1,11 @@
 <template>
 <div>
   <el-container>
-    <Header></Header>
+    <AdminHeader></AdminHeader>
   </el-container>
-
 <div>
   <div style="height:1px"></div>
   <el-row class="tac">
-    
     <el-col :span="4" style="border:1px solid transparent">
         <div style="display:none" class="grid-content bg-purple">1</div>
     </el-col>
@@ -34,7 +32,7 @@
             <!-- action="http://localhost:3000/article/upload" -->
             <el-upload
             class="upload-demo"
-            action="http://localhost:3000/article/upload"
+            action="http://localhost:3000/admin/upload"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :file-list="fileList"
@@ -47,12 +45,6 @@
         </el-card>
         <el-card class="box-card" shadow="hover">
             <div class="form-inline" style="margin-top:10px">
-                <div>申请成为专业文章</div>
-                <el-switch
-                v-model="value"
-                active-color="#13ce66"
-                inactive-color="#ff4949">
-                </el-switch> 
                 <div style="width:20px"></div>
                 <el-button type="" v-on:click="sendPost" style="float:right">修改</el-button>
             </div>
@@ -71,14 +63,14 @@
 
 <script>
 import { server } from "../../utils/helper";
-import Header from "../Header"
+import AdminHeader from "./AdminHeader"
 
 import axios from "axios";
 import router from "../../router";
 export default {
-    name: "UpdatePost",
+    name: "AdminArticleUpdate",
     components: {
-        Header
+        AdminHeader
     },
     data() {
         return {
@@ -125,9 +117,8 @@ export default {
                 img: this.fileName,
                 title: this.title,
                 content: this.content,
-                verify_code: verify
             }
-            axios.post(`${server.baseURL}/article/update`, postdata).then(data => {
+            axios.post(`${server.baseURL}/admin/update`, postdata).then(data => {
 				if(data.data.msg == "update_article_success") {
                     this.$message('修改成功');
                     this.$router.go(0);
@@ -137,7 +128,7 @@ export default {
         }
     },
     mounted() {
-        axios.get(`${server.baseURL}/article/myarticle/` + this.$route.query.id, ).then(data => {
+        axios.get(`${server.baseURL}/admin/myarticle/` + this.$route.query.id, ).then(data => {
 			if(data.data.msg == "get_article_success") {
                 console.log(data.data.article)
                 this.fileName = data.data.article.img
@@ -148,11 +139,12 @@ export default {
 				}else {
 					this.post["img"] = server.baseURL+"/public/upload/"+this.post["author_id"]+"/"+this.post["img"]
                 }
+
                 this.id = data.data.article.id
                 this.title = data.data.article.title
                 this.content = data.data.article.content
-                this.value = data.data.article.verify_code == 0?false:true;
                 console.log(this.fileName)
+				
 			}
         
 		});

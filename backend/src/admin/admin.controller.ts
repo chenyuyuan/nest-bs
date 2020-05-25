@@ -9,12 +9,14 @@ import { AddArticleDTO } from './dto/add-article.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 import { createWriteStream } from 'fs';
+import { UserService } from 'src/user/user.service';
+import { UpdateArticleDTO } from './dto/updateArticleDTO';
 const fs = require('fs');
 
 @Controller('admin')
 export class AdminController {
 	constructor(private readonly adminService: AdminService, private readonly deviceService: DeviceService,private readonly messageService: MessageService,
-		private readonly articleService: ArticleService) { }
+		private readonly articleService: ArticleService, private readonly userService: UserService) { }
 
 
 	@Post('/login') 
@@ -144,6 +146,50 @@ export class AdminController {
         }
         return res.status(HttpStatus.OK).json({msg:"add_article_failed",tip:"添加文章失败"});
 	}
+	@Get('/delarticle/:article_id') 
+    async delArticle(@Res() res, @Request() request, @Param() param) { // correct
+        var article = await this.articleService.deleteArticle(4, param.article_id);
+        return res.status(HttpStatus.OK).json({msg:"delete_article_success",tip:"删除文章成功"});
+	}
+	@Get('/passarticle/:ifpass/:article_id') 
+	async passArticle(@Res() res, @Request() request, @Param() param) { // correct
+		var article = await this.articleService.getArticle(param.article_id)
+		var user_id = article['author_id']
+		if(param.ifpass == 1) {
+			var sendcontent = '文章 '+article['title']+' 已通过审核';
+			await this.articleService.passArticle(param.article_id, 1);
+			await this.messageService.addMessage(3,user_id,sendcontent);
+        	return res.status(HttpStatus.OK).json({msg:"pass_article_success",tip:"审核文章成功"});
+		}
+		else {
+			var sendcontent = '文章 '+article['title']+' 未通过审核';
+			await this.articleService.passArticle(param.article_id, 0);
+			await this.messageService.addMessage(3,user_id,sendcontent);
+			return res.status(HttpStatus.OK).json({msg:"article_not_pass",tip:"文章未通过成功"});
+		}
+	}
+	@Get('/myarticle/:article_id') 
+    async getArticleMy(@Res() res, @Param() param, @Request() request) {
+
+        var user_id = 4;
+        var article = await this.articleService.getArticleMy(param.article_id, user_id);
+        var user = await this.userService.findById(article['author_id'])
+        var name = "";
+        if(user!=null) {
+            name = user['name']
+        }
+        return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功", article:article, name: name});
+	}
+	@Post('/update') 
+    async updateArticle(@Res() res, @Request() request, @Body() updateArticleDTO:UpdateArticleDTO) { //correct
+        var user_id = 4;
+        var article = await this.articleService.updateArticle(
+            updateArticleDTO.article_id, user_id, updateArticleDTO.title, updateArticleDTO.content, updateArticleDTO.img, 2);
+        if (article != null) {
+            return res.status(HttpStatus.OK).json({msg:"update_article_success",tip:"修改文章成功"});
+        }
+        return res.status(HttpStatus.OK).json({msg:"add_article_failed",tip:"修改文章失败"});
+    }
 	
 
 	@Post('upload')

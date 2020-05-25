@@ -22,10 +22,12 @@
                                 <div>{{p.name}}</div>
                                 <div>·</div>
                                 <div>{{p.time}}</div>
-                                <i class="el-icon-edit-outline" style="color:#409EFF;font-size:22px" v-on:click="toUpdatePost(p)"></i>
-                                <div style="color:#409EFF;font-size:15px" v-on:click="toUpdatePost(p)">修改</div>
-                                <i class="el-icon-delete" style="color:#F56C6C;font-size:22px" v-on:click="toUpdatePost(p)"></i>
-                                <div style="color:#F56C6C;font-size:15px" v-on:click="delArticle(p)">删除</div>
+                                <div class="form-inline" v-if="p.author_id==4">
+                                    <i class="el-icon-edit-outline" style="color:#409EFF;font-size:22px" v-on:click="toArticleUpDate(p)"></i>
+                                    <div style="color:#409EFF;font-size:15px" v-on:click="toArticleUpDate(p)">修改</div>
+                                    <i class="el-icon-delete" style="color:#F56C6C;font-size:22px" v-on:click="delArticle(p)"></i>
+                                    <div style="color:#F56C6C;font-size:15px" v-on:click="delArticle(p)">删除</div>
+                                </div>
                             </div>
                         </div>
                         <div v-on:click="toPost(p)">
@@ -75,7 +77,7 @@
                     </el-card>
                     <el-card class="box-card" shadow="hover">
                         <div class="form-inline" style="margin-top:10px">
-                            <el-button type="" v-on:click="sendPost" style="float:right">发布</el-button>
+                            <el-button type="" v-on:click="pass(p)" style="float:right">发布</el-button>
                         </div>
                     </el-card>
                 </el-col>
@@ -98,6 +100,9 @@
                                 <div>{{p.name}}</div>
                                 <div>·</div>
                                 <div>{{p.time}}</div>
+                                <div style="width:20px"></div>
+                                <el-button type="" v-on:click="pass(p)" style="float:right">通过</el-button>
+                                <el-button type="" v-on:click="notpass(p)" style="float:right">未通过</el-button>
                             </div>
                         </div>
                         <div v-on:click="toPost(p)">
@@ -167,19 +172,94 @@ export default {
 		}
 	},
 	methods: {
-		toUpDatePost(p) {
+		toArticleUpDate(p) {
 			console.log(p)
-			this.$router.push({path:'/post', query:{id: p.id}})
+			this.$router.push({path:'/admin/articleupdate', query:{id: p.id}})
         },
-        delArticle() {
+        pass(p) {
+			axios.get(`${server.baseURL}/admin/passarticle/1/`+p.id, ).then(data => {
+                if(data.data.msg == "delete_article_success") {
+                    this.$message({
+                        type: 'success',
+                        message: '成功!'
+                    });
+                    axios.get(`${server.baseURL}/article/articlelist/1`, ).then(data => {
+                        if(data.data.msg == "pass_article_success") {
+                            this.postList1 = data.data.articles
+                            var pLen = this.postList1.length;
+                            console.log(this.postList1)
+                            for (var i = 0;i < pLen; ++i) {
+                                var time = this.postList1[i]["time"];
+                                this.postList1[i]["time"] = time.substring(0,10)+" "+time.substring(11,19)
+                                if(this.postList1[i]["img"] == null || this.postList1[i]["img"] == "") {
+                                    this.postList1[i]["img"] == null
+                                }
+                                else {
+                                    this.postList1[i]["img"] = server.baseURL+"/public/upload/"+this.postList1[i]["author_id"]+"/"+this.postList1[i]["img"]
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        },
+        notpass(p) {
+			axios.get(`${server.baseURL}/admin/passarticle/0/`+p.id, ).then(data => {
+                if(data.data.msg == "article_not_pass") {
+                    this.$message({
+                        type: 'success',
+                        message: '成功!'
+                    });
+                    axios.get(`${server.baseURL}/article/articlelist/1`, ).then(data => {
+                        if(data.data.msg == "get_article_success") {
+                            this.postList1 = data.data.articles
+                            var pLen = this.postList1.length;
+                            console.log(this.postList1)
+                            for (var i = 0;i < pLen; ++i) {
+                                var time = this.postList1[i]["time"];
+                                this.postList1[i]["time"] = time.substring(0,10)+" "+time.substring(11,19)
+                                if(this.postList1[i]["img"] == null || this.postList1[i]["img"] == "") {
+                                    this.postList1[i]["img"] == null
+                                }
+                                else {
+                                    this.postList1[i]["img"] = server.baseURL+"/public/upload/"+this.postList1[i]["author_id"]+"/"+this.postList1[i]["img"]
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        },
+        delArticle(p) {
             this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
+                axios.get(`${server.baseURL}/admin/delarticle/`+p.id, ).then(data => {
+                    if(data.data.msg == "delete_article_success") {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        axios.get(`${server.baseURL}/article/articlelist/2`, ).then(data => {
+                        if(data.data.msg == "get_article_success") {
+                            this.postList2 = data.data.articles
+                            var pLen = this.postList2.length;
+                            console.log(this.postList2)
+                            for (var i = 0;i < pLen; ++i) {
+                                var time = this.postList2[i]["time"];
+                                this.postList2[i]["time"] = time.substring(0,10)+" "+time.substring(11,19)
+                                if(this.postList2[i]["img"] == null || this.postList2[i]["img"] == "") {
+                                    this.postList2[i]["img"] == null
+                                }
+                                else {
+                                    this.postList2[i]["img"] = server.baseURL+"/public/upload/"+this.postList2[i]["author_id"]+"/"+this.postList2[i]["img"]
+                                }
+                            }
+                        }
+                    });
+                    }
                 });
             }).catch(() => {
                 this.$message({
@@ -203,7 +283,24 @@ export default {
             }
             axios.post(`${server.baseURL}/admin/addarticle`, postdata).then(data => {
 				if(data.data.msg == "add_article_success") {
-					this.$message('发布成功');
+                    this.$message('发布成功');
+                    axios.get(`${server.baseURL}/article/articlelist/2`, ).then(data => {
+                        if(data.data.msg == "get_article_success") {
+                            this.postList2 = data.data.articles
+                            var pLen = this.postList2.length;
+                            console.log(this.postList2)
+                            for (var i = 0;i < pLen; ++i) {
+                                var time = this.postList2[i]["time"];
+                                this.postList2[i]["time"] = time.substring(0,10)+" "+time.substring(11,19)
+                                if(this.postList2[i]["img"] == null || this.postList2[i]["img"] == "") {
+                                    this.postList2[i]["img"] == null
+                                }
+                                else {
+                                    this.postList2[i]["img"] = server.baseURL+"/public/upload/"+this.postList2[i]["author_id"]+"/"+this.postList2[i]["img"]
+                                }
+                            }
+                        }
+                    });
                 }
                 else if(data.data.msg == "add_article_failed") {
 					this.$message('发布失败');
