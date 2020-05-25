@@ -15,7 +15,9 @@
         <el-menu-item style="float:right" index="7"><i class="el-icon-user"></i></el-menu-item>
         <el-menu-item style="float:right" index="6">
           <el-badge is-dot class="item">
-            <i class="el-icon-message"></i> 
+            <a href="/admin/message" target="_blank">
+              <i class="el-icon-message"></i>
+            </a>
           </el-badge> 
         </el-menu-item>
       </el-menu>

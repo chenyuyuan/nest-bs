@@ -346,9 +346,9 @@ export default {
 					var params0 = params[0];
 					var params1 = params[1]
 					var date = new Date(params0.name);
-					if(params1.value[1]!=null) {
-						return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' : '+params0.value[1]+','+params1.value[1];	
-					}
+					// if(params1.value[1]!=null) {
+					// 	return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' : '+params0.value[1]+','+params1.value[1];	
+					// }
 					return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' '+date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' : '+params0.value[1];
 				},
 				axisPointer: {

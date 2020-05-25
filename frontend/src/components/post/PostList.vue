@@ -169,16 +169,20 @@ export default {
 			postList2:[],
 			postList3:[],
 			postList4:[],
-
 		}
 	},
-
-
-
 	methods: {
 		toPost(p) {
 			console.log(p)
 			this.$router.push({path:'/post', query:{id: p.id}})
+		},
+		fixTime(origin_timestr) {
+            var origin_time = new Date(origin_timestr);
+            var origin_timestamp = Date.parse(origin_time);
+            var time = new Date(origin_timestamp);
+            var minute = time.getMinutes()<10?'0'+time.getMinutes():time.getMinutes();
+			var second = time.getSeconds()<10?'0'+time.getSeconds():time.getSeconds();
+            return time.getFullYear()+'/'+(time.getMonth()+1)+'/'+time.getDate()+' '+time.getHours()+':'+minute+':'+second;
         },
         toUpdatePost(p) {
 			console.log(p)
@@ -195,6 +199,7 @@ export default {
                 var pLen = this.postList1.length;
                 console.log(this.postList1)
 				for (var i = 0;i < pLen; ++i) {
+					this.postList1[i]["time"] = this.fixTime(this.postList1[i]["time"]);
 					if(this.postList1[i]["img"] == null || this.postList1[i]["img"] == "") {
 						this.postList1[i]["img"] == null
 					}
@@ -209,6 +214,7 @@ export default {
 				this.postList2 = data.data.articles
 				var pLen = this.postList2.length;
 				for (var i = 0;i < pLen; ++i) {
+					this.postList2[i]["time"] = this.fixTime(this.postList2[i]["time"]);
 					if(this.postList2[i]["img"] == null || this.postList2[i]["img"] == "") {
 						this.postList2[i]["img"] == null
 					}
@@ -224,6 +230,7 @@ export default {
 				this.postList3 = data.data.articles
 				var pLen = this.postList3.length;
 				for (var i = 0;i < pLen; ++i) {
+					this.postList3[i]["time"] = this.fixTime(this.postList3[i]["time"]);
 					if(this.postList3[i]["img"] == null || this.postList3[i]["img"] == "") {
 						this.postList3[i]["img"] == null
 					}
@@ -234,25 +241,22 @@ export default {
 			}
 		
 		});
-		axios.get(`${server.baseURL}/article/articlelist/3`, ).then(data => {
-			if(data.data.msg == "get_article_success") {
-				this.postList4 = data.data.articles
-				var pLen = this.postList4.length;
-				for (var i = 0;i < pLen; ++i) {
-					if(this.postList4[i]["img"] == null || this.postList4[i]["img"] == "") {
-						this.postList4[i]["img"] == null
-					}
-					else {
-						this.postList4[i]["img"] = server.baseURL+"/public/upload/"+this.postList4[i]["author_id"]+"/"+this.postList4[i]["img"]
-					}
-				}
-			}
-		
-		});
-
+		// axios.get(`${server.baseURL}/article/articlelist/3`, ).then(data => {
+		// 	if(data.data.msg == "get_article_success") {
+		// 		this.postList4 = data.data.articles
+		// 		var pLen = this.postList4.length;
+		// 		for (var i = 0;i < pLen; ++i) {
+		// 			this.postList4[i]["time"] = this.fixTime(this.postList4[i]["time"]);
+		// 			if(this.postList4[i]["img"] == null || this.postList4[i]["img"] == "") {
+		// 				this.postList4[i]["img"] == null
+		// 			}
+		// 			else {
+		// 				this.postList4[i]["img"] = server.baseURL+"/public/upload/"+this.postList4[i]["author_id"]+"/"+this.postList4[i]["img"]
+		// 			}
+		// 		}
+		// 	}
+		// });
 	}
-  
- 
 };
 </script>
 
