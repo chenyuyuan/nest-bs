@@ -22,7 +22,7 @@
 			<el-button plain v-on:click="clickGeneratePicture30days">下载图片</el-button>
 			<div id="my-chart-30days" style="width: 1400px;height: 500px;" ref="imageDom30days"></div>
 		</el-tab-pane>
-		<el-tab-pane label="列表显示">定时任务补偿</el-tab-pane>
+		<!-- <el-tab-pane label="列表显示">定时任务补偿</el-tab-pane> -->
   </el-tabs>
 </div>
 
@@ -423,7 +423,7 @@ export default {
 				myChart.setOption({series: [{data: data1}, {data: data2}]});
 				
 			});
-		}, 5000);
+		}, 4000);
 		if (option && typeof option === "object") {
 			myChart.setOption(option, true);
 			

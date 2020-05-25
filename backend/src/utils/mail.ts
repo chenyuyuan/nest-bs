@@ -18,7 +18,7 @@ let mailOptions = {
   subject: process.argv[3], // Subject line
   // 发送text或者html格式
   // text: 'Hello world?', // plain text body
-  html: '<b>'+process.argv[2]+'</b>' // html body
+  html: '<b>'+process.argv[3]+'</b>' // html body
 };
 
 // send mail with defined transport object

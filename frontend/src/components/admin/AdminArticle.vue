@@ -77,7 +77,7 @@
                     </el-card>
                     <el-card class="box-card" shadow="hover">
                         <div class="form-inline" style="margin-top:10px">
-                            <el-button type="" v-on:click="pass(p)" style="float:right">发布</el-button>
+                            <el-button type="" v-on:click="sendPost" style="float:right">发布</el-button>
                         </div>
                     </el-card>
                 </el-col>

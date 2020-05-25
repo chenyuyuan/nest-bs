@@ -75,7 +75,7 @@ export class ArticleController {
                 articles[i]["name"] = user['name'];
             }
         }
-
+        articles.reverse();
         return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles});
     }
     @Get('/myarticlelist') 
@@ -90,6 +90,7 @@ export class ArticleController {
             var likeRedis = (await this.cacheService.get(user_id) == 1)? 1:0;
             articles[i]["like"] = likeRedis;
         }
+        articles.reverse()
         return res.status(HttpStatus.OK).json({msg:"get_article_success", tip:"获取文章成功",articles:articles, name: name});
     }
     @Get('/article/:article_id') 

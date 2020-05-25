@@ -10,7 +10,7 @@
         </el-submenu> -->
         <el-menu-item index="3"><a href="/admin/device">设备管理</a></el-menu-item>
         <el-menu-item index="4"><a href="/admin/message" target="_blank">消息推送</a></el-menu-item>
-        <el-menu-item index="5"><a href="/admin/profile" target="_blank">账号管理</a></el-menu-item>
+        <!-- <el-menu-item index="5"><a href="/admin/profile" target="_blank">账号管理</a></el-menu-item> -->
         <el-menu-item index="6"><a href="/admin/article" target="_blank">文章管理</a></el-menu-item>
         <el-menu-item style="float:right" index="7"><i class="el-icon-user"></i></el-menu-item>
         <el-menu-item style="float:right" index="6">

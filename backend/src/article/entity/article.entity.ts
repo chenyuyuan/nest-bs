@@ -14,7 +14,7 @@ export class Article extends BaseEntity {
     @Column('varchar',{nullable:true})
     title: string;
   
-    @Column('varchar',{nullable:true})
+    @Column('varchar',{nullable:true,length:2000})
     content: string;
 
     @Column('varchar',{nullable:true})

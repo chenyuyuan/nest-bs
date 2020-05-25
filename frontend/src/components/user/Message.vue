@@ -129,9 +129,12 @@ export default {
 		deleteRow(row) {
 			axios.get(`${server.baseURL}/message/delete/`+row.id, ).then(data => {
 				if(data.data.msg == "message_delete_success") {
-					this.$message('删除成功成功');
+					this.$message('删除成功');
 					axios.get(`${server.baseURL}/message/get`, ).then(data => {
-						this.tableData = data.data.message
+						this.tableData = data.data.message;
+						for(var i = 0;i<this.tableData.length;++i) {
+							this.tableData[i]["time"] = this.fixTime(this.tableData[i]["time"]);
+						}
 					});
 				}
 			});

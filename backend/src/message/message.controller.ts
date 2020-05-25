@@ -52,6 +52,7 @@ export class MessageController {
             messages[i]["sender_name"] = username;
         }
         if(messages!=null){
+            messages.reverse();
             return res.status(HttpStatus.OK).json({msg:"message_get_success",tip:"消息查找成功",message:messages});
         }
         else {
@@ -71,6 +72,7 @@ export class MessageController {
             messages[i]["sender_name"] = username;
         }
         if(messages!=null){
+            messages.reverse();
             return res.status(HttpStatus.OK).json({msg:"message_get_success",tip:"消息查找成功",message:messages});
         }
         else {

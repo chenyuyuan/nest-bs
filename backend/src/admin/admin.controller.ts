@@ -113,7 +113,8 @@ export class AdminController {
 	}
 	@Get('/getallmessage') // correct ✔ AddMessageDTO
 	async getAllMessage(@Res() res,@Param() param): Promise<string> {
-		var messages = await this.messageService.findMessageByUserId(0)
+		var messages = await this.messageService.findMessageByUserId(0);
+		messages.reverse();
 		return res.status(HttpStatus.OK).json({msg:"success",tip:"成功",message:messages});
 	}
 
@@ -207,7 +208,4 @@ export class AdminController {
         writeImage.write(file.buffer)
         return res.status(HttpStatus.OK).json({msg:"success",tip:"成功"});
     }
-
-
-
 }
