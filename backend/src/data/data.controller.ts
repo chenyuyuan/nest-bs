@@ -180,7 +180,7 @@ export class DataController {
                 console.log(value)
                 //redis
                 var timevalue = time1 + value
-                console.log(timevalue)
+                // console.log(timevalue)
                 await this.cacheService.rpush(serviceName+'_'+ocdevice_id, timevalue);
                 //mysql
                 await this.dataService.addData(value, device_id, datatypes[i]['id'])
@@ -188,9 +188,9 @@ export class DataController {
                 //发送预警消息
                 var alarm_value_up = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 1)
                 var alarm_value_down = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 0)
-                var user_id = await this.deviceService.findUserDeviceByDeviceId(device_id)['user_id']
-                console.log(device_id)
-                console.log(user_id)
+                var user_id = (await this.deviceService.findUserDeviceByDeviceId(device_id))['user_id']
+                //console.log(device_id)
+                //console.log(user_id)
                 var sendcontent = ""
                 if(alarm_value_up!=null&&value>parseFloat(alarm_value_up.value)) {
                     sendcontent = "您的数据已超上限值，达" + value;
