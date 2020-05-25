@@ -189,6 +189,7 @@ export class DataController {
                 var alarm_value_up = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 1)
                 var alarm_value_down = await this.deviceService.findAlarmValue(device_id, datatypes[i]['id'], 0)
                 var user_id = await this.deviceService.findUserDeviceByDeviceId(device_id)['user_id']
+                console.log(user_id)
                 var sendcontent = ""
                 if(alarm_value_up!=null&&value>parseFloat(alarm_value_up.value)) {
                     sendcontent = "您的数据已超上限值，达" + value;
@@ -209,7 +210,7 @@ export class DataController {
                         });
                     }
                     if(alarm_value_up.send_message_in_website==1) {
-                        await this.messageService.addMessage(3,user_id,sendcontent);
+                        await this.messageService.addMessage(user_id,3,sendcontent);
                     }
                 }
                 else if(alarm_value_down!=null&&value<parseFloat(alarm_value_down.value)) {
@@ -231,7 +232,7 @@ export class DataController {
                         });
                     }
                     if(alarm_value_down.send_message_in_website==1) {
-                        await this.messageService.addMessage(3,user_id,sendcontent);
+                        await this.messageService.addMessage(user_id,3,sendcontent);
                     }
                 }
 
