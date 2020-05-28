@@ -201,7 +201,7 @@ export class ArticleController {
     async uploadFile(@Res() res, @UploadedFile() file, @Request() request): Promise<string> {
         console.log(file);
         var user_id = request.session.user_id;
-        // user_id = 1;
+        user_id = 1;
         var dir = join(__dirname, '..','../public/upload', '/', user_id.toString())
         if(fs.existsSync(dir) == false) {
             fs.mkdirSync(dir);

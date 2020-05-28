@@ -12,6 +12,7 @@
         <el-menu-item index="4"><a href="/messagelist" target="_blank">消息中心</a></el-menu-item>
         <el-menu-item index="5"><a href="/profile" target="_blank">个人账号</a></el-menu-item>
         <el-menu-item index="6"><a href="/postlist" target="_blank">动态</a></el-menu-item>
+		<el-menu-item index="8"><a href="/" target="_blank">退出</a></el-menu-item>
         <el-menu-item style="float:right" index="8"><a href="/profile" target="_blank"><i class="el-icon-user"></i></a></el-menu-item>
         <el-menu-item style="float:right" index="7">
           <el-badge is-dot class="item">

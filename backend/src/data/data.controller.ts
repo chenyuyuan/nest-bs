@@ -197,7 +197,7 @@ export class DataController {
                 }
                 var sendcontent = ""
                 if(alarm_value_up!=null&&value0>parseFloat(alarm_value_up.value)) {
-                    sendcontent = "您的数据已超上限值，达" + value;
+                    sendcontent = "您的数据已超上限值，达" + value0;
                     if(alarm_value_up.send_mail==1){
                         const fs = require('fs');
                         const child_process = require('child_process');
@@ -215,7 +215,7 @@ export class DataController {
                     }
                 }
                 else if(alarm_value_down!=null&&value0<parseFloat(alarm_value_down.value)) {
-                    sendcontent = "您的数据已低于下限值，达" + value;
+                    sendcontent = "您的数据已低于下限值，达" + value0;
                     if(alarm_value_down.send_mail==1){
                         const fs = require('fs');
                         const child_process = require('child_process');
