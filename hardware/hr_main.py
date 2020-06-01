@@ -16,7 +16,7 @@ def rcv_data(queue):
         if rcv == "\r\n":
             time.sleep(0.1)
             continue
-        print("消息: " + str(rcv[0:-2]))
+        # print("消息: " + str(rcv[0:-2]))
         if queue.full():
             print("队列queue已满")
         else:
