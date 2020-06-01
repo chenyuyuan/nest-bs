@@ -16,18 +16,18 @@ def rcv_data(queue):
         if rcv == "\r\n":
             time.sleep(0.1)
             continue
-        # print("消息: " + str(rcv[0:-2]))
+        print("消息: " + str(rcv[0:-2]))
         if queue.full():
             print("队列queue已满")
         else:
             if rcv[0:14] == "+CM2MCLIRECV: ":
                 queue.put(rcv[14:])
-                print("rcv_data: "+str(rcv[14:-2]))
-            if rcv[0:10] == "+CM2MCLI: ":
-                cm2mcli_code = rcv[10:-2]
-                print("+CM2MCLI code: " + str(cm2mcli_code))
-            if rcv == "ERROR":
-                print("is ERROR")
+                # print("rcv_data: "+str(rcv[14:-2]))
+            # if rcv[0:10] == "+CM2MCLI: ":
+            #     cm2mcli_code = rcv[10:-2]
+                # print("+CM2MCLI code: " + str(cm2mcli_code))
+            # if rcv == "ERROR":
+                # print("is ERROR")
 
         i = i + 1
         # print("rcv_data循环次数: " + str(i))
