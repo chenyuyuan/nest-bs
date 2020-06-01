@@ -113,7 +113,7 @@ if __name__ == '__main__':
             continue
 
         if queue.empty():
-            print("\n")
+            # print("\n")
             time.sleep(10)
             continue
         else:
