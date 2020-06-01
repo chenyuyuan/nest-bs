@@ -203,12 +203,16 @@ export class DataController {
                         const child_process = require('child_process');
                         var mail = (await this.userService.findById(user_id))['mail']
                         var workerProcess = child_process.spawn('node', ['./src/utils/mail.ts', mail, sendcontent]);
-                        workerProcess.stdout.on('data', function (data) {console.log('stdout: ' + data);});
+                        workerProcess.stdout.on('data', function (data) {
+                            // console.log('stdout: ' + data);
+                        });
                         workerProcess.stderr.on('data', function (data) {
-                           console.log('stderr: ' + data);
+                        //    console.log('stderr: ' + data);
                            return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"预警邮箱发送失败"});
                         });
-                        workerProcess.on('close', function (code) {console.log('子进程已退出，退出码 '+code);});
+                        workerProcess.on('close', function (code) {
+                            // console.log('子进程已退出，退出码 '+code);
+                        });
                     }
                     if(alarm_value_up.send_message_in_website==1) {
                         await this.messageService.addMessage(user_id,3,sendcontent);
@@ -221,12 +225,16 @@ export class DataController {
                         const child_process = require('child_process');
                         var mail = (await this.userService.findById(user_id))['mail']
                         var workerProcess = child_process.spawn('node', ['./src/utils/mail.ts', mail, sendcontent]);
-                        workerProcess.stdout.on('data', function (data) {console.log('stdout: ' + data);});
+                        workerProcess.stdout.on('data', function (data) {
+                            // console.log('stdout: ' + data);
+                        });
                         workerProcess.stderr.on('data', function (data) {
-                           console.log('stderr: ' + data);
+                        //    console.log('stderr: ' + data);
                            return res.status(HttpStatus.EXPECTATION_FAILED).json({msg:"mail_sended_failed",tip:"预警邮箱发送失败"});
                         });
-                        workerProcess.on('close', function (code) {console.log('子进程已退出，退出码 '+code);});
+                        workerProcess.on('close', function (code) {
+                            // console.log('子进程已退出，退出码 '+code);
+                        });
                     }
                     if(alarm_value_down.send_message_in_website==1) {
                         await this.messageService.addMessage(user_id,3,sendcontent);
