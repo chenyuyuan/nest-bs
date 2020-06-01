@@ -151,9 +151,7 @@ export class DataController {
 	}
 	@Post('/device_shadow_push')
     async msgpush(@Res() res, @Request() request, @Body() body): Promise<string> {
-        // var user_id = request.session.user_id;
-        // console.log(user_id)
-		console.log(body)
+		// console.log(body)
         var ocdevice_id = body['deviceId']
         //消息推送测试用的
         if(ocdevice_id == '01006f25-ab60-4a7e-8b0a-6dcfa15e43cc') {return res.status(HttpStatus.OK).json({msg:"success", tip:"成功"});}
@@ -177,7 +175,7 @@ export class DataController {
                 var serviceName = datatypes[i]['properties'];
                 var device_id = device['id'];
                 var value = body['service']['data'][serviceName]
-                console.log(value)
+                console.log("value: "+value+", time: "+time1)
                 //redis
                 var timevalue = time1 + value
                 // console.log(timevalue)
