@@ -70,7 +70,11 @@ if __name__ == '__main__':
     order_new_data = (order_new_data + serial.read(serial.inWaiting())).decode()
     print("order_new_data: " + str(order_new_data))
     start_time = time.time()
+    circlecount = 10000
     while True:
+        circlecount = circlecount - 1
+        if circlecount < 0:
+            break
         overtime = 4  # 超时未上报时间为10秒
         if (time.time() - start_time) > overtime:
             sensor_data = get_data()
