@@ -4,8 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 // 这里可以修改表名
 @Entity('message')
 export class Message extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn() id: number;
 
   @Column('int')
   user_id: number;
