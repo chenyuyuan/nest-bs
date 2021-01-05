@@ -27,7 +27,7 @@
     "@nestjs/platform-express": "^7.0.6",
     "@nestjs/swagger": "^4.5.3",
     "@nestjs/typeorm": "^7.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "mongoose": "^5.9.6",
