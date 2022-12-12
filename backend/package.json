@@ -28,7 +28,7 @@
     "@nestjs/swagger": "^4.5.3",
     "@nestjs/typeorm": "^7.0.0",
     "axios": "^0.19.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.1",
     "mongoose": "^5.9.6",
     "mysql": "^2.18.1",
